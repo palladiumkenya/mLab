@@ -80,7 +80,6 @@
 
 
 
-
 @endsection
 
 @section('bottom-js')

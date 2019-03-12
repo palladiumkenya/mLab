@@ -48,4 +48,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/edit/il/facility', 'ILFacilityController@edit_ilfacility')->name('edit_ilfacility');
     Route::post('/delete/il/facility', 'ILFacilityController@delete_ilfacility')->name('delete_ilfacility');
 
+
+
+    Route::get('/all/results', 'DataController@all_results')->name('all_results');
+    Route::get('/vl/results', 'DataController@vl_results')->name('vl_results');
+    Route::get('/eid/results', 'DataController@eid_results')->name('eid_results');
+    Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
+
 });
