@@ -107,6 +107,7 @@ class UserController extends Controller
             if($request->level =='5'){
                 $user->county_id = $request->county_id;
             }
+            $user->update_at = date('Y-m-d H:i:s');
 
             if($user->save()){
                 toastr()->success('User has been edited successfully!');
@@ -130,6 +131,7 @@ class UserController extends Controller
         try{
             $user = User::find($request->uid);
             $user->password = bcrypt($user->phone_no);
+            $user->update_at = date('Y-m-d H:i:s');
 
             if($user->save()){
                 

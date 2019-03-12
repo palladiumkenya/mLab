@@ -17,9 +17,9 @@
                             <p class="text-primary text--cap border-bottom-primary d-inline-block">Adminstration Options</p>
                                 <div class="menu-icon-grid w-auto p-0">
                                     <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
-                                    <a href="#"><i class="i-Network"></i>Partners</a>
-                                    <a href="#"><i class="i-Hospital"></i>Facilities</a>
-                                    <a href="#"><i class="i-Hospital1"></i>IL Facilities</a>
+                                    <a href="{{route('partners')}}"><i class="i-Network"></i>Partners</a>
+                                    <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
+                                    <a href="{{route('il_facilities')}}"><i class="i-Hospital1"></i>IL Facilities</a>
                                 </div>
                             </div>
                             <div class="col-md-4 p-4">
@@ -39,7 +39,12 @@
                 <!-- / Mega menu -->
                 <div >
                 <p></p>
-                   <h6> Welcome, {{ ucwords(Auth::user()->f_name)}} {{ ucwords(Auth::user()->l_name)}}: @if(Auth::user()->user_level < 2)   National Dashboard @endif </h6>
+                   <h6> Welcome, {{ ucwords(Auth::user()->f_name)}} {{ ucwords(Auth::user()->l_name)}}: @if(Auth::user()->user_level < 2)   National Dashboard 
+                   @elseif(Auth::user()->user_level == 2) Partner Dashboard
+                   @elseif(Auth::user()->user_level == 3) Facility Dashboard
+                   @elseif(Auth::user()->user_level == 4) Facility Dashboard
+                   @elseif(Auth::user()->user_level == 5) County Dashboard
+                   @endif </h6>
                 </div>
             </div>
 
@@ -56,10 +61,14 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                             <div class="dropdown-header">
-                                <i class="i-Lock-User mr-1"></i> User Name
+                                <i class="i-Lock-User mr-1"></i> {{ ucwords(Auth::user()->f_name)}} {{ ucwords(Auth::user()->l_name)}}
                             </div>
-                            <a class="dropdown-item">User Level</a>
-                            <a class="dropdown-item">Attachment</a>
+                            <a class="dropdown-item">@if(Auth::user()->user_level < 2)   National
+                   @elseif(Auth::user()->user_level == 2) Partner
+                   @elseif(Auth::user()->user_level == 3) Facility
+                   @elseif(Auth::user()->user_level == 4) Facility
+                   @elseif(Auth::user()->user_level == 5) County
+                   @endif</a>
                             <a class="dropdown-item" href="{{route('logout')}}">Sign out</a>
                         </div>
                     </div>
