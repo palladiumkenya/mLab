@@ -6,12 +6,16 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Partner;
 use App\County;
+use Auth;
 
 class UserController extends Controller
 {
     public function index(){
 
         $users = User::with('partner')->with('county')->with('facility')->get();
+        if(Auth::user()->user_level == 2){
+            $users = User::where('user_level', '>', 2)->where('partner_id', Auth::user()->partner->id)->with('partner')->with('county')->with('facility')->get(); 
+        }
         $partners = Partner::all();
         $counties = County::all();
 
@@ -51,6 +55,9 @@ class UserController extends Controller
             }
             if($request->level =='5'){
                 $user->county_id = $request->county_id;
+            }
+            if($request->level =='3'){
+                $user->partner_id = Auth::user()->partner->id;
             }
             $user->password = bcrypt($request->phone);
             $user->first_login = "Yes";
@@ -107,7 +114,7 @@ class UserController extends Controller
             if($request->level =='5'){
                 $user->county_id = $request->county_id;
             }
-            $user->update_at = date('Y-m-d H:i:s');
+            $user->updated_at = date('Y-m-d H:i:s');
 
             if($user->save()){
                 toastr()->success('User has been edited successfully!');
@@ -131,7 +138,7 @@ class UserController extends Controller
         try{
             $user = User::find($request->uid);
             $user->password = bcrypt($user->phone_no);
-            $user->update_at = date('Y-m-d H:i:s');
+            $user->updated_at = date('Y-m-d H:i:s');
 
             if($user->save()){
                 

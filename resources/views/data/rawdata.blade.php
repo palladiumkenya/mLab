@@ -15,16 +15,22 @@
                             <form role="form" method="post"action="{{route('fetchraw')}}">
                             {{ csrf_field() }}
                                 <div class="row">
-
                                 <div class="col-md-6 form-group mb-3">
                                         <label for="firstName1">Partner</label>
                                         <select  class="form-control" data-width="100%" id="partner" name="partner_id">
                                             <option value="">Select Partner</option>
+                                            @if(Auth::user()->user_level < 2)
                                                 @if (count($partners) > 0)
                                                     @foreach($partners as $partner)
                                                     <option value="{{$partner->id}}">{{ ucwords($partner->name) }}</option>
                                                         @endforeach
                                                 @endif
+                                            @endif
+                                            @if(Auth::user()->user_level == 2)
+
+                                            <option value="{{Auth::user()->partner->id}}">{{ ucwords(Auth::user()->partner->name) }}</option>
+                                            @endif
+
                                         </select>
                                     </div>
                                     <div class="col-md-6 form-group mb-3">

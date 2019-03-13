@@ -38,33 +38,40 @@
                                         <label for="picker1">User Level</label>
                                         <select id ="level" name="level" class="form-control">
                                             <option >Select</option>
+                                        @if(Auth::user()->user_level < 2)    
                                             <option value="1">National</option>
                                             <option value="2">Partner</option>
                                             <option value="5">County</option>
+                                        @endif
+                                        @if(Auth::user()->user_level == 2)
+                                            <option value="3">Facility Admin</option>
+                                            <option value="4">Facility User</option>
+                                        @endif 
                                         </select>
                                     </div>
-
-                                    <div class="col-md-6 form-group mb-3">
-                                        <label for="picker1">Affiliation</label>
-                                        <input id="affiliation" class="form-control" readonly  placeholder="Select Affiliation">
-                                        <select hidden class="form-control" data-width="100%" id="county" name="county_id">
-                                            <option value="">Select County</option>
-                                                @if (count($counties) > 0)
-                                                    @foreach($counties as $county)
-                                                    <option value="{{$county->id }}">{{ ucwords($county->name) }}</option>
-                                                        @endforeach
-                                                @endif
-                                        </select>
-                                        <select hidden class="form-control" data-width="100%" id="partner" name="partner_id">
-                                            <option value="">Select Partner</option>
-                                                @if (count($partners) > 0)
-                                                    @foreach($partners as $partner)
-                                                    <option value="{{$partner->id }}">{{ ucwords($partner->name) }}</option>
-                                                        @endforeach
-                                                @endif
-                                        </select>
-                                    
-                                    </div>
+                                    @if(Auth::user()->user_level < 2) 
+                                        <div class="col-md-6 form-group mb-3">
+                                            <label for="picker1">Affiliation</label>
+                                            <input id="affiliation" class="form-control" readonly  placeholder="Select Affiliation">
+                                            <select hidden class="form-control" data-width="100%" id="county" name="county_id">
+                                                <option value="">Select County</option>
+                                                    @if (count($counties) > 0)
+                                                        @foreach($counties as $county)
+                                                        <option value="{{$county->id }}">{{ ucwords($county->name) }}</option>
+                                                            @endforeach
+                                                    @endif
+                                            </select>
+                                            <select hidden class="form-control" data-width="100%" id="partner" name="partner_id">
+                                                <option value="">Select Partner</option>
+                                                    @if (count($partners) > 0)
+                                                        @foreach($partners as $partner)
+                                                        <option value="{{$partner->id }}">{{ ucwords($partner->name) }}</option>
+                                                            @endforeach
+                                                    @endif
+                                            </select>
+                                        
+                                        </div>
+                                    @endif
                         
                                 </div>
                                 <button type="submit" class="btn btn-block btn-primary">Submit</button>

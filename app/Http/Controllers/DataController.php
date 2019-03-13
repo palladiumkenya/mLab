@@ -8,30 +8,44 @@ use App\County;
 use App\Partner;
 use App\Facility;
 use App\SubCounty;
+use Auth;
 
 class DataController extends Controller
 {
     public function all_results(){
-        $results = Data::orderBy('id', 'DESC')->paginate(100);
+        $results = Data::orderBy('id', 'DESC');
 
-        return view('data.results')->with('results', $results);
+        if(Auth::user()->user_level == 2){
+            $results->where('partner', Auth::user()->partner->name);
+        }
+
+        return view('data.results')->with('results', $results->paginate(100));
     }
 
     public function vl_results(){
-        $results = Data::orderBy('id', 'DESC')->where('result_type', 'Viral Load')->paginate(100);
+        $results = Data::orderBy('id', 'DESC')->where('result_type', 'Viral Load');
 
-        return view('data.results')->with('results', $results);
+       if(Auth::user()->user_level == 2){
+            $results->where('partner', Auth::user()->partner->name);
+        }
+
+        return view('data.results')->with('results', $results->paginate(100));
     }
 
     public function eid_results(){
-        $results = Data::orderBy('id', 'DESC')->where('result_type', 'EID')->paginate(100);
+        $results = Data::orderBy('id', 'DESC')->where('result_type', 'EID');
 
-        return view('data.results')->with('results', $results);
+        if(Auth::user()->user_level == 2){
+            $results->where('partner', Auth::user()->partner->name);
+        }
+
+        return view('data.results')->with('results', $results->paginate(100));
     }
 
     public function rawdataform(){
 
         $partners = Partner::all();
+        
 
         $data = array(
             'partners' => $partners,
@@ -64,6 +78,9 @@ class DataController extends Controller
                     }
                     if(!empty($request->to)){
                         $data->where('date_sent', '<=', date($request->to));
+                    }
+                    if(Auth::user()->user_level == 2){
+                        $data->where('partner', Auth::user()->partner->name);
                     }
         
 

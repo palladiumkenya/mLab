@@ -38,6 +38,16 @@ class HomeController extends Controller
             return $facilities;
     }
 
+    public function get_facilities_mlab(Request $request)
+    {
+            $sub_county_id = $request->sub_county_id;
+
+            
+            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->whereNull('partner_id')->whereNull('mobile')->get();
+
+            return $facilities;
+    }
+
     public function get_facilities_data(Request $request)
     {
             $sub_county_id = $request->sub_county_id;

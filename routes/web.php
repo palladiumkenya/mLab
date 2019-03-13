@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);
+    Route::post('/get_facilities_mlab', ['uses'=>'HomeController@get_facilities_mlab', 'as'=>'get_facilities_mlab']);
     Route::post('/get_facilities_data', ['uses'=>'HomeController@get_facilities_data', 'as'=>'get_facilities_data']);
     Route::post('/get_counties', ['uses'=>'HomeController@get_counties', 'as'=>'get_counties']);
 
@@ -42,6 +43,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::get('/facilities', 'FacilityController@index')->name('facilities');
+    Route::get('/add/facility/form', 'FacilityController@addfacilityform')->name('addfacilityform');
+    Route::post('/add/facility', 'FacilityController@addfacility')->name('addfacility');
+    Route::post('/remove/facility', 'FacilityController@removefacility')->name('removefacility');
+    
+    Route::post('/edit/facility', 'FacilityController@edit_facility')->name('edit_facility');
 
 
     Route::get('/il/facilities', 'ILFacilityController@index')->name('il_facilities');
