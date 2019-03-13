@@ -23,6 +23,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);
+    Route::post('/get_facilities_data', ['uses'=>'HomeController@get_facilities_data', 'as'=>'get_facilities_data']);
+    Route::post('/get_counties', ['uses'=>'HomeController@get_counties', 'as'=>'get_counties']);
 
     Route::get('/users', 'UserController@index')->name('users');
     Route::get('/add/user/form', 'UserController@adduserform')->name('adduserform');
@@ -54,5 +56,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/vl/results', 'DataController@vl_results')->name('vl_results');
     Route::get('/eid/results', 'DataController@eid_results')->name('eid_results');
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
+    Route::post('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
 
 });

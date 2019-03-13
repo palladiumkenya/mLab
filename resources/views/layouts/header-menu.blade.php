@@ -1,10 +1,10 @@
     <div class="main-header">
             <div class="logo">
-                <img src="{{asset('assets/images/logo.png')}}" alt="">
+                <a href="{{route('home')}}"><img src="{{asset('assets/images/logo.png')}}" alt=""></a>
             </div>
 
             <div class="menu-toggle">
-                <h1 style="color: blue;"> mLab</h1>
+                <a href="{{route('home')}}"><i class="i-Home"></i><h1 style="color:blue;">mLab</h1></a>
             </div>
 
             <div class="d-flex align-items-center">

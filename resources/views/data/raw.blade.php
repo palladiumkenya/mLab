@@ -86,10 +86,14 @@
             targets: [4],
             orderData: [4, 0]
         }],
-        "paging": true,
+        "paging": false,
         "responsive":true,
         "ordering": true,
-        "info": true
+        "info": true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });</script>
 
 
