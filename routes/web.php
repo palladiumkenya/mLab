@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);
     Route::post('/get_facilities_mlab', ['uses'=>'HomeController@get_facilities_mlab', 'as'=>'get_facilities_mlab']);
+    Route::post('/get_partner_facilities_mlab', ['uses'=>'HomeController@get_partner_facilities_mlab', 'as'=>'get_partner_facilities_mlab']);
     Route::post('/get_facilities_data', ['uses'=>'HomeController@get_facilities_data', 'as'=>'get_facilities_data']);
     Route::post('/get_counties', ['uses'=>'HomeController@get_counties', 'as'=>'get_counties']);
 
@@ -32,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/add/user', 'UserController@adduser')->name('adduser');
     Route::post('/edit/user', 'UserController@edituser')->name('edituser');
     Route::post('/reset/user', 'UserController@resetuser')->name('resetuser');
+    Route::post('/delete/user', 'UserController@deleteuser')->name('deleteuser');
     Route::post('/change/password', 'UserController@changepass')->name('changepass');
 
 

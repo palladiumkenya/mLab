@@ -16,6 +16,9 @@ class FacilityController extends Controller
         if(Auth::user()->user_level == 2){
             $facilities->where('partner_id', Auth::user()->partner_id);
         }
+        if(Auth::user()->user_level == 5){
+            $facilities->join('sub_county','sub_county.id', '=', 'health_facilities.Sub_County_ID')->where('sub_county.county_id', Auth::user()->county_id);
+        }
 
         return view('facility.facility')->with('facilities', $facilities->get());
     }

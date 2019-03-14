@@ -63,6 +63,8 @@
                                                         <td>
                                                             <button onclick="editUser({{$user}});" data-toggle="modal" data-target="#editUser" type="button" class="btn btn-primary btn-sm">Edit</button>
                                                             <button onclick="resetUser({{$user->id}});"type="button" class="btn btn-success btn-sm">Reset</button>
+                                                            <button onclick="deleteUser({{$user->id}});"type="button" class="btn btn-danger btn-sm">Delete</button>
+
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -116,7 +118,44 @@
                                         <label for="phone">Phone</label>
                                         <input class="form-control" id="phone" name="phone" placeholder="Enter phone">
                                     </div>
+                                    @if(Auth::user()->user_level == 2) 
+                                        <div class="col-md-6 form-group mb-3">
+                                            <label for="firstName1">County</label>
+                                            <select  class="form-control" data-width="100%" id="county" name="county_id">
+                                                <option value="">Select County</option>
+                                                    @if (count($counties) > 0)
+                                                        @foreach($counties as $county)
+                                                        <option value="{{$county->id }}">{{ ucwords($county->name) }}</option>
+                                                            @endforeach
+                                                    @endif
+                                            </select>
+                                        </div>
 
+                                        <div class="col-md-6 form-group mb-3">
+                                            <label for="firstName1">Sub County</label>
+                                            <select  class="form-control" data-width="100%" id="sub_county" name="sub_county_id">
+                                                <option value="">Select Sub County</option>
+                                                    @if (count($subcounties) > 0)
+                                                        @foreach($subcounties as $subcounty)
+                                                        <option value="{{$subcounty->id }}">{{ ucwords($subcounty->name) }}</option>
+                                                            @endforeach
+                                                    @endif
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6 form-group mb-3">
+                                            <label for="firstName1">Facility</label>
+                                            <select  class="form-control" data-width="100%" id="facility" name="code">
+                                                <option value="">Select Facility</option>
+                                                @if (count($facilities) > 0)
+                                                        @foreach($facilities as $facility)
+                                                        <option value="{{$facility->code }}">{{ ucwords($facility->name) }}</option>
+                                                            @endforeach
+                                                    @endif
+                                                    
+                                            </select>
+                                        </div>
+                                    @endif
                                     
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="picker1">User Level</label>
@@ -131,8 +170,12 @@
                                             <option value="3">Facility Admin</option>
                                             <option value="4">Facility User</option>
                                         @endif 
+                                        @if(Auth::user()->user_level == 3)
+                                            <option value="4">Facility User</option>
+                                        @endif 
                                         </select>
                                     </div>
+
                                     @if(Auth::user()->user_level < 2) 
                                         <div class="col-md-6 form-group mb-3">
                                             <label for="picker1">Affiliation</label>
@@ -156,6 +199,15 @@
                                         
                                         </div>
                                     @endif
+
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="picker1">Status</label>
+                                        <select id ="status" name="status" class="form-control">
+                                            <option >Select</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>                                     
+                                        </select>
+                                    </div>
                         
                                 </div>
                                 <button type="submit" class="btn btn-block btn-primary">Submit</button>
@@ -186,6 +238,29 @@
                         <p>Are you sure you want to reset this user's password?.</p>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
                         <button id="reset" type="button" class="btn btn-success" data-person_id="">Reset</button>
+                    </div>
+                    <div class="modal-footer">
+                       
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="DeleteModal" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to Delete this user's password?.</p>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                        <button id="delete" type="button" class="btn btn-danger" data-person_id="">Delete</button>
                     </div>
                     <div class="modal-footer">
                        
@@ -225,13 +300,16 @@ $('#level').on('change', function() {
 
 
 function editUser(user){
-
     $('#fname').val(user.f_name);
     $('#lname').val(user.l_name);
     $('#email').val(user.email);
+    $('#county').val(user.facility.sub_county.county.id);
+    $('#sub_county').val(user.facility.sub_county.id);
+    $('#facility').val(user.facility.code);
     $('#phone').val(user.phone_no);
     $('#uid').val(user.id);
     $('#level').val(user.user_level);
+    $('#status').val(user.status);
 
 }
 
@@ -239,8 +317,6 @@ function editUser(user){
 function resetUser(uid){
     $('#ResetModal').modal('show');
 
-               
-    console.log(uid);
     $(document).off("click", "#reset").on("click", "#reset", function (event) {
         $.ajax({
             type: "POST",
@@ -257,6 +333,88 @@ function resetUser(uid){
     });
 
 }
+
+function deleteUser(uid){
+    $('#DeleteModal').modal('show');
+
+               
+    console.log(uid);
+    $(document).off("click", "#delete").on("click", "#delete", function (event) {
+        $.ajax({
+            type: "POST",
+            url: '/delete/user',
+            data: {
+                "uid": uid, "_token": "{{ csrf_token()}}"
+            },
+            dataType: "json",
+            success: function (data) {
+                toastr.success(data.details);
+                $('#DeleteModal').modal('hide');
+            }
+        })
+    });
+
+}
+
+
+$('#county').change(function () {
+
+$("#sub_county").empty();
+
+var x = $(this).val();
+$.ajax({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: "POST",
+    url: '/get_subcounties',
+    data: {
+        "county_id": x
+    },
+    dataType: "json",
+    success: function (data) {
+
+        for (var i = 0; i < data.length; i++) {
+            var select = document.getElementById("sub_county"),
+                opt = document.createElement("option");
+
+            opt.value = data[i].id;
+            opt.textContent = data[i].name;
+            select.appendChild(opt);
+        }
+    }
+})
+});
+
+$('#sub_county').change(function () {
+
+$("#facility").empty();
+
+var y = $(this).val();
+$.ajax({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: "POST",
+    url: '/get_partner_facilities_mlab',
+    data: {
+        "sub_county_id": y
+    },
+    dataType: "json",
+    success: function (data) {
+
+        for (var i = 0; i < data.length; i++) {
+            var select = document.getElementById("facility"),
+                opt = document.createElement("option");
+
+            opt.value = data[i].code;
+            opt.textContent = data[i].name;
+            select.appendChild(opt);
+        }
+    }
+})
+});
+
 </script>
 
 @endsection

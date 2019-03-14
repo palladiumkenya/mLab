@@ -23,7 +23,7 @@
                                     <a href="{{route('il_facilities')}}"><i class="i-Hospital1"></i>IL Facilities</a>
                                 </div>
                             </div>
-                            <div class="col-md-6 p-">
+                            <div class="col-md-6 p-4">
                                 <p class="text-primary text--cap border-bottom-primary d-inline-block">Reports</p>
                                 <div class="menu-icon-grid w-auto p-0">
                                     <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
@@ -35,9 +35,43 @@
                         @endif
                         @if(Auth::user()->user_level == 2)
                         <div class="col-md-12 p-4 ">
-                            <p class="text-primary text--cap border-bottom-primary d-inline-block">Adminstration Options</p>
+                            <p class="text-primary text--cap border-bottom-primary d-inline-block">Adminstration & Reports</p>
                                 <div class="menu-icon-grid w-auto p-0">
                                     <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
+                                    <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
+                                    <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
+                                    <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
+                                    <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                    <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
+                                </div>
+                            </div>
+                        @endif
+                        @if(Auth::user()->user_level == 3)
+                        <div class="col-md-10 p-4 ">
+                            <p class="text-primary text--cap border-bottom-primary d-inline-block">Adminstration & Reports</p>
+                                <div class="menu-icon-grid w-auto p-0">
+                                    <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
+                                    <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
+                                    <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
+                                    <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                    <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
+                                </div>
+                            </div>
+                        @endif
+                        @if(Auth::user()->user_level == 4)
+                        <div class="col-md-6 p-4 ">
+                            <p class="text-primary text--cap border-bottom-primary d-inline-block">Reports</p>
+                                <div class="menu-icon-grid w-auto p-0">
+                                    <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
+                                    <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
+                                    <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                </div>
+                            </div>
+                        @endif
+                        @if(Auth::user()->user_level == 5)
+                        <div class="col-md-10 p-4 ">
+                            <p class="text-primary text--cap border-bottom-primary d-inline-block">Reports</p>
+                                <div class="menu-icon-grid w-auto p-0">
                                     <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
                                     <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                                     <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
@@ -55,9 +89,9 @@
                 <p></p>
                    <h6> Welcome, <b>{{ ucwords(Auth::user()->f_name)}} {{ ucwords(Auth::user()->l_name)}}</b>: @if(Auth::user()->user_level < 2)   National Dashboard 
                    @elseif(Auth::user()->user_level == 2) {{Auth::user()->partner->name}} Dashboard
-                   @elseif(Auth::user()->user_level == 3) Facility Dashboard
-                   @elseif(Auth::user()->user_level == 4) Facility Dashboard
-                   @elseif(Auth::user()->user_level == 5) County Dashboard
+                   @elseif(Auth::user()->user_level == 3) {{Auth::user()->facility->name}} Dashboard <b>(MFL: {{Auth::user()->facility->code}})</b>
+                   @elseif(Auth::user()->user_level == 4) {{Auth::user()->facility->name}} Dashboard <b>(MFL: {{Auth::user()->facility->code}})</b>
+                   @elseif(Auth::user()->user_level == 5) {{Auth::user()->county->name}} County Dashboard
                    @endif </h6>
                 </div>
             </div>
@@ -79,9 +113,9 @@
                             </div>
                             <a class="dropdown-item">@if(Auth::user()->user_level < 2)   National
                    @elseif(Auth::user()->user_level == 2) {{Auth::user()->partner->name}}
-                   @elseif(Auth::user()->user_level == 3) Facility
-                   @elseif(Auth::user()->user_level == 4) Facility
-                   @elseif(Auth::user()->user_level == 5) County
+                   @elseif(Auth::user()->user_level == 3) {{Auth::user()->facility->name}}
+                   @elseif(Auth::user()->user_level == 4) {{Auth::user()->facility->name}}
+                   @elseif(Auth::user()->user_level == 5) {{Auth::user()->county->name}} County
                    @endif</a>
                             <a class="dropdown-item" href="{{route('logout')}}">Sign out</a>
                         </div>

@@ -18,6 +18,12 @@ class DataController extends Controller
         if(Auth::user()->user_level == 2){
             $results->where('partner', Auth::user()->partner->name);
         }
+        if(Auth::user()->user_level == 5){
+            $results->where('county', Auth::user()->county->name);
+        }
+        if(Auth::user()->user_level == 3 || Auth::user()->user_level == 4){
+            $results->where('facility', Auth::user()->facility->name);
+        }
 
         return view('data.results')->with('results', $results->paginate(100));
     }
@@ -28,6 +34,12 @@ class DataController extends Controller
        if(Auth::user()->user_level == 2){
             $results->where('partner', Auth::user()->partner->name);
         }
+        if(Auth::user()->user_level == 5){
+            $results->where('county', Auth::user()->county->name);
+        }
+        if(Auth::user()->user_level == 3 || Auth::user()->user_level == 4){
+            $results->where('facility', Auth::user()->facility->name);
+        }
 
         return view('data.results')->with('results', $results->paginate(100));
     }
@@ -37,6 +49,12 @@ class DataController extends Controller
 
         if(Auth::user()->user_level == 2){
             $results->where('partner', Auth::user()->partner->name);
+        }
+        if(Auth::user()->user_level == 5){
+            $results->where('county', Auth::user()->county->name);
+        }
+        if(Auth::user()->user_level == 3 || Auth::user()->user_level == 4){
+            $results->where('facility', Auth::user()->facility->name);
         }
 
         return view('data.results')->with('results', $results->paginate(100));

@@ -47,6 +47,15 @@ class HomeController extends Controller
 
             return $facilities;
     }
+    public function get_partner_facilities_mlab(Request $request)
+    {
+            $sub_county_id = $request->sub_county_id;
+
+            
+            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->where('partner_id', Auth::user()->partner->id)->get();
+
+            return $facilities;
+    }
 
     public function get_facilities_data(Request $request)
     {
