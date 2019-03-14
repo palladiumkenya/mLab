@@ -25,7 +25,7 @@
                                                 <th>Email</th>
                                                 <th>Level</th>
                                                 @if(Auth::user()->user_level < 2)
-                                                <th>Partner</th>
+                                                <th>Affiliation</th>
                                                 @endif
                                                 @if(Auth::user()->user_level == 2)
                                                 <th>Facility</th>
@@ -51,7 +51,7 @@
                                                               @if($user->user_level == '5') County @endif
                                                         </td>
                                                         @if(Auth::user()->user_level < 2)
-                                                            <td>  @if(!empty($user->partner)) {{$user->partner->name}}@else None @endif
+                                                            <td>  @if(!empty($user->partner)) {{$user->partner->name}}@elseif(!empty($user->county)) {{$user->county->name}} County @else None @endif
                                                         @endif
                                                         @if(Auth::user()->user_level == 2)
                                                             <td> {{$user->facility->name}} </td>
@@ -161,10 +161,12 @@
                                         <label for="picker1">User Level</label>
                                         <select id ="level" name="level" class="form-control">
                                             <option >Select</option>
-                                        @if(Auth::user()->user_level < 2)    
+                                        @if(Auth::user()->user_level < 2) 
                                             <option value="1">National</option>
                                             <option value="2">Partner</option>
                                             <option value="5">County</option>
+                                            <option value="3">Facility Admin</option>
+                                            <option value="4">Facility User</option>
                                         @endif
                                         @if(Auth::user()->user_level == 2)
                                             <option value="3">Facility Admin</option>
@@ -184,7 +186,7 @@
                                                 <option value="">Select County</option>
                                                     @if (count($counties) > 0)
                                                         @foreach($counties as $county)
-                                                        <option value="{{$county->id }}">{{ ucwords($county->name) }}</option>
+                                                        <option value="{{$county->id }}">{{ ucwords($county->name) }} County</option>
                                                             @endforeach
                                                     @endif
                                             </select>
@@ -296,20 +298,50 @@ $('#level').on('change', function() {
     $('#partner').attr("hidden",true);
     $('#affiliation').attr("hidden",true);
   }
+  
 });
 
 
 function editUser(user){
+
+    var p = {!! Auth:: user() !!};
+    if(p.user_level < 2){
+        if (user.user_level < 2){
+            $('#affiliation').val('National');
+        }
+        if (user.user_level == 2){
+            $('#partner').removeAttr('hidden');
+            $('#affiliation').attr("hidden",true);
+            $('#county').attr("hidden",true);
+            $('#partner').val(user.partner.id);
+        }
+        if (user.user_level == 5){
+            $('#county').removeAttr('hidden');
+            $('#partner').attr("hidden",true);
+            $('#affiliation').attr("hidden",true);
+            $('#county').val(user.county.id);
+        }
+        if (user.user_level == 3 || user.user_level == 4){
+            $('#partner').removeAttr('hidden');
+            $('#affiliation').attr("hidden",true);
+            $('#county').attr("hidden",true);
+            $('#partner').val(user.partner.id);
+        }
+    }
     $('#fname').val(user.f_name);
     $('#lname').val(user.l_name);
     $('#email').val(user.email);
-    $('#county').val(user.facility.sub_county.county.id);
-    $('#sub_county').val(user.facility.sub_county.id);
-    $('#facility').val(user.facility.code);
+    if(p.user_level > 1){
+        $('#county').val(user.facility.sub_county.county.id);
+        $('#sub_county').val(user.facility.sub_county.id);
+        $('#facility').val(user.facility.code);
+
+    }
     $('#phone').val(user.phone_no);
     $('#uid').val(user.id);
     $('#level').val(user.user_level);
     $('#status').val(user.status);
+    $('#email').val(user.email);
 
 }
 

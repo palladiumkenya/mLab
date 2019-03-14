@@ -188,7 +188,7 @@ $.ajax({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
     type: "POST",
-    url: '/get_facilities_mlab',
+    url: '/get_partner_facilities_mlab',
     data: {
         "sub_county_id": y
     },

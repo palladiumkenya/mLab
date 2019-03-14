@@ -115,7 +115,7 @@ class UserController extends Controller
             }
             if($request->level =='3'){
                 $user->partner_id = Auth::user()->partner->id;
-                $user->facility_id = $request->facility_id;
+                $user->facility_id = $request->code;
             }
             if($request->level =='4'){
                 $user->partner_id = Auth::user()->partner->id;
