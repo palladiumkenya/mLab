@@ -66,4 +66,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
     Route::post('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
 
+
+
 });
+
+Route::get('/send/results', ['uses' => 'SendResultsController@sendVLEID', 'as' => 'sendvleid']);
+Route::get('/send/il/results', ['uses' => 'SendResultsController@sendIL', 'as' => 'sendil']);
+Route::get('/process/inbox', ['uses' => 'TasksController@read', 'as' => 'read']);
+Route::get('/classify', ['uses' => 'TasksController@classify', 'as' => 'classify']);

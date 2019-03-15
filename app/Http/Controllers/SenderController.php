@@ -32,10 +32,17 @@ class SenderController extends Controller
             foreach ($send['data'] as $data) {
                 $dts = $data->Recipients;
                 foreach($dts as $dt){
+                    
+
+                    date_default_timezone_set('UTC');
+                    $date = date('Y-m-d H:i:s', time());
+
                     $sent->status = $dt->status;
                     $sent->statusCode = $dt->statusCode;
                     $sent->messageId = $dt->messageId;
                     $sent->cost = $dt->cost;
+                    $sent->updated_at = $date;
+                    $sent->created_at = $date;
                 }
 
             }
