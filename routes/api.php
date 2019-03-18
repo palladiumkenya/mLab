@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/get_vl_results', ['uses' => 'VLResultsController@getResults', 'as' => 'get_vl_results']);
+Route::get('/get_eid_results', ['uses' => 'VLResultsController@getEIDResults', 'as' => 'get_eid_results']);
+Route::post('/tb_results', 'TBResultsController@index');
+Route::post('/hts_results', 'HTSResultsController@index');
+Route::get('/active_facilities', 'FacilityController@active_facilities');

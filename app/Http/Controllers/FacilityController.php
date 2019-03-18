@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Facility;
+use App\ILFacility;
 use App\County;
 use Auth;
 
@@ -101,4 +102,48 @@ class FacilityController extends Controller
         }
     }
     
+
+    public function active_facilities(){
+
+        $data = [];
+        $facilities = Facility::whereNotNull('mobile')->get();
+
+        $ilfs = ILFacility::all();
+
+        foreach($ilfs as $ilf){
+
+            $fac = [];
+
+            $code = $ilf->mfl_code;
+
+            $facility = Facility::where('code', $code)->first();
+
+            $fac['facility'] = $facility->name;
+            $fac['mfl_code'] = $facility->code;
+            $fac['date_added'] = $facility->modified;
+
+
+            array_push($data, $fac);
+
+            
+        }
+
+        foreach($facilities as $f){
+            $fa = [];
+
+            $fa['facility'] = $f->name;
+            $fa['mfl_code'] = $f->code;
+            $fa['date_added'] = $f->modified;
+
+            array_push($data, $fa);
+
+
+
+        }
+
+        $a = array_unique(array($data));
+        
+
+        echo json_encode($a);
+    }
 }
