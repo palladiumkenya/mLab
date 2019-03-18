@@ -38,6 +38,7 @@ class FacilityController extends Controller
             $facility = Facility::where('code', $request->code)->first();
             $facility->mobile = $request->phone;
             $facility->partner_id = Auth::user()->partner->id;
+            $facility->updated_at = date('Y-m-d H:i:s');
 
             if($facility->save()){
 
@@ -90,7 +91,8 @@ class FacilityController extends Controller
 
             $facility->mobile = null;
             $facility->partner_id = null;
-
+            $facility->updated_at = date('Y-m-d H:i:s');
+            
             if($facility->save()){
 
                 return response(['status' => 'success', 'details' => 'Facility has been removed successfully']);

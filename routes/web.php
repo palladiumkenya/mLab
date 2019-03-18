@@ -72,5 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/send/results', ['uses' => 'SendResultsController@sendVLEID', 'as' => 'sendvleid']);
 Route::get('/send/il/results', ['uses' => 'SendResultsController@sendIL', 'as' => 'sendil']);
+Route::get('/send/hts/results', ['uses' => 'SendResultsController@sendHTS', 'as' => 'sendhts']);
+Route::get('/send/tb/results', ['uses' => 'SendResultsController@sendTB', 'as' => 'sendtb']);
 Route::get('/process/inbox', ['uses' => 'TasksController@read', 'as' => 'read']);
 Route::get('/classify', ['uses' => 'TasksController@classify', 'as' => 'classify']);
