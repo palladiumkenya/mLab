@@ -3,24 +3,17 @@
 
             <div class="separator-breadcrumb border-top"></div>
 
-            <div id="FirstModal" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Reset User</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        
 
-                            <div class="col-md-12">
-                            @php
+            @php
                                 $username = 'admin'; // Username  
 
                                 $cip = $_SERVER['REMOTE_ADDR'];       
                                 $server = 'https://tableau.mhealthkenya.co.ke/trusted'; 
+
+                                echo $username;
+                                echo $ip;
+                                echo $server;
+                                
                             @endphp
                             @if(Auth::user()->user_level < 2)
                                 @php
@@ -74,6 +67,20 @@
                                 <iframe src="<?= $server ?>/<?= $ticket ?>/<?= $clnd_view ?>" width="100%" height="652px" ></iframe> 
                             @endphp
 
+            <div id="FirstModal" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Reset User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        
+
+                            <div class="col-md-12">
+                          
                             <form role="form" method="post"action="{{route('changepass')}}">
                                 {{ csrf_field() }}
                                 <div class="row">
