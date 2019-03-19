@@ -177,6 +177,8 @@ class SendResultsController extends Controller
             if($sender->send($dest, $encr)){
 
                 $result->processed = '1';
+                $result->date_sent = $date;
+                $result->date_delivered = $date;
                 $result->updated_at = $date;
 
 
@@ -229,9 +231,11 @@ class SendResultsController extends Controller
             $date = date('Y-m-d H:i:s', time());
 
             $sender = new SenderController;
-            if($sender->send("0723783021", $encr)){
+            if($sender->send($dest, $encr)){
 
                 $result->processed = '1';
+                $result->date_sent = $date;
+                $result->date_delivered = $date;
                 $result->updated_at = $date;
 
 
