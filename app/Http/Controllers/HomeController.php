@@ -13,8 +13,46 @@ class HomeController extends Controller
     public function index()
     {
         Auth::user()->load('partner', 'facility', 'county');
+        $username = 'viewer'; // Username  
+        $server = 'https://tableau.mhealthkenya.co.ke/trusted';  // Tableau URL  
+        if(Auth::user()->user_level < 2){
+                $view = "views/MLABDASH_0/MDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no"; 
+        }
+        if(Auth::user()->user_level == 2){
+                $aff = str_replace(' ', '%20', Auth::user()->partner->name);
+                $view = "views/MLABDASH_0/PartnerDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&partner=".$aff;
+        }
+        if(Auth::user()->user_level == 3 || Auth::user()->user_level == 4){
+                $aff = str_replace(' ', '%20', Auth::user()->facility->name);
+                $view = "views/MLABDASH_0/FacilityDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&facility=".$aff;
+                
+        }
+        if(Auth::user()->user_level == 5){
+                $aff = str_replace(' ', '%20', Auth::user()->county->name);
+                $view = "views/MLABDASH_0/CountyDashboard?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&county=".$aff;
+        }
 
-        return view('dashboard.dashboardv1');
+
+        $ch = curl_init($server); // Initializes cURL session 
+
+
+
+        $data = array('username' => $username); // What data to send to Tableau Server  
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POST, true); // Tells cURL to use POST method  
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // What data to post  
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return ticket to variable  
+
+
+        $ticket = curl_exec($ch); // Execute cURL function and retrieve ticket  
+        curl_close($ch); // Close cURL session  
+
+        $clnd_view = str_replace(' ', '%20', $view);
+        $url = $server . '/' . $ticket . '/' . $clnd_view;
+
+        
+        return view('dashboard.dashboardv1')->with('url', $url);
        
     }
 

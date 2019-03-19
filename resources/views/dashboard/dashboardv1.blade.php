@@ -3,69 +3,8 @@
 
             <div class="separator-breadcrumb border-top"></div>
 
-
-            @php
-                                $username = 'admin'; // Username  
-
-                                $cip = $_SERVER['REMOTE_ADDR'];       
-                                $server = 'https://tableau.mhealthkenya.co.ke/trusted'; 
-
-                                echo $username;
-                                echo $ip;
-                                echo $server;
-                                
-                            @endphp
-                            @if(Auth::user()->user_level < 2)
-                                @php
-                                    $view = "/views/MLABDASH_0/MDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no";
-                                @endphp
-
-                            @endif
-                            @if(Auth::user()->user_level == 2)
-                                @php
-                                    $view = "/views/MLABDASH_0/PartnerDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no";
-                                @endphp
-
-                            @endif
-                            @if((Auth::user()->user_level == 3) || (Auth::user()->user_level == 4))
-                                @php
-                                    $view = "/views/MLABDASH_0/FacilityDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no";
-                                @endphp
-
-                            @endif
-                            @if(Auth::user()->user_level == 5)
-                                @php
-                                    $view = "/views/MLABDASH_0/CountyDashboard?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no";
-                                @endphp
-
-                            @endif
-
-
-                            @php
-                                
-                                $ch = curl_init($server); // Initializes cURL session 
-
-
-
-                                $data = array('username' => $username, 'client_ip' => $cip); // What data to send to Tableau Server  
-
-                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                                curl_setopt($ch, CURLOPT_POST, true); // Tells cURL to use POST method  
-                                curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // What data to post  
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return ticket to variable  
-
-
-                                $ticket = curl_exec($ch); // Execute cURL function and retrieve ticket  
-                                curl_close($ch); // Close cURL session  
-
-                                $clnd_view = str_replace(' ', '%20', $view);
-                                $url = $server . '/' . $ticket . '/' . $clnd_view;
-
-                                ?>  
-
-
-                                <iframe src="<?= $server ?>/<?= $ticket ?>/<?= $clnd_view ?>" width="100%" height="652px" ></iframe> 
-                            @endphp
+            <iframe src="{{$url}}" width="100%" height="652px" ></iframe>  
+         
 
             <div id="FirstModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-lg" role="document">
