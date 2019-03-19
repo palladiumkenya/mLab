@@ -8,6 +8,7 @@ use App\County;
 use App\Partner;
 use App\Facility;
 use App\SubCounty;
+use App\HTSData;
 use Auth;
 
 class DataController extends Controller
@@ -58,6 +59,22 @@ class DataController extends Controller
         }
 
         return view('data.results')->with('results', $results->paginate(100));
+    }
+
+    public function hts_results(){
+        $results = HTSData::orderBy('hts_result_id', 'DESC');
+
+        if(Auth::user()->user_level == 2){
+            $results->where('partner', Auth::user()->partner->name);
+        }
+        if(Auth::user()->user_level == 5){
+            $results->where('county', Auth::user()->county->name);
+        }
+        if(Auth::user()->user_level == 3 || Auth::user()->user_level == 4){
+            $results->where('facility', Auth::user()->facility->name);
+        }
+
+        return view('data.hts_results')->with('results', $results->paginate(100));
     }
 
     public function rawdataform(){

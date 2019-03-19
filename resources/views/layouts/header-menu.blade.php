@@ -29,6 +29,7 @@
                                     <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                                     <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                                     <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                    <a href="{{route('hts_results')}}"><i class="i-Neutron"></i> HTS Results</a>
                                     <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
                                 </div>
                             </div>
@@ -42,6 +43,7 @@
                                     <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                                     <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                                     <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                    <a href="{{route('hts_results')}}"><i class="i-Neutron"></i> HTS Results</a>
                                     <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
                                 </div>
                             </div>
@@ -54,6 +56,7 @@
                                     <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                                     <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                                     <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                    <a href="{{route('hts_results')}}"><i class="i-Neutron"></i> HTS Results</a>
                                     <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
                                 </div>
                             </div>
@@ -65,6 +68,7 @@
                                     <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                                     <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                                     <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                    <a href="{{route('hts_results')}}"><i class="i-Neutron"></i> HTS Results</a>
                                 </div>
                             </div>
                         @endif
@@ -76,6 +80,7 @@
                                     <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                                     <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                                     <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
+                                    <a href="{{route('hts_results')}}"><i class="i-Neutron"></i> HTS Results</a>
                                     <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
                                 </div>
                             </div>
