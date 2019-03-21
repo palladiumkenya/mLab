@@ -39,6 +39,12 @@ class LoginController extends Controller
         $this->middleware('guest', ['except' => 'logout']);
     }
 
+
+    public function guard()
+    {
+     return Auth::guard('api');
+    }
+
     /**
      * Handle a login request to the application.
      *

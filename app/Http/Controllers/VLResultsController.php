@@ -47,30 +47,30 @@ class VLResultsController extends Controller
     public function getResults()
     {
 
-        $ilfs = ILFacility::all();
+        // $ilfs = ILFacility::all();
 
-        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
+        // $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
 
-        $facilities = array();
+        // $facilities = array();
 
-            foreach($ilfs as $ilf){
+        //     foreach($ilfs as $ilf){
 
-                $code = $ilf->mfl_code;
+        //         $code = $ilf->mfl_code;
 
-                array_push($facilities,$code);
-            }
-            foreach($mlabfs as $mlabf){
+        //         array_push($facilities,$code);
+        //     }
+        //     foreach($mlabfs as $mlabf){
 
-                $code = $mlabf->code;
+        //         $code = $mlabf->code;
 
-                array_push($facilities,$code);
-            }
+        //         array_push($facilities,$code);
+        //     }
        
 
        
-        $results= array_unique($facilities);
+        // $results= array_unique($facilities);
 
-        $a =  implode( ',', $results );
+        // $a =  implode( ',', $results );
 
         $today = date("Y-m-d");
         $yester = date('Y-m-d', strtotime("-7 days"));
@@ -78,7 +78,7 @@ class VLResultsController extends Controller
 
             $fields = array(
                 'test' => 1,
-                'facility_code' =>$a,
+                'facility_code' => '19719',
                 'date_dispatched_start' => $yester,
                 'date_dispatched_end' => $today
 
@@ -136,7 +136,8 @@ class VLResultsController extends Controller
                         $r->cst = $dat->cst;
                         $r->csr = $dat->csr;
                         $r->lab_order_date = $dat->lab_order_date;
-                        $r->date_collected = $dat->date_collected;
+                        $r->date_collected = $dat->date_collected;                        
+                        $r->lab_name = $request->lab_name;
             
                         $r->save();
                     }
@@ -209,7 +210,8 @@ class VLResultsController extends Controller
                                 $r->cst = $dat->cst;
                                 $r->csr = $dat->csr;
                                 $r->lab_order_date = $dat->lab_order_date;
-                                $r->date_collected = $dat->date_collected;
+                                $r->date_collected = $dat->date_collected;                                
+                                $r->lab_name = $request->lab_name;
                     
                                 $r->save();
                             }
@@ -332,7 +334,8 @@ class VLResultsController extends Controller
                         $r->cst = $dat->cst;
                         $r->csr = $dat->csr;
                         $r->lab_order_date = $dat->lab_order_date;
-                        $r->date_collected = $dat->date_collected;
+                        $r->date_collected = $dat->date_collected;                        
+                        $r->lab_name = $request->lab_name;
             
                         $r->save();
                     }
@@ -419,7 +422,8 @@ class VLResultsController extends Controller
                                 $r->cst = $dat->cst;
                                 $r->csr = $dat->csr;
                                 $r->lab_order_date = $dat->lab_order_date;
-                                $r->date_collected = $dat->date_collected;
+                                $r->date_collected = $dat->date_collected;                                
+                                $r->lab_name = $request->lab_name;
                     
                                 $r->save();
                             }

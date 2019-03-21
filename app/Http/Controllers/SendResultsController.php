@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ini_set('max_execution_time', 0);
+ini_set('memory_limit', '1024M');
 use Illuminate\Http\Request;
 use App\Http\Controllers\SenderController;
 use App\Result;
@@ -118,24 +119,25 @@ class SendResultsController extends Controller
                 $encr = "IL ". $ted;
             }
 
-            $nf = ILFacility::where('mfl_code', $mfl)->first();
+            $nf = ILFacility::where('mfl_code', $mfl)->where('phone_no', 'not like', '%SWOP%')->first();
 
-            $dest = $nf->phone_no;
+            if(!empty($nf)){
+                $dest = $nf->phone_no;
 
-            date_default_timezone_set('Africa/Nairobi');
-            $date = date('Y-m-d H:i:s', time());
+                $date = date('Y-m-d H:i:s', time());
 
-            $sender = new SenderController;
-            if($sender->send($dest, $encr)){
+                $sender = new SenderController;
+                if($sender->send($dest, $encr)){
 
-                $result->il_send = '1';
-                $result->date_sent = $date;
-                $result->date_delivered = $date;
-                $result->updated_at = $date;
+                    $result->il_send = '1';
+                    $result->date_sent = $date;
+                    $result->date_delivered = $date;
+                    $result->updated_at = $date;
 
 
-                $result->save();
+                    $result->save();
 
+                }
             }
         }
 
@@ -244,5 +246,73 @@ class SendResultsController extends Controller
             }
         }
 
+    }
+
+    public function ViralLoads(Request $request)
+    {
+
+        $results = Result::where('mfl_code', $request->mfl_code)->where('result_type', 1)->where('il_send', 0)->limit(10)->get();
+
+        $final = [];
+        
+        foreach($results as $result){
+            
+            $time = date("YmdHis");
+
+            $header = (object)[
+                "SENDING_APPLICATION" => "MLAB",
+                "SENDING_FACILITY" => "",
+                "RECEIVING_APPLICATION" => "*",
+                "RECEIVING_FACILITY" => $request->mfl_code,
+                "MESSAGE_DATETIME" =>$time,
+                "SECURITY" => "",
+                "MESSAGE_TYPE" => "ORU^VL",
+                "PROCESSING_ID" => "P"
+
+            ];
+
+            $internalIdentifiers = [
+                (object)[
+                    "ID" => $result->client_id,
+                    "IDENTIFIER_TYPE" => "CCC_NUMBER",
+                    "ASSIGNING_AUTHORITY" => "CCC"
+                ]
+            ];
+
+            $patientIdentifier = (object)[
+                "INTERNAL_PATIENT_ID" => $internalIdentifiers
+            ];
+
+
+            $result = [
+                (object)[
+                    "DATE_SAMPLE_COLLECTED" =>  date('YmdHis',strtotime($result->date_collected)),
+                    "DATE_LAB_ORDERED" => date('YmdHis',strtotime($result->date_collected)),
+                    "DATE_SAMPLE_TESTED" => "",
+                    "VL_RESULT" => $result->result_content.' '.$result->units,
+                    "SAMPLE_TYPE" => $result->cst,
+                    "SAMPLE_REJECTION" => $result->csr,
+                    "JUSTIFICATION" => $result->cj,
+                    "REGIMEN" => "",
+                    "LAB_TESTED_IN" => $result->lab_id
+                ]
+            ];
+        
+
+            $full = (object)[
+                "MESSAGE_HEADER" => $header,
+                "PATIENT_IDENTIFICATION" => $patientIdentifier,                
+                "VIRAL_LOAD_RESULT" => $result
+            ];
+            
+            array_push($final, $full);
+
+            $result->il_send = 1;
+
+            $result->save();
+        }
+
+
+        return response()->json(["results" => $final], 200);
     }
 }

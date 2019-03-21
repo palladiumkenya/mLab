@@ -122,7 +122,7 @@ class FacilityController extends Controller
 
             $fac['facility'] = $facility->name;
             $fac['mfl_code'] = $facility->code;
-            $fac['date_added'] = $facility->modified;
+            $fac['date_added'] = $ilf->created_at;
 
 
             array_push($data, $fac);
