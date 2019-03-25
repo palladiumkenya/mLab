@@ -251,11 +251,13 @@ class SendResultsController extends Controller
     public function ViralLoads(Request $request)
     {
 
-        $results = Result::where('mfl_code', $request->mfl_code)->where('result_type', 1)->where('il_send', 0)->limit(10)->get();
+        $results = Result::where('mfl_code', $request->mfl_code)->where('result_type', 1)
+        // ->where('il_send', 0)
+        ->limit(10)->get();
 
         $final = [];
         
-        foreach($results as $result){
+        foreach($results as $res){
             
             $time = date("YmdHis");
 
@@ -273,7 +275,7 @@ class SendResultsController extends Controller
 
             $internalIdentifiers = [
                 (object)[
-                    "ID" => $result->client_id,
+                    "ID" => $res->client_id,
                     "IDENTIFIER_TYPE" => "CCC_NUMBER",
                     "ASSIGNING_AUTHORITY" => "CCC"
                 ]
@@ -286,15 +288,15 @@ class SendResultsController extends Controller
 
             $result = [
                 (object)[
-                    "DATE_SAMPLE_COLLECTED" =>  date('YmdHis',strtotime($result->date_collected)),
-                    "DATE_LAB_ORDERED" => date('YmdHis',strtotime($result->date_collected)),
+                    "DATE_SAMPLE_COLLECTED" =>  date('YmdHis',strtotime($res->date_collected)),
+                    "DATE_LAB_ORDERED" => date('YmdHis',strtotime($res->date_collected)),
                     "DATE_SAMPLE_TESTED" => "",
-                    "VL_RESULT" => $result->result_content.' '.$result->units,
-                    "SAMPLE_TYPE" => $result->cst,
-                    "SAMPLE_REJECTION" => $result->csr,
-                    "JUSTIFICATION" => $result->cj,
+                    "VL_RESULT" => $res->result_content.' '.$res->units,
+                    "SAMPLE_TYPE" => $res->cst,
+                    "SAMPLE_REJECTION" => $res->csr,
+                    "JUSTIFICATION" => $res->cj,
                     "REGIMEN" => "",
-                    "LAB_TESTED_IN" => $result->lab_id
+                    "LAB_TESTED_IN" => $res->lab_id
                 ]
             ];
         
@@ -307,9 +309,9 @@ class SendResultsController extends Controller
             
             array_push($final, $full);
 
-            $result->il_send = 1;
+            $res->il_send = 1;
 
-            $result->save();
+            $res->save();
         }
 
 
