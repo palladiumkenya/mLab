@@ -49,12 +49,13 @@ class SendResultsController extends Controller
             $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
          
             $encr =  base64_encode($msgmlb);
+            $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
 
             date_default_timezone_set('Africa/Nairobi');
             $date = date('Y-m-d H:i:s', time());
 
             $sender = new SenderController;
-            if($sender->send($dest, $encr)){
+            if($sender->send($dest, $finalmsg)){
 
                 $result->processed = '1';
                 $result->date_sent = $date;
