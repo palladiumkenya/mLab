@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -40,10 +41,10 @@ class LoginController extends Controller
     }
 
 
-    public function guard()
-    {
-     return Auth::guard('api');
-    }
+// public function guard()
+  //  {
+    // return Auth::guard('api');
+    //}
 
     /**
      * Handle a login request to the application.
