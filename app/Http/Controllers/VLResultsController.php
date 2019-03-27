@@ -73,14 +73,14 @@ class VLResultsController extends Controller
         // $a =  implode( ',', $results );
 
         $today = date("Y-m-d");
-        $yester = date('Y-m-d', strtotime("-7 days"));
+        $yester = date('Y-m-d', strtotime("-90 days"));
             $curl = curl_init();
 
             $fields = array(
                 'test' => 1,
-                'facility_code' => '19719',
-                'date_dispatched_start' => $yester,
-                'date_dispatched_end' => $today
+                'facility_code' => '19719,  18827, 22349, 19394, 18896, 13180',
+                // 'date_dispatched_start' => $yester,
+                // 'date_dispatched_end' => $today
 
             );
             $fields_string = http_build_query($fields);
@@ -137,7 +137,7 @@ class VLResultsController extends Controller
                         $r->csr = $dat->csr;
                         $r->lab_order_date = $dat->lab_order_date;
                         $r->date_collected = $dat->date_collected;                        
-                        $r->lab_name = $request->lab_name;
+                        $r->lab_name = $dat->lab_name;
             
                         $r->save();
                     }
@@ -154,9 +154,9 @@ class VLResultsController extends Controller
 
                     $fields = array(
                         'test' => 1,
-                        'facility_code' =>$a,
-                        'date_dispatched_start' => $yester,
-                        'date_dispatched_end' => $today
+                        'facility_code' =>'19719,  18827, 22349, 19394, 18896, 13180',
+                        // 'date_dispatched_start' => $yester,
+                        // 'date_dispatched_end' => $today
             
                     );
                     $fields_string = http_build_query($fields);
@@ -211,7 +211,7 @@ class VLResultsController extends Controller
                                 $r->csr = $dat->csr;
                                 $r->lab_order_date = $dat->lab_order_date;
                                 $r->date_collected = $dat->date_collected;                                
-                                $r->lab_name = $request->lab_name;
+                                $r->lab_name = $dat->lab_name;
                     
                                 $r->save();
                             }
