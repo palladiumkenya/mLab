@@ -123,21 +123,17 @@ class SendResultsController extends Controller
                     }
         
                     $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
-                 
+        
                     $encr =  base64_encode($msgmlb);
                     $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
-        
-        
-                    $sender = new SenderController;
-                    $sender->send($number, $finalmsg);
+    
+                    return response()->json(["results" => $finalmsg], 200);
 
        
                }
             }else{
 
-                $msgf = "No results were found for this period: ". $fr . " - ".$to;
-                $sender = new SenderController;
-                $sender->send($number, $msgf);
+                return response()->json(["results" => $msgf], 404);
 
             }
         }                        
@@ -178,24 +174,21 @@ class SendResultsController extends Controller
                         $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                     
                         $encr =  base64_encode($msgmlb);
-            
-            
-                        $sender = new SenderController;
-                        $sender->send($number, $encr);
+                        $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+        
+                        return response()->json(["results" => $finalmsg], 200);
 
                     }
                 }else{
 
                     $msgf = "No results were found for this period: ". $fr . " - ".$to;
-                    $sender = new SenderController;
-                    $sender->send($number, $msgf);
+                    return response()->json(["results" => $msgf], 404);
 
                 }
             }
             else{
                 $msgf = "Phone Number not Authorised to receive results";
-                $sender = new SenderController;
-                $sender->send($number, $msgf);
+                return response()->json(["results" => $msgf], 301);
 
             }
         }
