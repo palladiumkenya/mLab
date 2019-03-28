@@ -76,5 +76,5 @@ Route::get('/send/il/results', ['uses' => 'SendResultsController@sendIL', 'as' =
 Route::get('/send/hts/results', ['uses' => 'SendResultsController@sendHTS', 'as' => 'sendhts']);
 Route::get('/send/tb/results', ['uses' => 'SendResultsController@sendTB', 'as' => 'sendtb']);
 Route::get('/get/results', ['uses' => 'VLResultsController@getResults', 'as' => 'getResults']);
-Route::get('/process/inbox', ['uses' => 'TasksController@read', 'as' => 'read']);
-Route::get('/classify', ['uses' => 'TasksController@classify', 'as' => 'classify']);
+Route::get('/process/inbox/{id}', ['uses' => 'TasksController@read', 'as' => 'read']);
+Route::get('/classify/{id}', ['uses' => 'TasksController@classify', 'as' => 'classify']);

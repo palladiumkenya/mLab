@@ -9,67 +9,222 @@ use App\Result;
 use App\Facility;
 use App\ILFacility;
 use App\HTSResult;
+use Carbon\Carbon;
 use App\TBResult;
 
 class SendResultsController extends Controller
 {
-    public function sendVLEID(){
+    public function sendVLEID(Request $request){
 
-        $results = Result::whereNull('date_sent')->where('processed', '0')->get();
+        $facility = Facility::where('mobile', $request->phone_no)->first();
 
-       foreach ($results as $result){
+        if(!empty($facility)){
+            $mfl = $facility->code;
 
-            $id = $result->id;
-            $type = $result->result_type;
-            $client_id = $result->client_id;
-            $age = $result->age;
-            $gender = $result->gender;
-            $content = $result->result_content;
-            $units = $result->units;
-            $date_collected = $result->date_collected;
-            $mfl = $result->mfl_code;
+            $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->get();
+
+        
+            foreach ($results as $result){
+
+                $id = $result->id;
+                $type = $result->result_type;
+                $client_id = $result->client_id;
+                $age = $result->age;
+                $gender = $result->gender;
+                $content = $result->result_content;
+                $units = $result->units;
+                $date_collected = $result->date_collected;
+                $mfl = $result->mfl_code;
 
 
-            if (strpos($date_collected, "00:00:00") !== false) {
-                $date_collected = substr($date_collected, 0, 10);
-            }
+                if (strpos($date_collected, "00:00:00") !== false) {
+                    $date_collected = substr($date_collected, 0, 10);
+                }
+                
+                if ($type == 1) {
+                    $ftype = "VL";
+                    $rtype = "FFViral Load Results";
+                } 
+                elseif ($type == 2) {
+                    $ftype = "EID";
+                    $rtype = "FFEID Results";
+                }
+
+                $facility = Facility::where('code', $mfl)->first();
+
+                $dest = $facility->mobile;
+                $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
             
-            if ($type == 1) {
-                $ftype = "VL";
-                $rtype = "FFViral Load Results";
-            } 
-            elseif ($type == 2) {
-                $ftype = "EID";
-                $rtype = "FFEID Results";
+                $encr =  base64_encode($msgmlb);
+                $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+
+                date_default_timezone_set('Africa/Nairobi');
+                $date = date('Y-m-d H:i:s', time());
+
+                $sender = new SenderController;
+                if($sender->send($dest, $finalmsg)){
+
+                    $result->processed = '1';
+                    $result->date_sent = $date;
+                    $result->date_delivered = $date;
+                    $result->updated_at = $date;
+
+
+                    $result->save();
+
+                }
+                
+
             }
-
-            $facility = Facility::where('code', $mfl)->first();
-
-            $dest = $facility->mobile;
-            $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
-         
-            $encr =  base64_encode($msgmlb);
-            $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
-
-            date_default_timezone_set('Africa/Nairobi');
-            $date = date('Y-m-d H:i:s', time());
-
+        }else{
             $sender = new SenderController;
-            if($sender->send($dest, $finalmsg)){
+            $sender->send($request->phone_no, "Phone Number not attched to any Facility");
 
-                $result->processed = '1';
-                $result->date_sent = $date;
-                $result->date_delivered = $date;
-                $result->updated_at = $date;
+        }
 
+    }
 
-                $result->save();
+    public function sendhistorical(Request $request){
+        $mfl = $request->mfl_code;
+        $frm = $request->from;
+        $to = $request->to;
+        $number = $request->phone_no;
 
+        $fr =  Carbon::parse($frm)->format('Y-m-d');
+
+        $t = Carbon::parse($to)->format('Y-m-d');
+
+        $fac = Facility::where('mobile',$number)->where('code', $mfl)->first();
+
+        if (!empty($fac)) {
+            $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
+
+            if(!empty($results)){
+                foreach ($results as $result){
+
+                    $id = $result->id;
+                    $type = $result->result_type;
+                    $client_id = $result->client_id;
+                    $age = $result->age;
+                    $gender = $result->gender;
+                    $content = $result->result_content;
+                    $units = $result->units;
+                    $date_collected = $result->date_collected;
+                    $mfl = $result->mfl_code;
+        
+        
+                    if (strpos($date_collected, "00:00:00") !== false) {
+                        $date_collected = substr($date_collected, 0, 10);
+                    }
+                    
+                    if ($type == 1) {
+                        $ftype = "VL";
+                        $rtype = "FFViral Load Results";
+                    } 
+                    elseif ($type == 2) {
+                        $ftype = "EID";
+                        $rtype = "FFEID Results";
+                    }
+        
+                    $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                 
+                    $encr =  base64_encode($msgmlb);
+        
+        
+                    $sender = new SenderController;
+                    $sender->send($number, $encr);
+
+                    $unpro->processed = 1;
+                    $unpro->updated_at = $date;
+    
+                    $unpro->save();
+                    
+        
+               }
+            }else{
+
+                $msgf = "No results were found for this period: ". $fr . " - ".$to;
+                $sender = new SenderController;
+                $sender->send($number, $msgf);
+
+                $unpro->processed = 1;
+                $unpro->updated_at = $date;
+
+                $unpro->save();
             }
+        }                        
+        else{
+
+            $user = User::where('phone_no',$number)->where('facility_id', $mfl)->first();
+
+            if (!empty($user)) {
+                $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
+
+                if(!empty($results)){
+                    foreach ($results as $result){
+
+                        $id = $result->id;
+                        $type = $result->result_type;
+                        $client_id = $result->client_id;
+                        $age = $result->age;
+                        $gender = $result->gender;
+                        $content = $result->result_content;
+                        $units = $result->units;
+                        $date_collected = $result->date_collected;
+                        $mfl = $result->mfl_code;
             
+            
+                        if (strpos($date_collected, "00:00:00") !== false) {
+                            $date_collected = substr($date_collected, 0, 10);
+                        }
+                        
+                        if ($type == 1) {
+                            $ftype = "VL";
+                            $rtype = "FFViral Load Results";
+                        } 
+                        elseif ($type == 2) {
+                            $ftype = "EID";
+                            $rtype = "FFEID Results";
+                        }
+            
+                        $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                    
+                        $encr =  base64_encode($msgmlb);
+            
+            
+                        $sender = new SenderController;
+                        $sender->send($number, $encr);
 
-       }
+                        $unpro->processed = 1;
+                        $unpro->updated_at = $date;
+        
+                        $unpro->save();
+                        
+            
+                    }
+                }else{
 
+                    $msgf = "No results were found for this period: ". $fr . " - ".$to;
+                    $sender = new SenderController;
+                    $sender->send($number, $msgf);
+
+                    $unpro->processed = 1;
+                    $unpro->updated_at = $date;
+    
+                    $unpro->save();
+                }
+            }
+            else{
+                $msgf = "Phone Number not Authorised to receive results";
+                $sender = new SenderController;
+                $sender->send($number, $msgf);
+
+                $unpro->processed = 1;
+                $unpro->updated_at = $date;
+
+                $unpro->save();
+            }
+        }
     }
 
     public function sendIL(){

@@ -12,16 +12,82 @@ use App\User;
 
 class TasksController extends Controller
 {
-    public function read(){
-       
-        $unpros = Inbox::where('processed', 0)->get();
+    public function read($id){
 
-        foreach($unpros as $unpro){
-            if (strlen($unpro->message) > 10 && strpos($unpro->message, ' ') < 1) {
+                $msg = Inbox::find($id);
 
-                $decr = base64_decode($unpro->message);
+                $decr = base64_decode($msg->message);
+                //SEND CURRENT RESULTS
+
+                if(strpos($decr, '07') !== false){
+
+                    $facility = Facility::where('mobile', $decr)->first();
+
+                    if(!empty(facility)){
+                        $mfl = $facility->code;
+
+                        $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->get();
+
+                        foreach ($results as $result){
+                
+                            $id = $result->id;
+                            $type = $result->result_type;
+                            $client_id = $result->client_id;
+                            $age = $result->age;
+                            $gender = $result->gender;
+                            $content = $result->result_content;
+                            $units = $result->units;
+                            $date_collected = $result->date_collected;
+                            $mfl = $result->mfl_code;
+                
+                
+                            if (strpos($date_collected, "00:00:00") !== false) {
+                                $date_collected = substr($date_collected, 0, 10);
+                            }
+                            
+                            if ($type == 1) {
+                                $ftype = "VL";
+                                $rtype = "FFViral Load Results";
+                            } 
+                            elseif ($type == 2) {
+                                $ftype = "EID";
+                                $rtype = "FFEID Results";
+                            }
+                
+                            $dest = $facility->mobile;
+                            $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                        
+                            $encr =  base64_encode($msgmlb);
+                            $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                
+                            date_default_timezone_set('Africa/Nairobi');
+                            $date = date('Y-m-d H:i:s', time());
+                
+                            $sender = new SenderController;
+                            if($sender->send($dest, $finalmsg)){
+                
+                                $result->processed = '1';
+                                $result->date_sent = $date;
+                                $result->date_delivered = $date;
+                                $result->updated_at = $date;
+                
+                
+                                $result->save();
+                
+                            }
+                            
+                
+                        }
+                    }
+                    else{
+                        $sender = new SenderController;
+                        $sender->send($request->phone_no, "Phone Number not attched to any Facility");
+            
+                    }
+
+                }
+
                 //HISTORICAL RESULTS
-
                 if (strpos($decr, 'histr') !== false) {
 
                     $prevs = Inbox::where('id', '<', $unpro->id)->where('MSISDN',$unpro->MSISDN)->where("created_at",">",Carbon::now()->subDay())->where("created_at","<",$unpro->created_at)->get();
@@ -242,16 +308,12 @@ class TasksController extends Controller
                 }
 
                 //END READ
-            }
-            
-        }
+       
     }
 
-    public function classify(){
+    public function classify($id){
 
-        $results = Result::where('data_key', 0)->limit(1000)->get();
-
-        foreach($results as $result){
+            $result  = Result::find($id); 
 
             $message = $result->result_content;
 
@@ -288,7 +350,11 @@ class TasksController extends Controller
 
                     $result->save();
                 }
+
             }
-        }
+
+            
+            return true;
+        
     }
 }
