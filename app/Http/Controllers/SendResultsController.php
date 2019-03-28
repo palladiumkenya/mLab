@@ -16,7 +16,9 @@ class SendResultsController extends Controller
 {
     public function sendVLEID(Request $request){
 
-        $facility = Facility::where('mobile', $request->phone_no)->first();
+        $phone = base64_decode($request->phone_no);
+
+        $facility = Facility::where('mobile', $phone)->first();
 
         if(!empty($facility)){
             $mfl = $facility->code;
@@ -58,37 +60,30 @@ class SendResultsController extends Controller
                 $encr =  base64_encode($msgmlb);
                 $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
 
-                date_default_timezone_set('Africa/Nairobi');
-                $date = date('Y-m-d H:i:s', time());
+                return response()->json(["results" => $finalmsg], 200);
 
-                $sender = new SenderController;
-                if($sender->send($dest, $finalmsg)){
-
-                    $result->processed = '1';
-                    $result->date_sent = $date;
-                    $result->date_delivered = $date;
-                    $result->updated_at = $date;
-
-
-                    $result->save();
-
-                }
                 
 
             }
         }else{
-            $sender = new SenderController;
-            $sender->send($request->phone_no, "Phone Number not attched to any Facility");
+            return response()->json(["results" => "Phone Number not attched to any Facility"], 301);
 
         }
 
     }
 
     public function sendhistorical(Request $request){
-        $mfl = $request->mfl_code;
-        $frm = $request->from;
-        $to = $request->to;
-        $number = $request->phone_no;
+
+        $phone = base64_decode($request->phone_no);
+        $msg = base64_decode($request->message);
+
+
+        $val = explode("*", $msg);
+
+        $mfl = $val[1];
+        $frm = $val[2];
+        $to = $val[3];
+        $number = $phone_no;
 
         $fr =  Carbon::parse($frm)->format('Y-m-d');
 

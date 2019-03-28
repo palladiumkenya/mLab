@@ -94,7 +94,7 @@ class TasksController extends Controller
                 //HISTORICAL RESULTS
                 if (strpos($decr, 'histr') !== false) {
 
-                    $prevs = Inbox::where('id', '<', $unpro->id)->where('MSISDN',$unpro->MSISDN)->where("created_at",">",Carbon::now()->subDay())->where("created_at","<",$unpro->created_at)->get();
+                    $prevs = Inbox::where('id', '<', $msg->id)->where('MSISDN',$msg->MSISDN)->where("created_at",">",Carbon::now()->subDay())->where("created_at","<",$msg->created_at)->get();
                     
                     $to_send = "NO";
                     foreach ($prevs as $prev) {
@@ -109,12 +109,7 @@ class TasksController extends Controller
                                 $date = date('Y-m-d H:i:s', time());
                     
                                 $sender = new SenderController;
-                                if($sender->send($unpro->MSISDN, $msg)){
-                    
-                                    $unpro->processed = 1;
-                                    $unpro->updated_at = $date;
-                    
-                                    $unpro->save();
+                                if($sender->send($msg->MSISDN, $msg)){
                                 }
 
                             $to_send = "NO";
@@ -136,7 +131,7 @@ class TasksController extends Controller
                         $mfl = $val[1];
                         $frm = $val[2];
                         $to = $val[3];
-                        $number = '0'.substr($unpro->MSISDN, 4);
+                        $number = '0'.substr($msg->MSISDN, 4);
 
                         $fr =  Carbon::parse($frm)->format('Y-m-d');
 
@@ -182,11 +177,6 @@ class TasksController extends Controller
                         
                                     $sender = new SenderController;
                                     $sender->send($number, $finalmsg);
-
-                                    $unpro->processed = 1;
-                                    $unpro->updated_at = $date;
-                    
-                                    $unpro->save();
                                     
                         
                                }
@@ -195,11 +185,6 @@ class TasksController extends Controller
                                 $msgf = "No results were found for this period: ". $fr . " - ".$to;
                                 $sender = new SenderController;
                                 $sender->send($number, $msgf);
-
-                                $unpro->processed = 1;
-                                $unpro->updated_at = $date;
-                
-                                $unpro->save();
                             }
                         }                        
                         else{
@@ -245,11 +230,6 @@ class TasksController extends Controller
                             
                                         $sender = new SenderController;
                                         $sender->send($number, $encr);
-
-                                        $unpro->processed = 1;
-                                        $unpro->updated_at = $date;
-                        
-                                        $unpro->save();
                                         
                             
                                     }
@@ -258,11 +238,6 @@ class TasksController extends Controller
                                     $msgf = "No results were found for this period: ". $fr . " - ".$to;
                                     $sender = new SenderController;
                                     $sender->send($number, $msgf);
-
-                                    $unpro->processed = 1;
-                                    $unpro->updated_at = $date;
-                    
-                                    $unpro->save();
                                 }
                             }
                             else{
@@ -270,10 +245,6 @@ class TasksController extends Controller
                                 $sender = new SenderController;
                                 $sender->send($number, $msgf);
 
-                                $unpro->processed = 1;
-                                $unpro->updated_at = $date;
-                
-                                $unpro->save();
                             }
                         }
 
@@ -287,7 +258,7 @@ class TasksController extends Controller
 
                 elseif ((strpos($decr, 'FFViral') !== false) || (strpos($decr, 'FFEID') !== false)) {
                         $cc = 0;
-                        $number = $cc . substr($unpro->MSISDN, 4);
+                        $number = $cc . substr($msg->MSISDN, 4);
 
 
 
@@ -307,16 +278,14 @@ class TasksController extends Controller
                             $upd->save();
                         }
 
-                        $unpro->processed = 1;
-                        $unpro->updated_at = $date;
-        
-                        $unpro->save();
                         
                 }
 
                 //END READ
 
-	  	$msg->processed = 1;
+                $msg->processed = 1;
+                  
+                $msg->updated_at = $date;
                 $msg->save();
        
     }
