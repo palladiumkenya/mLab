@@ -25,7 +25,7 @@ class SendResultsController extends Controller
 
             $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
 
-        
+        $res = [];
             foreach ($results as $result){
 
                 $id = $result->id;
@@ -60,11 +60,22 @@ class SendResultsController extends Controller
                 $encr =  base64_encode($msgmlb);
                 $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
 
-                return response()->json(["results" => $finalmsg], 200);
+                date_default_timezone_set('Africa/Nairobi');
+                $date = date('Y-m-d H:i:s', time());
+                $result->processed = '1';
+                $result->date_sent = $date;
+                $result->date_delivered = $date;
+                $result->updated_at = $date;
+
+
+                $result->save();
+
+                array_push($res, $finalmsg);
 
                 
 
             }
+            return response()->json(["results" => $res], 200);
         }else{
             return response()->json(["results" => "Phone Number not attched to any Facility"], 301);
 
@@ -94,8 +105,10 @@ class SendResultsController extends Controller
 
         if (!empty($fac)) {
             $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
-	
+    
+                
             if(!empty($results)){
+                $res = [];
                 foreach ($results as $result){
 
                     $id = $result->id;
@@ -127,10 +140,11 @@ class SendResultsController extends Controller
                     $encr =  base64_encode($msgmlb);
                     $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
     
-                    return response()->json(["results" => $finalmsg], 200);
+                    array_push($res, $finalmsg);
 
        
                }
+               return response()->json(["results" => $res], 200);
             }else{
 
                 return response()->json(["results" => $msgf], 404);
@@ -145,6 +159,7 @@ class SendResultsController extends Controller
                 $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
 
                 if(!empty($results)){
+                    $res = [];
                     foreach ($results as $result){
 
                         $id = $result->id;
@@ -176,9 +191,10 @@ class SendResultsController extends Controller
                         $encr =  base64_encode($msgmlb);
                         $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
         
-                        return response()->json(["results" => $finalmsg], 200);
+                        array_push($res, $finalmsg);
 
                     }
+                    return response()->json(["results" => $res], 200);
                 }else{
 
                     $msgf = "No results were found for this period: ". $fr . " - ".$to;
