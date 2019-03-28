@@ -130,10 +130,11 @@ class SendResultsController extends Controller
                     $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                  
                     $encr =  base64_encode($msgmlb);
+                    $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
         
         
                     $sender = new SenderController;
-                    $sender->send($number, $encr);
+                    $sender->send($number, $finalmsg);
 
        
                }
