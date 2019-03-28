@@ -83,7 +83,7 @@ class SendResultsController extends Controller
         $mfl = $val[1];
         $frm = $val[2];
         $to = $val[3];
-        $number = $phone_no;
+        $number = $phone;
 
         $fr =  Carbon::parse($frm)->format('Y-m-d');
 
