@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Result;
 use App\ILFacility;
 use App\Facility;
+use App\Http\Controllers\TasksController as Task;
 
 class VLResultsController extends Controller
 {
@@ -47,40 +48,40 @@ class VLResultsController extends Controller
     public function getResults()
     {
 
-        // $ilfs = ILFacility::all();
+        $ilfs = ILFacility::all();
 
-        // $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
+        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
 
-        // $facilities = array();
+        $facilities = array();
 
-        //     foreach($ilfs as $ilf){
+            foreach($ilfs as $ilf){
 
-        //         $code = $ilf->mfl_code;
+                $code = $ilf->mfl_code;
 
-        //         array_push($facilities,$code);
-        //     }
-        //     foreach($mlabfs as $mlabf){
+                array_push($facilities,$code);
+            }
+            foreach($mlabfs as $mlabf){
 
-        //         $code = $mlabf->code;
+                $code = $mlabf->code;
 
-        //         array_push($facilities,$code);
-        //     }
+                array_push($facilities,$code);
+            }
        
 
        
-        // $results= array_unique($facilities);
+        $results= array_unique($facilities);
 
-        // $a =  implode( ',', $results );
+        $a =  implode( ',', $results );
 
         $today = date("Y-m-d");
-        $yester = date('Y-m-d', strtotime("-90 days"));
+        $yester = date('Y-m-d', strtotime("-7 days"));
             $curl = curl_init();
 
             $fields = array(
                 'test' => 1,
-                'facility_code' => '19719,  18827, 22349, 19394, 18896, 13180',
-                // 'date_dispatched_start' => $yester,
-                // 'date_dispatched_end' => $today
+                'facility_code' =>$a,
+                'date_dispatched_start' => $yester,
+                'date_dispatched_end' => $today
 
             );
             $fields_string = http_build_query($fields);
@@ -139,7 +140,11 @@ class VLResultsController extends Controller
                         $r->date_collected = $dat->date_collected;                        
                         $r->lab_name = $dat->lab_name;
             
-                        $r->save();
+                        if($r->save()){
+                            $task = new Task;
+
+                            return $task->classify($r->id);
+                        }
                     }
 
                 }
