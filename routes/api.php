@@ -19,7 +19,8 @@ Route::get('/get_eid_results', ['uses' => 'VLResultsController@getEIDResults', '
 Route::post('/tb_results', 'TBResultsController@index');
 Route::post('/hts_results', 'HTSResultsController@index');
 Route::get('/active_facilities', 'FacilityController@active_facilities');
-Route::post('/sms/receiver', 'ReceiverController@index');
+Route::post('/get/results', 'SendResultsController@sendVLEID');
+Route::post('/historical/results', 'SendResultsController@sendhistorical');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/viral/loads', 'SendResultsController@ViralLoads');
