@@ -13,20 +13,24 @@ use App\User;
 class TasksController extends Controller
 {
     public function read($id){
+		
 
                 $msg = Inbox::find($id);
 
                 $decr = base64_decode($msg->message);
-                //SEND CURRENT RESULTS
+                
+	
+
+		//SEND CURRENT RESULTS
 
                 if(strpos($decr, '07') !== false){
 
                     $facility = Facility::where('mobile', $decr)->first();
 
-                    if(!empty(facility)){
+                    if(!empty($facility)){
                         $mfl = $facility->code;
 
-                        $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->get();
+                        $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
 
                         foreach ($results as $result){
                 
@@ -81,7 +85,7 @@ class TasksController extends Controller
                     }
                     else{
                         $sender = new SenderController;
-                        $sender->send($request->phone_no, "Phone Number not attched to any Facility");
+                        $sender->send($decr, "Phone Number not attched to any Facility");
             
                     }
 
@@ -308,6 +312,9 @@ class TasksController extends Controller
                 }
 
                 //END READ
+
+	  	$msg->processed = 1;
+                $msg->save();
        
     }
 

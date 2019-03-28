@@ -21,7 +21,7 @@ class SendResultsController extends Controller
         if(!empty($facility)){
             $mfl = $facility->code;
 
-            $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->get();
+            $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
 
         
             foreach ($results as $result){
@@ -96,9 +96,10 @@ class SendResultsController extends Controller
 
         $fac = Facility::where('mobile',$number)->where('code', $mfl)->first();
 
+
         if (!empty($fac)) {
             $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
-
+	
             if(!empty($results)){
                 foreach ($results as $result){
 
@@ -134,12 +135,7 @@ class SendResultsController extends Controller
                     $sender = new SenderController;
                     $sender->send($number, $encr);
 
-                    $unpro->processed = 1;
-                    $unpro->updated_at = $date;
-    
-                    $unpro->save();
-                    
-        
+       
                }
             }else{
 
@@ -147,10 +143,6 @@ class SendResultsController extends Controller
                 $sender = new SenderController;
                 $sender->send($number, $msgf);
 
-                $unpro->processed = 1;
-                $unpro->updated_at = $date;
-
-                $unpro->save();
             }
         }                        
         else{
@@ -195,12 +187,6 @@ class SendResultsController extends Controller
                         $sender = new SenderController;
                         $sender->send($number, $encr);
 
-                        $unpro->processed = 1;
-                        $unpro->updated_at = $date;
-        
-                        $unpro->save();
-                        
-            
                     }
                 }else{
 
@@ -208,10 +194,6 @@ class SendResultsController extends Controller
                     $sender = new SenderController;
                     $sender->send($number, $msgf);
 
-                    $unpro->processed = 1;
-                    $unpro->updated_at = $date;
-    
-                    $unpro->save();
                 }
             }
             else{
@@ -219,10 +201,6 @@ class SendResultsController extends Controller
                 $sender = new SenderController;
                 $sender->send($number, $msgf);
 
-                $unpro->processed = 1;
-                $unpro->updated_at = $date;
-
-                $unpro->save();
             }
         }
     }
