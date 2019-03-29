@@ -24,10 +24,10 @@ class SendResultsController extends Controller
             $mfl = $facility->code;
 
             $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
+	$finalres = [];
 
-        $res = [];
             foreach ($results as $result){
-
+$res = (object)[];
                 $id = $result->id;
                 $type = $result->result_type;
                 $client_id = $result->client_id;
@@ -70,12 +70,12 @@ class SendResultsController extends Controller
 
                 $result->save();
 
-                array_push($res, $finalmsg);
 
-                
+              	$res->message =  $encr;                
+		array_push($finalres, $res);
 
             }
-            return response()->json(["results" => $res]);
+           return response()->json(["results" => $finalres]);
         }else{
             return "Phone Number not attached to any Facility";
         }
@@ -107,9 +107,9 @@ class SendResultsController extends Controller
     
                 
             if(!empty($results)){
-                $res = [];
+		$finalres =[];
                 foreach ($results as $result){
-
+		$res = (object)[];
                     $id = $result->id;
                     $type = $result->result_type;
                     $client_id = $result->client_id;
@@ -139,11 +139,12 @@ class SendResultsController extends Controller
                     $encr =  base64_encode($msgmlb);
                     $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
     
-                    array_push($res, $finalmsg);
-
+                    $res->message = $encr;
+		   array_push($finalres, $res);	
        
                }
-               return response()->json(["results" => $res]);
+		
+               return response()->json(["results" => $finalres]);
             }else{
                 echo "No results were found for this period: ". $fr . " - ".$to;
                
