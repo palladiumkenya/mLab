@@ -75,10 +75,9 @@ class SendResultsController extends Controller
                 
 
             }
-            return response()->json(["results" => $res], 200);
+            return response()->json(["results" => $res]);
         }else{
-            return response()->json("Phone Number not attached to any Facility", 301);
-
+            echo "Phone Number not attached to any Facility";
         }
 
     }
@@ -144,10 +143,10 @@ class SendResultsController extends Controller
 
        
                }
-               return response()->json(["results" => $res], 200);
+               return response()->json(["results" => $res]);
             }else{
-                $msgf = "No results were found for this period: ". $fr . " - ".$to;
-                return response()->json($msgf, 404);
+                echo "No results were found for this period: ". $fr . " - ".$to;
+               
 
             }
         }                        
@@ -194,18 +193,16 @@ class SendResultsController extends Controller
                         array_push($res, $finalmsg);
 
                     }
-                    return response()->json(["results" => $res], 200);
+                    return response()->json(["results" => $res]);
                 }else{
 
-                    $msgf = "No results were found for this period: ". $fr . " - ".$to;
-                    return response()->json($msgf, 404);
+                   echo "No results were found for this period: ". $fr . " - ".$to;
+                    
 
                 }
             }
             else{
-                $msgf = "Phone Number not Authorised to receive results";
-                return response()->json($msgf, 301);
-
+               echo "Phone Number not Authorised to receive results";
             }
         }
     }
