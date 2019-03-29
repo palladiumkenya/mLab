@@ -32,7 +32,7 @@ class TasksController extends Controller
 
                         $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
 
-                        if($results != null){
+                        if($results->isNotEmpty()){
                             foreach ($results as $result){
                     
                                 $id = $result->id;
