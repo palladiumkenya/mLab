@@ -27,12 +27,12 @@ class TasksController extends Controller
 
                     $facility = Facility::where('mobile', $decr)->first();
 
-                    if($facility->isEmpty()){
+                    if($facility != null){
                         $mfl = $facility->code;
 
                         $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
 
-                        if($results->isEmpty()){
+                        if($results != null){
                             foreach ($results as $result){
                     
                                 $id = $result->id;
