@@ -11,6 +11,7 @@ use App\ILFacility;
 use App\HTSResult;
 use Carbon\Carbon;
 use App\TBResult;
+use App\User;
 
 class SendResultsController extends Controller
 {
@@ -95,9 +96,9 @@ $res = (object)[];
         $to = $val[3];
         $number = $phone;
 
-        $fr =  Carbon::parse($frm)->format('Y-m-d');
+        $fr =  Carbon::parse(str_replace('/', '-', $frm))->format('Y-m-d');
 
-        $t = Carbon::parse($to)->format('Y-m-d');
+        $t = Carbon::parse(str_replace('/', '-', $to))->format('Y-m-d');
 
         $fac = Facility::where('mobile',$number)->where('code', $mfl)->first();
 
