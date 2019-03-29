@@ -28,9 +28,9 @@ class TasksController extends Controller
                     $facility = Facility::where('mobile', $decr)->first();
 
                     if(!empty($facility)){
-                        // $mfl = $facility->code;
+                        $mfl = $facility->code;
 
-                        // $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
+                        $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
 
                         // if(!empty($results)){
                         //     foreach ($results as $result){
@@ -86,7 +86,8 @@ class TasksController extends Controller
                         // }
                         // else{
                             $sender = new SenderController;
-                            $sender->send($decr, "No pending results found.");
+                            $str = "No pending results found.".sizeOf($results);
+                            $sender->send($decr, $str);
                 
                         // }
                     }
