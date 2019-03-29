@@ -24,10 +24,10 @@ class SendResultsController extends Controller
             $mfl = $facility->code;
 
             $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
-	$finalres = [];
+	        $finalres = [];
 
             foreach ($results as $result){
-$res = (object)[];
+                $res = (object)[];
                 $id = $result->id;
                 $type = $result->result_type;
                 $client_id = $result->client_id;
@@ -106,7 +106,7 @@ $res = (object)[];
             $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
     
                 
-            if(!empty($results)){
+            if($results->isNotEmpty()){
 		$finalres =[];
                 foreach ($results as $result){
 		$res = (object)[];
@@ -158,7 +158,7 @@ $res = (object)[];
             if (!empty($user)) {
                 $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
 
-                if(!empty($results)){
+                if($results->isNotEmpty()){
                     $res = [];
                     foreach ($results as $result){
 

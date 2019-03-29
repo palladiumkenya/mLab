@@ -150,7 +150,7 @@ class TasksController extends Controller
                         if (!empty($fac)) {
                             $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
 
-                            if(!empty($results)){
+                            if($results->isNotEmpty()){
                                 foreach ($results as $result){
 
                                     $id = $result->id;
@@ -202,7 +202,7 @@ class TasksController extends Controller
                             if (!empty($user)) {
                                 $results= Result::where('mfl_code',$mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
 
-                                if(!empty($results)){
+                                if($results->isNotEmpty()){
                                     foreach ($results as $result){
 
                                         $id = $result->id;
