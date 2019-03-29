@@ -77,7 +77,7 @@ class SendResultsController extends Controller
             }
             return response()->json(["results" => $res]);
         }else{
-            echo "Phone Number not attached to any Facility";
+            return "Phone Number not attached to any Facility";
         }
 
     }
