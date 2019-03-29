@@ -32,54 +32,61 @@ class TasksController extends Controller
 
                         $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
 
-                        foreach ($results as $result){
-                
-                            $id = $result->id;
-                            $type = $result->result_type;
-                            $client_id = $result->client_id;
-                            $age = $result->age;
-                            $gender = $result->gender;
-                            $content = $result->result_content;
-                            $units = $result->units;
-                            $date_collected = $result->date_collected;
-                            $mfl = $result->mfl_code;
-                
-                
-                            if (strpos($date_collected, "00:00:00") !== false) {
-                                $date_collected = substr($date_collected, 0, 10);
-                            }
+                        if(!empty($results)){
+                            foreach ($results as $result){
+                    
+                                $id = $result->id;
+                                $type = $result->result_type;
+                                $client_id = $result->client_id;
+                                $age = $result->age;
+                                $gender = $result->gender;
+                                $content = $result->result_content;
+                                $units = $result->units;
+                                $date_collected = $result->date_collected;
+                                $mfl = $result->mfl_code;
+                    
+                    
+                                if (strpos($date_collected, "00:00:00") !== false) {
+                                    $date_collected = substr($date_collected, 0, 10);
+                                }
+                                
+                                if ($type == 1) {
+                                    $ftype = "VL";
+                                    $rtype = "FFViral Load Results";
+                                } 
+                                elseif ($type == 2) {
+                                    $ftype = "EID";
+                                    $rtype = "FFEID Results";
+                                }
+                    
+                                $dest = $facility->mobile;
+                                $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                             
-                            if ($type == 1) {
-                                $ftype = "VL";
-                                $rtype = "FFViral Load Results";
-                            } 
-                            elseif ($type == 2) {
-                                $ftype = "EID";
-                                $rtype = "FFEID Results";
+                                $encr =  base64_encode($msgmlb);
+                                $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                    
+                                date_default_timezone_set('Africa/Nairobi');
+                                $date = date('Y-m-d H:i:s', time());
+                    
+                                $sender = new SenderController;
+                                if($sender->send($dest, $finalmsg)){
+                    
+                                    $result->processed = '1';
+                                    $result->date_sent = $date;
+                                    $result->date_delivered = $date;
+                                    $result->updated_at = $date;
+                    
+                    
+                                    $result->save();
+                    
+                                }
+                                
+                    
                             }
-                
-                            $dest = $facility->mobile;
-                            $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
-                        
-                            $encr =  base64_encode($msgmlb);
-                            $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
-                
-                            date_default_timezone_set('Africa/Nairobi');
-                            $date = date('Y-m-d H:i:s', time());
-                
+                        }
+                        else{
                             $sender = new SenderController;
-                            if($sender->send($dest, $finalmsg)){
-                
-                                $result->processed = '1';
-                                $result->date_sent = $date;
-                                $result->date_delivered = $date;
-                                $result->updated_at = $date;
-                
-                
-                                $result->save();
-                
-                            }
-                            
+                            $sender->send($decr, "No pending results found.");
                 
                         }
                     }
