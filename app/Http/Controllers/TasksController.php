@@ -282,7 +282,8 @@ class TasksController extends Controller
                 }
 
                 //END READ
-
+                date_default_timezone_set('Africa/Nairobi');
+                $date = date('Y-m-d H:i:s', time());
                 $msg->processed = 1;
                   
                 $msg->updated_at = $date;
