@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/eid/results', 'DataController@eid_results')->name('eid_results');
     Route::get('/hts/results', 'DataController@hts_results')->name('hts_results');
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
-    Route::post('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
+    Route::get('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
 
 
 
