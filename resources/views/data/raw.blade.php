@@ -12,7 +12,7 @@
                         <div class="card-body">
                             <h4 class="card-title mb-3">Showing {{count($results)}}, use the links below to pull results per page.</h4>
                             <div class="col-md-12" style="margin-top:10px; ">
-                                {{ $results->onEachSide(5)->links() }}
+                                {{ $results->appends(request()->input())->links() }}
                             </div>
                                 <div class="table-responsive">                                    
                                     <table id="multicolumn_ordering_table" class="display table table-striped table-bordered" style="width:100%">
