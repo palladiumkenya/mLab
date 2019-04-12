@@ -12,7 +12,7 @@
                             <div class="card-title mb-3">Raw Data</div>
 
                             <h4>Select any of the filters below, and click Fetch when complete. None is a required field.</h4>
-                            <form role="form" method="post"action="{{route('fetchraw')}}">
+                            <form role="form" method="get"action="{{route('fetchraw')}}">
                             {{ csrf_field() }}
                                 <div class="row">
                                 @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)

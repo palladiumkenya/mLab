@@ -281,107 +281,142 @@ class SendResultsController extends Controller
 
     }
 
-    public function sendHTS(){
+    public function sendHTS(Request $request){
+        $phone = base64_decode($request->phone_no);
 
-        $results = HTSResult::where('processed', '0')->get();
+        $facility = Facility::where('mobile', $phone)->first();
 
-        foreach($results as $result){
-            $pid = $result->patient_id;
-            $age = $result->age;
-            $gender = $result->gender;
-            $test = $result->test;
-            $res = $result->result_value;
-            $sub = $result->submit_date;
-            $rel = $result->date_released;
-            $mfl = $result->mfl_code;
+        if(!empty($facility)){
 
-            if (strpos($rel, "00:00:00") !== false) {
-                $rel = substr($rel, 0, 10);
-            }
-            if (strpos($sub, "00:00:00") !== false) {
-                $sub = substr($sub, 0, 10);
-            }
+            $results = HTSResult::where('processed', '0')->get();
+            if($results->isNotEmpty()){
+                $res = [];
+
+                foreach($results as $result){
+                    $pid = $result->patient_id;
+                    $age = $result->age;
+                    $gender = $result->gender;
+                    $test = $result->test;
+                    $res = $result->result_value;
+                    $sub = $result->submit_date;
+                    $rel = $result->date_released;
+                    $mfl = $result->mfl_code;
+                    $sid = $result->sample_id;
+
+                    if (strpos($rel, "00:00:00") !== false) {
+                        $rel = substr($rel, 0, 10);
+                    }
+                    if (strpos($sub, "00:00:00") !== false) {
+                        $sub = substr($sub, 0, 10);
+                    }
+                    
+                    
+                    $facility = Facility::where('code', $mfl)->first();
+
+                    $dest = $facility->mobile;
+                    $msgmlb = "HTS PID:$pid A:$age S:$gender T:$test R:$res SB:$sub REL:$rel SID:$sid";
+
+                    $encr =  base64_encode($msgmlb);
+
+                    $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
             
-            
-            $facility = Facility::where('code', $mfl)->first();
+                    array_push($res, $finalmsg);
 
-            $dest = $facility->mobile;
-            $msgmlb = "HTS PID:$pid A:$age S:$gender T:$test R:$res SB: $sub REL:$rel";
+                    // date_default_timezone_set('Africa/Nairobi');
+                    // $date = date('Y-m-d H:i:s', time());
 
-            $encr =  base64_encode($msgmlb);
+                    // $sender = new SenderController;
+                    // if($sender->send($dest, $encr)){
 
-            date_default_timezone_set('Africa/Nairobi');
-            $date = date('Y-m-d H:i:s', time());
-
-            $sender = new SenderController;
-            if($sender->send($dest, $encr)){
-
-                $result->processed = '1';
-                $result->date_sent = $date;
-                $result->date_delivered = $date;
-                $result->updated_at = $date;
+                    //     $result->processed = '1';
+                    //     $result->date_sent = $date;
+                    //     $result->date_delivered = $date;
+                    //     $result->updated_at = $date;
 
 
-                $result->save();
+                    //     $result->save();
 
+                    // }
+                }
+                return response()->json(["results" => $res]);
+            }else{
+               echo "No pending results found";
             }
+        }
+        else{
+           echo "Phone Number not Authorised to receive results";
         }
 
     }
 
-    public function sendTB(){
+    public function sendTB(Request $request){
+        $phone = base64_decode($request->phone_no);
 
-        $results = TBResult::where('processed', '0')->get();
+        $facility = Facility::where('mobile', $phone)->first();
 
-        foreach($results as $result){
-            $pid = $result->patient_id;
-            $age = $result->age;
-            $gender = $result->gender;
-            $res1 = $result->result_value1;
-            $res2 = $result->result_value2;
-            $res3 = $result->result_value3;
-            $login_date = $result->login_date;
-            $date_reviewed = $result->date_reviewed;
-            $record_date = $result->record_date;
-            $mfl = $result->mfl_code;
+        if(!empty($facility)){
+            $results = TBResult::where('processed', '0')->get();
+        
+            if($results->isNotEmpty()){
+                $res = [];
+
+                foreach($results as $result){
+                    $pid = $result->patient_id;
+                    $age = $result->age;
+                    $gender = $result->gender;
+                    $res1 = $result->result_value1;
+                    $res2 = $result->result_value2;
+                    $res3 = $result->result_value3;
+                    $login_date = $result->login_date;
+                    $date_reviewed = $result->date_reviewed;
+                    $record_date = $result->record_date;
+                    $mfl = $result->mfl_code;
 
 
-            if (strpos($login_date, "00:00:00") !== false) {
-                $login_date = substr($login_date, 0, 10);
-            }
-            if (strpos($date_reviewed, "00:00:00") !== false) {
-                $date_reviewed = substr($date_reviewed, 0, 10);
-            }
-            if (strpos($record_date, "00:00:00") !== false) {
-                $record_date = substr($record_date, 0, 10);
-            }
+                    if (strpos($login_date, "00:00:00") !== false) {
+                        $login_date = substr($login_date, 0, 10);
+                    }
+                    if (strpos($date_reviewed, "00:00:00") !== false) {
+                        $date_reviewed = substr($date_reviewed, 0, 10);
+                    }
+                    if (strpos($record_date, "00:00:00") !== false) {
+                        $record_date = substr($record_date, 0, 10);
+                    }
+                    
+
+                    $facility = Facility::where('code', $mfl)->first();
+
+                    $dest = $facility->mobile;
+                    $msgmlb = "TB PID:$pid A:$age S:$gender SC:$res1 MC:$res2 LJC:$res3 LD: $login_date DR:$date_reviewed RD:$record_date";
+
+                    $encr =  base64_encode($msgmlb);
+
+                    $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
             
+                    array_push($res, $finalmsg);
+                    // date_default_timezone_set('Africa/Nairobi');
+                    // $date = date('Y-m-d H:i:s', time());
 
-            $facility = Facility::where('code', $mfl)->first();
+                    // $sender = new SenderController;
+                    // if($sender->send($dest, $encr)){
 
-            $dest = $facility->mobile;
-            $msgmlb = "TB PID:$pid A:$age S:$gender SC:$res1 MC:$res2 LJC:$res3 LD: $login_date DR:$date_reviewed RD:$record_date";
-
-            echo $msgmlb;
-            exit;
-
-            $encr =  base64_encode($msgmlb);
-
-            date_default_timezone_set('Africa/Nairobi');
-            $date = date('Y-m-d H:i:s', time());
-
-            $sender = new SenderController;
-            if($sender->send($dest, $encr)){
-
-                $result->processed = '1';
-                $result->date_sent = $date;
-                $result->date_delivered = $date;
-                $result->updated_at = $date;
+                    //     $result->processed = '1';
+                    //     $result->date_sent = $date;
+                    //     $result->date_delivered = $date;
+                    //     $result->updated_at = $date;
 
 
-                $result->save();
+                    //     $result->save();
 
+                    // }
+                }
+                return response()->json(["results" => $res]);
+            }else{
+            echo "No pending results found";
             }
+        }
+        else{
+        echo "Phone Number not Authorised to receive results";
         }
 
     }
@@ -390,7 +425,6 @@ class SendResultsController extends Controller
     {
 
         $results = Result::where('mfl_code', $request->mfl_code)->where('result_type', 1)
-        // ->where('il_send', 0)
         ->limit(10)->get();
 
         $final = [];
