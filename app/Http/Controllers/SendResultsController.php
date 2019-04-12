@@ -73,7 +73,7 @@ class SendResultsController extends Controller
 
 
               	$res->message =  $encr;                
-		array_push($finalres, $res);
+		        array_push($finalres, $res);
 
             }
            return response()->json(["results" => $finalres]);
@@ -289,10 +289,10 @@ class SendResultsController extends Controller
         if(!empty($facility)){
 
             $results = HTSResult::where('processed', '0')->get();
-            if($results->isNotEmpty()){
-                $res = [];
+                $finalres = [];
 
                 foreach($results as $result){
+                    $res = (object)[];
                     $pid = $result->patient_id;
                     $age = $result->age;
                     $gender = $result->gender;
@@ -320,33 +320,15 @@ class SendResultsController extends Controller
 
                     $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
             
-                    array_push($res, $finalmsg);
+                    $res->message =  $encr;                
+                    array_push($finalres, $res);
 
-                    // date_default_timezone_set('Africa/Nairobi');
-                    // $date = date('Y-m-d H:i:s', time());
-
-                    // $sender = new SenderController;
-                    // if($sender->send($dest, $encr)){
-
-                    //     $result->processed = '1';
-                    //     $result->date_sent = $date;
-                    //     $result->date_delivered = $date;
-                    //     $result->updated_at = $date;
-
-
-                    //     $result->save();
-
-                    // }
-                }
-                return response()->json(["results" => $res]);
-            }else{
-               echo "No pending results found";
             }
+           return response()->json(["results" => $finalres]);
+        }else{
+            return "Phone Number not attached to any Facility";
         }
-        else{
-           echo "Phone Number not Authorised to receive results";
-        }
-
+    
     }
 
     public function sendTB(Request $request){
