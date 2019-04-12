@@ -86,7 +86,7 @@ class TasksController extends Controller
                         }
                         else{
                             $sender = new SenderController;
-                            $str = "No pending results found.".sizeOf($results);
+                            $str = "No pending results found.";
                             $sender->send($decr, $str);
                 
                         }
@@ -342,7 +342,7 @@ class TasksController extends Controller
             }
 
             
-            return true;
+            return "success";
         
     }
 }

@@ -48,6 +48,8 @@ class VLResultsController extends Controller
     public function getResults()
     {
 
+
+    
         $ilfs = ILFacility::all();
 
         $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
@@ -106,7 +108,7 @@ class VLResultsController extends Controller
             curl_close($curl);
 
             if ($err) {
-            echo "cURL Error #:" . $err;
+                echo "cURL Error #:" . $err;
             } else {
 
                 echo "page: 1".'<br>';
@@ -143,7 +145,7 @@ class VLResultsController extends Controller
                         if($r->save()){
                             $task = new Task;
 
-                            return $task->classify($r->id);
+                            $task->classify($r->id);
                         }
                     }
 
@@ -159,9 +161,9 @@ class VLResultsController extends Controller
 
                     $fields = array(
                         'test' => 1,
-                        'facility_code' =>'19719,  18827, 22349, 19394, 18896, 13180',
-                        // 'date_dispatched_start' => $yester,
-                        // 'date_dispatched_end' => $today
+                        'facility_code' =>$a,
+                        'date_dispatched_start' => $yester,
+                        'date_dispatched_end' => $today
             
                     );
                     $fields_string = http_build_query($fields);
@@ -186,7 +188,7 @@ class VLResultsController extends Controller
                     curl_close($curl);
             
                     if ($err) {
-                    echo "cURL Error #:" . $err;
+                        echo "cURL Error #:" . $err;
                     }else {
 
                         $objects = json_decode($response);
@@ -218,7 +220,11 @@ class VLResultsController extends Controller
                                 $r->date_collected = $dat->date_collected;                                
                                 $r->lab_name = $dat->lab_name;
                     
-                                $r->save();
+                                if($r->save()){
+                                    $task = new Task;
+        
+                                    $task->classify($r->id);
+                                }
                             }
             
                         }
@@ -340,9 +346,13 @@ class VLResultsController extends Controller
                         $r->csr = $dat->csr;
                         $r->lab_order_date = $dat->lab_order_date;
                         $r->date_collected = $dat->date_collected;                        
-                        $r->lab_name = $request->lab_name;
+                        $r->lab_name = $dat->lab_name;
             
-                        $r->save();
+                        if($r->save()){
+                            $task = new Task;
+
+                            $task->classify($r->id);
+                        }
                     }
 
                 }
@@ -428,9 +438,13 @@ class VLResultsController extends Controller
                                 $r->csr = $dat->csr;
                                 $r->lab_order_date = $dat->lab_order_date;
                                 $r->date_collected = $dat->date_collected;                                
-                                $r->lab_name = $request->lab_name;
+                                $r->lab_name = $dat->lab_name;
                     
-                                $r->save();
+                                if($r->save()){
+                                    $task = new Task;
+        
+                                    $task->classify($r->id);
+                                }
                             }
             
                         }
