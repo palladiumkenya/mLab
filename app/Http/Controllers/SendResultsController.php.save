@@ -1,6 +1,6 @@
 <?php
-namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
 ini_set('max_execution_time', 0);
 ini_set('memory_limit', '1024M');
 use Illuminate\Http\Request;
@@ -211,7 +211,7 @@ class SendResultsController extends Controller
 
     public function sendIL(){
 
-        $facilities = ILFacility::where('phone_no', 'not like', '%SWOP%')->get();
+        $facilities = ILFacility::whereRoute::get('/get/results', ['uses' => 'VLResultsController@getResults', 'as' => 'getResults']);->get();
 
         $ilfs = [];
 

@@ -1,0 +1,2 @@
+[Thu Apr 25 11:45:36.071276 2019] [php7:error] [pid 20020] [client 127.0.0.1:46962] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /var/www/mlab_new/app/Http/Controllers/SendResultsController.php on line 4
+[Thu Apr 25 11:46:22.590352 2019] [php7:error] [pid 20138] [client 127.0.0.1:47144] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /var/www/mlab_new/app/Http/Controllers/SendResultsController.php on line 4
