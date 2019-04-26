@@ -61,7 +61,6 @@ class SendResultsController extends Controller
                 $encr =  base64_encode($msgmlb);
                 $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
 
-                date_default_timezone_set('Africa/Nairobi');
                 $date = date('Y-m-d H:i:s', time());
                 $result->processed = '1';
                 $result->date_sent = $date;
@@ -268,6 +267,7 @@ class SendResultsController extends Controller
                 if($sender->send($dest, $encr)){
 
                     $result->il_send = '1';
+                    $result->processed = '1';
                     $result->date_sent = $date;
                     $result->date_delivered = $date;
                     $result->updated_at = $date;
@@ -322,6 +322,9 @@ class SendResultsController extends Controller
             
                     $res->message =  $encr;                
                     array_push($finalres, $res);
+
+                    $result->processed = 1;
+                    $result->save();
 
             }
            return response()->json(["results" => $finalres]);
@@ -406,8 +409,8 @@ class SendResultsController extends Controller
     public function ViralLoads(Request $request)
     {
 
-        $results = Result::where('mfl_code', $request->mfl_code)->where('result_type', 1)
-        ->limit(10)->get();
+        $results = Result::where('mfl_code', $request->mfl_code)->where('result_type', 1)->whereNull('date_sent')
+        ->where('il_send', 0)->orderBy('id', 'DESC')->get();
 
         $final = [];
         
@@ -463,7 +466,13 @@ class SendResultsController extends Controller
             
             array_push($final, $full);
 
+            $date = date('Y-m-d H:i:s', time());
+            
             $res->il_send = 1;
+            $res->processed = '1';
+            $res->date_sent = $date;
+            $res->date_delivered = $date;
+            $res->updated_at = $date;
 
             $res->save();
         }
