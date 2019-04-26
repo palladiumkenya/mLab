@@ -79,3 +79,7 @@ Route::get('/get/results', ['uses' => 'VLResultsController@getResults', 'as' => 
 Route::get('/process/inbox/{id}', ['uses' => 'TasksController@read', 'as' => 'read']);
 Route::get('/classify/{id}', ['uses' => 'TasksController@classify', 'as' => 'classify']);
 Route::get('/get/eid/results', ['uses' => 'VLResultsController@getEIDResults', 'as' => 'getEIDResults']);
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
