@@ -12,7 +12,7 @@
 @yield('before-css')
     {{-- theme css --}}
     @toastr_css
-<link rel="stylesheet" href="{{mix('assets/styles/css/themes/lite-blue.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/styles/css/themes/lite-blue.min.css')}}">
  <link rel="stylesheet" href="{{asset('assets/styles/vendor/perfect-scrollbar.css')}}">
  {{-- page specific css --}}
  @yield('page-css')
@@ -40,7 +40,7 @@
     <!-- ============ Search UI End ============= -->
 
 {{-- common js --}}
-<script src="{{mix('assets/js/common-bundle-script.js')}}"></script>
+<script src="{{asset('assets/js/common-bundle-script.js')}}"></script>
     {{-- page specific javascript --}}
     @yield('page-js')
 

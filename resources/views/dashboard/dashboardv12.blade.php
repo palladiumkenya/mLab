@@ -1,9 +1,10 @@
-@extends('layouts.master')
+@extends('layouts.app')
 @section('main-content')
-
+{{ $url}}
             <div class="separator-breadcrumb border-top"></div>
 
             <iframe src="{{$url}}" width="100%" height="652px" ></iframe>  
+Hello Moto
 
 
             <div id="FirstModal" class="modal" tabindex="-1" role="dialog">

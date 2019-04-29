@@ -1,9 +1,8 @@
-@extends('layouts.master')
-@section('main-content')
+<?php $__env->startSection('main-content'); ?>
 
             <div class="separator-breadcrumb border-top"></div>
 
-            <iframe src="{{$url}}" width="100%" height="652px" ></iframe>  
+            <iframe src="<?php echo e($url); ?>" width="100%" height="652px" ></iframe>  
 
 
             <div id="FirstModal" class="modal" tabindex="-1" role="dialog">
@@ -20,10 +19,11 @@
 
                             <div class="col-md-12">
                           
-                            <form role="form" method="post"action="{{route('changepass')}}">
-                                {{ csrf_field() }}
+                            <form role="form" method="post"action="<?php echo e(route('changepass')); ?>">
+                                <?php echo e(csrf_field()); ?>
+
                                 <div class="row">
-                                    <input type="hidden" name="id" value="{{Auth::user()->id}}">
+                                    <input type="hidden" name="id" value="<?php echo e(Auth::user()->id); ?>">
 
                                     <div class="form-group col-md-12">
                                         <label for="new_password" class="col-sm-2 control-label ">New Password </label>
@@ -59,18 +59,18 @@
                 </div>
             </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('page-js')
-     <script src="{{asset('assets/js/vendor/echarts.min.js')}}"></script>
-     <script src="{{asset('assets/js/es5/echart.options.min.js')}}"></script>
-     <script src="{{asset('assets/js/es5/dashboard.v1.script.js')}}"></script>
+<?php $__env->startSection('page-js'); ?>
+     <script src="<?php echo e(asset('assets/js/vendor/echarts.min.js')); ?>"></script>
+     <script src="<?php echo e(asset('assets/js/es5/echart.options.min.js')); ?>"></script>
+     <script src="<?php echo e(asset('assets/js/es5/dashboard.v1.script.js')); ?>"></script>
 
      <script type="text/javascript">
 
     
 
-        st = '{!! Auth::user()->first_login !!}';
+        st = '<?php echo Auth::user()->first_login; ?>';
 
         if(st == 'Yes'){
             $('#FirstModal').modal('show');
@@ -91,4 +91,6 @@
 
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
