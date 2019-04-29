@@ -4,7 +4,7 @@
             <div class="separator-breadcrumb border-top"></div>
 
             <iframe src="{{$url}}" width="100%" height="652px" ></iframe>  
-         
+
 
             <div id="FirstModal" class="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-lg" role="document">

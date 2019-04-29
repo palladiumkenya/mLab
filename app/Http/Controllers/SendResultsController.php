@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+date_default_timezone_set('Africa/Nairobi');
 ini_set('max_execution_time', 0);
 ini_set('memory_limit', '1024M');
 use Illuminate\Http\Request;
