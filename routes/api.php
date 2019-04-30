@@ -23,6 +23,8 @@ Route::post('/get/results', 'SendResultsController@sendVLEID');
 Route::post('/historical/results', 'SendResultsController@sendhistorical');
 Route::post('/hts_results', 'SendResultsController@sendHTS');
 Route::post('/tb_results', 'SendResultsController@sendTB');
+Route::post('/remote/login/results', 'RemoteLoginController@results');
+Route::post('/remote/login/hts', 'RemoteLoginController@hts');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/viral/loads', 'SendResultsController@ViralLoads');
