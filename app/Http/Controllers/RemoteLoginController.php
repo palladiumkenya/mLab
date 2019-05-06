@@ -16,11 +16,17 @@ class RemoteLoginController extends Controller
 
 
         $fac = Facility::where('mobile', $phone)->first();
-
+      
         if(!empty($fac)){
             $val = explode("*", $msg);
 
+            
+
             if($val[0] == 'VL'){
+                if(sizeof($val) < 12){
+                    echo "Kindly ensure all fields are included";
+                    
+               }else{
 
                 $ccc = $val[1];
                 $patient_name = $val[2];
@@ -58,9 +64,13 @@ class RemoteLoginController extends Controller
                 }else{
                     echo "An error occured, kindly try again";
                 }
+            }
 
             }elseif($val[0] == 'EID'){
-                
+                if(sizeof($val) < 15){
+                    echo "Kindly ensure all fields are included";
+                    
+               }else{
                 $selected_sex = $val[1];                
                 $selected_regimen= $val[2];
                 $selected_alive = $val[3];
@@ -102,6 +112,7 @@ class RemoteLoginController extends Controller
                 }else{
                     echo "An error occured, kindly try again";
                 }
+            }
 
             }
 
@@ -123,6 +134,11 @@ class RemoteLoginController extends Controller
 
         if(!empty($fac)){
             $val = explode("*", $msg);
+
+            if(sizeof($val) < 18){
+                echo "Kindly ensure all fields are included";
+                
+           }else{
 
                 $sample_number = $val[0];
                 $client_name = $val[1];
@@ -177,6 +193,7 @@ class RemoteLoginController extends Controller
                 }else{
                     echo "An error occured, kindly try again";
                 }
+            }
          
         }else{
             echo "Phone Number not Authorised to send remote samples";
