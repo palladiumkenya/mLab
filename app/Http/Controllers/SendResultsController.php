@@ -298,7 +298,7 @@ class SendResultsController extends Controller
                     $age = $result->age;
                     $gender = $result->gender;
                     $test = $result->test;
-                    $res = $result->result_value;
+                    $res1 = $result->result_value;
                     $sub = $result->submit_date;
                     $rel = $result->date_released;
                     $mfl = $result->mfl_code;
@@ -315,7 +315,7 @@ class SendResultsController extends Controller
                     $facility = Facility::where('code', $mfl)->first();
 
                     $dest = $facility->mobile;
-                    $msgmlb = "HTS PID:$pid A:$age S:$gender T:$test R:$res SB:$sub REL:$rel SID:$sid";
+                    $msgmlb = "HTS PID:$pid A:$age S:$gender T:$test R:$res1 SB:$sub REL:$rel SID:$sid";
 
                     $encr =  base64_encode($msgmlb);
 
