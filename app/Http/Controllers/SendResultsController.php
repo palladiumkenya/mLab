@@ -25,7 +25,7 @@ class SendResultsController extends Controller
         if(!empty($facility)){
             $mfl = $facility->code;
 
-            $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
+            $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->get();
 	        $finalres = [];
 
             foreach ($results as $result){
@@ -76,7 +76,10 @@ class SendResultsController extends Controller
 		        array_push($finalres, $res);
 
             }
-           return response()->json(["results" => $finalres]);
+
+            $msg = "We have found ". sizeof($finalres). " results for your facility";
+            
+           return response()->json(["results" => $finalres, "message" => $msg]);
         }else{
             return "Phone Number not attached to any Facility";
         }
@@ -141,16 +144,15 @@ class SendResultsController extends Controller
                     $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
     
                     $res->message = $encr;
-		   array_push($finalres, $res);	
+		            array_push($finalres, $res);	
        
                }
-		
-               return response()->json(["results" => $finalres]);
+               $msg = "We have found ". sizeof($finalres). " results for your facility";
+            
+               return response()->json(["results" => $finalres, "message" => $msg]);
             }else{
                 echo "No results were found for this period: ". $fr . " - ".$to;
-               
-
-            }
+                    }
         }                        
         else{
 
@@ -195,7 +197,9 @@ class SendResultsController extends Controller
                         array_push($res, $finalmsg);
 
                     }
-                    return response()->json(["results" => $res]);
+                    $msg = "We have found ". sizeof($finalres). " results for your facility";
+            
+                    return response()->json(["results" => $finalres, "message" => $msg]);
                 }else{
 
                    echo "No results were found for this period: ". $fr . " - ".$to;
@@ -288,8 +292,8 @@ class SendResultsController extends Controller
         $facility = Facility::where('mobile', $phone)->first();
 
         if(!empty($facility)){
-
-            $results = HTSResult::where('processed', '0')->get();
+            $mfl = $facility->code;
+            $results = HTSResult::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->get();
                 $finalres = [];
 
                 foreach($results as $result){
@@ -328,7 +332,9 @@ class SendResultsController extends Controller
                     $result->save();
 
             }
-           return response()->json(["results" => $finalres]);
+            $msg = "We have found ". sizeof($finalres). " results for your facility";
+            
+            return response()->json(["results" => $finalres, "message" => $msg]);
         }else{
             return "Phone Number not attached to any Facility";
         }
