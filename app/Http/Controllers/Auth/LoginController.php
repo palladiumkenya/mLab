@@ -79,6 +79,9 @@ class LoginController extends Controller
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
+        if (!($user)) {
+            return $this->sendFailedLoginResponse($request, 'Account does not exist');
+        }
 
         // Customization: If status status is inactive (0) return failed_status error.
         if ($user->status == 'Inactive') {
