@@ -32,7 +32,6 @@ class HomeController extends Controller
                 $view = "views/MLABDASH_0/CountyDashboard?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&county=".$aff;
         }
 
-
         $ch = curl_init($server); // Initializes cURL session 
 
 
