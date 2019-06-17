@@ -497,7 +497,8 @@ class SendResultsController extends Controller
             $mfl = $fac->mfl_code;
             
             $users = User::where('facility_id', $mfl)->get();
-            $facility  = Facility::where('code', $mfl)->WhereNotNull('mobile')->first();
+            $facility  = Facility::where('code', $mfl)->first();
+            
             $unpulled_count = Result::where('mfl_code', $mfl)->whereNull('date_sent')->where('processed', '0')->count();
 
 
@@ -505,12 +506,12 @@ class SendResultsController extends Controller
             $facility_number = $facility->mobile;
             if($facility_number != '' || $facility_number != NULL){
 
-                $facility_msg =  'This is a reminder that your facility, '. $facility_name . ' MFL: ' .$mfl . ' has ' . $unpulled_count . 
+                $facility_msg =  'This is a reminder that your facility, MFL: ' .$mfl . ' has ' . $unpulled_count . 
                 ' results pending and have not been pulled to mLab. Kindly login to the application to pull and refresh.';  
                 
                 $sender = new SenderController;
                
-                if($sender->send('0723783021', $facility_msg)){
+                if($sender->send($facility_number, $facility_msg)){
                     foreach($users as $user){
                         $phone_no = $user->phone_no;
                         $name = $user->f_name . ' ' . $user->l_name;
@@ -518,7 +519,7 @@ class SendResultsController extends Controller
                         $msg = 'Hello '. $name . ', your facility, MFL: ' .$mfl . ' has ' . $unpulled_count . 
                         ' results pending and have not been pulled to mLab. Kindly ensure to login to the application to pull and refresh.';  
         
-                        if($sender->send('0723783021', $msg)){
+                        if($sender->send($phone_no, $msg)){
         
                             echo 'notified';
                             exit;
