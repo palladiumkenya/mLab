@@ -324,10 +324,12 @@ class SendResultsController extends Controller
                     $encr =  base64_encode($msgmlb);
 
                     $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
-            
+            date_default_timezone_set('Africa/Nairobi');
+                   $date = date('Y-m-d H:i:s', time());
                     $res->message =  $encr;                
                     array_push($finalres, $res);
-
+		$result->date_sent = $date;
+		$result->date_delivered = $date;
                     $result->processed = 1;
                     $result->save();
 
