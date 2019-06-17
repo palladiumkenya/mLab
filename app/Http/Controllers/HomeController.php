@@ -46,7 +46,6 @@ class HomeController extends Controller
 
         $ticket = curl_exec($ch); // Execute cURL function and retrieve ticket  
         curl_close($ch); // Close cURL session  
-
         $clnd_view = str_replace(' ', '%20', $view);
         $url = $server . '/' . $ticket . '/' . $clnd_view;
 

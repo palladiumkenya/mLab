@@ -83,3 +83,4 @@ Route::get('/get/eid/results', ['uses' => 'VLResultsController@getEIDResults', '
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/notify', 'SendResultsController@notify')->name('notify');
