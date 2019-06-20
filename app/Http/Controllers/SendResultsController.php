@@ -215,7 +215,7 @@ class SendResultsController extends Controller
 
     public function sendIL(){
 
-        $facilities = ILFacility::where('phone_no', 'not like', '%SWOP%')->get();
+        $facilities = ILFacility::where('internet', 'No')->get();
 
         $ilfs = [];
 
@@ -535,5 +535,78 @@ class SendResultsController extends Controller
 
          
         }
+    }
+
+
+    public function sendILInternet(Request $request){
+       
+        $mfl = $request->mfl_code;
+
+        $facilities = ILFacility::where('internet', 'Yes')->where('mfl_code', $mfl)->first();
+
+        if(!$facilities){
+            echo "No Facility with given MFL code registered for IL";
+            
+        }else{
+
+            $results = Result::where('mfl_code', $mfl)->where('il_send', '0')->get();
+            $res_arr = [];
+
+            if (!$results->isEmpty()) { 
+
+                foreach($results as $result){
+
+                    $id = $result->id;
+                    $type = $result->result_type;
+                    $client_id = $result->client_id;
+                    $lab = $result->lab_id;
+                    $age = $result->age;
+                    $gender = $result->gender;
+                    $content = $result->result_content;
+                    $units = $result->units;
+                    $date_collected = $result->date_collected;
+                    $mfl = $result->mfl_code;
+                    $csr = $result->csr;
+                    $cst = $result->cst;
+                    $cj = $result->cj;
+                    $date_ordered = $result->lab_order_date;
+
+                    if (strpos($date_collected, "00:00:00") !== false) {
+                        $date_collected = substr($date_collected, 0, 10);
+                    }
+                    if (strpos($date_ordered, "00:00:00") !== false) {
+                        $date_ordered = substr($date_ordered, 0, 10);
+                    }
+                    
+
+                    if ($type = 1) {
+                        $rtype = "VL";
+                        $msg = "ID: $id, PID:$client_id, Age:$age, Sex:$gender, DC:$date_collected, LOD: $date_ordered, CSR: $csr, CST: $cst, CJ: $cj, Result: :$content $units, MFL: $mfl, Lab: $lab";
+
+                        $ted =  base64_encode($msg);
+                        
+                        $encr = "IL ". $ted;
+
+                        array_push($res_arr, $encr);
+
+                        // $result->il_send = 1;
+                        // $result->save();
+                    }
+
+                                    
+                }
+
+                if(sizeof($res_arr) > 0){
+                    echo json_encode($res_arr);
+                }
+                else{
+                    echo "No Viral Load Results found";
+                }
+            }
+            else{
+                echo "No results found";
+            }
+    }
+
     }
 }
