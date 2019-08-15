@@ -318,7 +318,7 @@ class TasksController extends Controller
 
                     $result->save();
                 }
-                if ((strpos($message, 'Invalid') !== false) || (strpos($message, 'Failed') !== false) || (strpos($message, 'Collect') !== false)) {
+                if ($message == NULL || $message == '' || (strpos($message, 'Invalid') !== false) || (strpos($message, 'Failed') !== false) || (strpos($message, 'Collect') !== false)) {
                     $result->data_key = 3;
 
                     $result->save();
@@ -333,8 +333,8 @@ class TasksController extends Controller
                     $result->data_key = 5;
 
                     $result->save();
-                } elseif ((strpos($message, 'Invalid') !== false) || (strpos($message, 'Collect') !== false) || (strpos($message, 'Failed') !== false)) {
-                    $result->data_key = 6;
+                 } elseif ($message == NULL || $message == '' || (strpos($message, 'Rejected') !== false) || (strpos($message, 'Invalid') !== false) || (strpos($message, 'Failed') !== false) || (strpos($message, 'Collect') !== false)) {
+                        $result->data_key = 6;
 
                     $result->save();
                 }
@@ -344,6 +344,57 @@ class TasksController extends Controller
             
             return "success";
         
+    }
+
+    public function classifyOne(){
+
+        $results  = Result::where('data_key', null)->get(); 
+
+
+        foreach($results as $result){
+            
+            $message = $result->result_content;
+
+            $p_value = explode(" ", $message);
+
+            if($result->result_type == 1){
+                if ( (strpos($message, '<') !== false) || $p_value[0] < 1000 || (strpos($message, 'LDL') !== false)) {
+                    $result->data_key = 1;
+
+                    $result->save();
+                } 
+                if ($p_value[0] >= 1000) {
+                    $result->data_key = 2;
+
+                    $result->save();
+                }
+                if ($message == NULL || $message == '' || (strpos($message, 'Invalid') !== false) || (strpos($message, 'Failed') !== false) || (strpos($message, 'Collect') !== false)) {
+                    $result->data_key = 3;
+
+                    $result->save();
+                }
+            }
+            elseif($result->result_type == 2){
+                if (strpos($message, 'Negative') !== false) {
+                    $result->data_key = 4;
+
+                    $result->save();
+                } elseif (strpos($message, 'Positive') !== false) {
+                    $result->data_key = 5;
+
+                    $result->save();
+                } elseif ($message == NULL || $message == '' || (strpos($message, 'Rejected') !== false) || (strpos($message, 'Invalid') !== false) || (strpos($message, 'Failed') !== false) || (strpos($message, 'Collect') !== false)) {
+                        $result->data_key = 6;
+
+                    $result->save();
+                }
+
+            }
+
+            
+            echo "success";
+        }
+    
     }
 }
 

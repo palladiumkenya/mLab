@@ -78,6 +78,7 @@ Route::get('/send/tb/results', ['uses' => 'SendResultsController@sendTB', 'as' =
 Route::get('/get/results', ['uses' => 'VLResultsController@getResults', 'as' => 'getResults']);
 Route::get('/process/inbox/{id}', ['uses' => 'TasksController@read', 'as' => 'read']);
 Route::get('/classify/{id}', ['uses' => 'TasksController@classify', 'as' => 'classify']);
+Route::get('/classifyone', ['uses' => 'TasksController@classifyOne', 'as' => 'classifyOne']);
 Route::get('/get/eid/results', ['uses' => 'VLResultsController@getEIDResults', 'as' => 'getEIDResults']);
 
 Auth::routes();

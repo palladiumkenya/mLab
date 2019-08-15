@@ -81,7 +81,7 @@ class VLResultsController extends Controller
 
             $fields = array(
                 'test' => 1,
-                'facility_code' =>'16059',
+                'facility_code' =>$a,
                 'date_dispatched_start' => $yester,
                 'date_dispatched_end' => $today
 
@@ -161,7 +161,7 @@ class VLResultsController extends Controller
 
                     $fields = array(
                         'test' => 1,
-                        'facility_code' =>'16059',
+                        'facility_code' => $a,
                         'date_dispatched_start' => $yester,
                         'date_dispatched_end' => $today
             
@@ -240,7 +240,7 @@ class VLResultsController extends Controller
     public function getEIDResults()
     {
         $today = date("Y-m-d");
-        $yester = date('Y-m-d', strtotime("-2 days"));
+        $yester = date('Y-m-d', strtotime("-60 days"));
 
 
         $ilfs = ILFacility::all();
