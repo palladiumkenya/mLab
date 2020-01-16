@@ -20,6 +20,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', ['uses' => 'HomeController@index', 'as' => 'home']);
+    Route::get('/dashboard', ['uses' => 'DashboardController@index', 'as' => 'dashboard']);
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);

@@ -11,5 +11,6 @@ class Dashboard extends Model
     public $incrementing = false;
     
     protected $fillable = [
+        
     ];
 }

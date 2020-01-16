@@ -76,7 +76,7 @@ class VLResultsController extends Controller
         $a =  implode( ',', $results );
 
         $today = date("Y-m-d");
-        $yester = date('Y-m-d', strtotime("-60 days"));
+        $yester = date('Y-m-d', strtotime("-14 days"));
             $curl = curl_init();
 
             $fields = array(
@@ -240,7 +240,7 @@ class VLResultsController extends Controller
     public function getEIDResults()
     {
         $today = date("Y-m-d");
-        $yester = date('Y-m-d', strtotime("-60 days"));
+        $yester = date('Y-m-d', strtotime("-14 days"));
 
 
         $ilfs = ILFacility::all();
