@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+date_default_timezone_set('Africa/Nairobi');
+ini_set('max_execution_time', 0);
+ini_set('memory_limit', '1024M');
 use App\Http\Controllers\SenderController;
 use Illuminate\Http\Request;
 use App\Inbox;
@@ -18,10 +20,8 @@ class TasksController extends Controller
                 $msg = Inbox::find($id);
 
                 $decr = base64_decode($msg->message);
-                
-	
 
-		//SEND CURRENT RESULTS
+		        //SEND CURRENT RESULTS
 
                 if(strpos($decr, '07') !== false){
 
@@ -30,7 +30,7 @@ class TasksController extends Controller
                     if($facility != null){
                         $mfl = $facility->code;
 
-                        $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->limit(2)->get();
+                        $results = Result::whereNull('date_sent')->where('processed', '0')->where('mfl_code', $mfl)->get();
 
                         if($results->isNotEmpty()){
                             foreach ($results as $result){
@@ -63,7 +63,7 @@ class TasksController extends Controller
                                 $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                             
                                 $encr =  base64_encode($msgmlb);
-                                $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                                $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
                     
                                 date_default_timezone_set('Africa/Nairobi');
                                 $date = date('Y-m-d H:i:s', time());
@@ -103,7 +103,7 @@ class TasksController extends Controller
                 if (strpos($decr, 'histr') !== false) {
 
                     $prevs = Inbox::where('id', '<', $msg->id)->where('MSISDN',$msg->MSISDN)->where("created_at",">",Carbon::now()->subDay())->where("created_at","<",$msg->created_at)->get();
-                    
+
                     $to_send = "NO";
                     foreach ($prevs as $prev) {
 
@@ -111,13 +111,13 @@ class TasksController extends Controller
 
                         if (strpos($prev_decr, 'histr') !== false) {
                                                            
-                                $msg = "You already made this request within the last 24 Hours. It will be processed  and sent to you shortly. mLab";
+                                $message = "You already made this request within the last 24 Hours. It will be processed  and sent to you shortly. mLab";
 
                                 date_default_timezone_set('Africa/Nairobi');
                                 $date = date('Y-m-d H:i:s', time());
                     
                                 $sender = new SenderController;
-                                if($sender->send($msg->MSISDN, $msg)){
+                                if($sender->send($msg->MSISDN, $message)){
                                 }
 
                             $to_send = "NO";
@@ -141,10 +141,8 @@ class TasksController extends Controller
                         $to = $val[3];
                         $number = '0'.substr($msg->MSISDN, 4);
 
-                        $fr =  Carbon::parse($frm)->format('Y-m-d');
-
-                        $t = Carbon::parse($to)->format('Y-m-d');
-
+                        $fr =  Carbon::createFromFormat('d/m/Y', $frm)->format('Y-m-d');
+                        $t = Carbon::createFromFormat('d/m/Y', $to)->format('Y-m-d');
                         $fac = Facility::where('mobile',$number)->where('code', $mfl)->first();
 
                         if (!empty($fac)) {
@@ -180,7 +178,7 @@ class TasksController extends Controller
                                     $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                                  
                                     $encr =  base64_encode($msgmlb);
-                                    $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                                    $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
                         
                         
                                     $sender = new SenderController;
@@ -232,7 +230,7 @@ class TasksController extends Controller
                                         $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                                     
                                         $encr =  base64_encode($msgmlb);
-                                        $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                                        $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
                         
                             
                             

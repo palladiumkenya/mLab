@@ -60,7 +60,7 @@ class SendResultsController extends Controller
                 $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
             
                 $encr =  base64_encode($msgmlb);
-                $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
 
                 $date = date('Y-m-d H:i:s', time());
                 $result->processed = '1';
@@ -141,7 +141,7 @@ class SendResultsController extends Controller
                     $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
         
                     $encr =  base64_encode($msgmlb);
-                    $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                    $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
     
                     $res->message = $encr;
 		            array_push($finalres, $res);	
@@ -192,7 +192,7 @@ class SendResultsController extends Controller
                         $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                     
                         $encr =  base64_encode($msgmlb);
-                        $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                        $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
         
                         array_push($res, $finalmsg);
 
@@ -323,7 +323,7 @@ class SendResultsController extends Controller
 
                     $encr =  base64_encode($msgmlb);
 
-                    $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                    $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
             date_default_timezone_set('Africa/Nairobi');
                    $date = date('Y-m-d H:i:s', time());
                     $res->message =  $encr;                
@@ -385,7 +385,7 @@ class SendResultsController extends Controller
 
                     $encr =  base64_encode($msgmlb);
 
-                    $finalmsg = "<#> ". $encr . " ukmLMZrTc2e";
+                    $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
             
                     array_push($res, $finalmsg);
                     // date_default_timezone_set('Africa/Nairobi');
@@ -588,8 +588,14 @@ class SendResultsController extends Controller
                         $encr = "IL ". $ted;
 
                         array_push($res_arr, $encr);
+                        $date = date('Y-m-d H:i:s', time());
 
-                        $result->il_send = 1;
+                        $result->il_send = '1';
+                        $result->processed = '1';
+                        $result->date_sent = $date;
+                        $result->date_delivered = $date;
+                        $result->updated_at = $date;
+
                         $result->save();
                     }
 

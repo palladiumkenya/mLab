@@ -1,2 +1,163 @@
 [Thu Apr 25 11:45:36.071276 2019] [php7:error] [pid 20020] [client 127.0.0.1:46962] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /var/www/mlab_new/app/Http/Controllers/SendResultsController.php on line 4
 [Thu Apr 25 11:46:22.590352 2019] [php7:error] [pid 20138] [client 127.0.0.1:47144] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /var/www/mlab_new/app/Http/Controllers/SendResultsController.php on line 4
+[Tue Oct 29 11:35:01.186606 2019] [proxy_fcgi:error] [pid 7758] (70007)The timeout specified has expired: [client 127.0.0.1:45060] AH01075: Error dispatching request to : (polling)
+[Tue Oct 29 16:05:01.629720 2019] [proxy_fcgi:error] [pid 28292] (70007)The timeout specified has expired: [client 127.0.0.1:45926] AH01075: Error dispatching request to : (polling)
+[Tue Oct 29 16:05:01.633505 2019] [proxy_fcgi:error] [pid 32494] (70007)The timeout specified has expired: [client 127.0.0.1:45930] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 00:05:02.137495 2019] [proxy_fcgi:error] [pid 19222] (70007)The timeout specified has expired: [client 127.0.0.1:35554] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 08:05:01.750258 2019] [proxy_fcgi:error] [pid 17729] (70007)The timeout specified has expired: [client 127.0.0.1:45308] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 08:05:01.752965 2019] [proxy_fcgi:error] [pid 17434] (70007)The timeout specified has expired: [client 127.0.0.1:45316] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 08:05:01.761682 2019] [proxy_fcgi:error] [pid 30528] (70007)The timeout specified has expired: [client 127.0.0.1:45320] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 16:05:01.379076 2019] [proxy_fcgi:error] [pid 20403] (70007)The timeout specified has expired: [client 127.0.0.1:56782] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 16:05:01.379063 2019] [proxy_fcgi:error] [pid 20563] (70007)The timeout specified has expired: [client 127.0.0.1:56794] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 16:35:01.857374 2019] [proxy_fcgi:error] [pid 24678] (70007)The timeout specified has expired: [client 127.0.0.1:59802] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 20:35:01.635635 2019] [proxy_fcgi:error] [pid 39112] (70007)The timeout specified has expired: [client 127.0.0.1:38606] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 21:35:01.137071 2019] [proxy_fcgi:error] [pid 42773] (70007)The timeout specified has expired: [client 127.0.0.1:40284] AH01075: Error dispatching request to : (polling)
+[Wed Oct 30 22:35:01.411633 2019] [proxy_fcgi:error] [pid 46328] (70007)The timeout specified has expired: [client 127.0.0.1:41108] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 08:05:01.903851 2019] [proxy_fcgi:error] [pid 1156] (70007)The timeout specified has expired: [client 127.0.0.1:48480] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 08:05:03.739727 2019] [proxy_fcgi:error] [pid 3320] (70007)The timeout specified has expired: [client 127.0.0.1:48492] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 08:05:03.776602 2019] [proxy_fcgi:error] [pid 3321] (70007)The timeout specified has expired: [client 127.0.0.1:48494] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 08:35:01.854240 2019] [proxy_fcgi:error] [pid 5800] (70007)The timeout specified has expired: [client 127.0.0.1:48964] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 08:57:52.150801 2019] [proxy_fcgi:error] [pid 30711] (70007)The timeout specified has expired: [client 127.0.0.1:51178] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 09:03:48.495331 2019] [proxy_fcgi:error] [pid 42129] (70007)The timeout specified has expired: [client 127.0.0.1:52690] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 09:03:52.935393 2019] [proxy_fcgi:error] [pid 42131] (70007)The timeout specified has expired: [client 127.0.0.1:52738] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 09:08:54.907505 2019] [proxy_fcgi:error] [pid 42132] (70007)The timeout specified has expired: [client 127.0.0.1:53480] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 09:09:02.494795 2019] [proxy_fcgi:error] [pid 42886] (70007)The timeout specified has expired: [client 127.0.0.1:53604] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 09:18:59.595027 2019] [proxy_fcgi:error] [pid 45151] (70007)The timeout specified has expired: [client 127.0.0.1:56160] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 09:19:02.063937 2019] [proxy_fcgi:error] [pid 45169] (70007)The timeout specified has expired: [client 127.0.0.1:56226] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 16:05:01.590860 2019] [proxy_fcgi:error] [pid 26944] (70007)The timeout specified has expired: [client 127.0.0.1:35796] AH01075: Error dispatching request to : (polling)
+[Thu Oct 31 16:05:01.616517 2019] [proxy_fcgi:error] [pid 26805] (70007)The timeout specified has expired: [client 127.0.0.1:35804] AH01075: Error dispatching request to : (polling)
+[Fri Nov 01 00:05:01.543830 2019] [proxy_fcgi:error] [pid 36746] (70007)The timeout specified has expired: [client 127.0.0.1:49186] AH01075: Error dispatching request to : (polling)
+[Fri Nov 01 00:05:01.544494 2019] [proxy_fcgi:error] [pid 40817] (70007)The timeout specified has expired: [client 127.0.0.1:49204] AH01075: Error dispatching request to : (polling)
+[Fri Nov 01 08:05:02.021103 2019] [proxy_fcgi:error] [pid 34365] (70007)The timeout specified has expired: [client 127.0.0.1:57404] AH01075: Error dispatching request to : (polling)
+[Fri Nov 01 08:05:02.108889 2019] [proxy_fcgi:error] [pid 36053] (70007)The timeout specified has expired: [client 127.0.0.1:57400] AH01075: Error dispatching request to : (polling)
+[Fri Nov 01 08:05:02.122624 2019] [proxy_fcgi:error] [pid 34366] (70007)The timeout specified has expired: [client 127.0.0.1:57414] AH01075: Error dispatching request to : (polling)
+[Fri Nov 01 16:05:01.700834 2019] [proxy_fcgi:error] [pid 31383] (70007)The timeout specified has expired: [client 127.0.0.1:60500] AH01075: Error dispatching request to : (polling)
+[Fri Nov 01 16:05:01.729693 2019] [proxy_fcgi:error] [pid 31195] (70007)The timeout specified has expired: [client 127.0.0.1:60506] AH01075: Error dispatching request to : (polling)
+[Sat Nov 02 00:05:01.405975 2019] [proxy_fcgi:error] [pid 5778] (70007)The timeout specified has expired: [client 127.0.0.1:43228] AH01075: Error dispatching request to : (polling)
+[Sat Nov 02 00:05:01.419951 2019] [proxy_fcgi:error] [pid 7243] (70007)The timeout specified has expired: [client 127.0.0.1:43232] AH01075: Error dispatching request to : (polling)
+[Sat Nov 02 08:05:01.849801 2019] [proxy_fcgi:error] [pid 3628] (70007)The timeout specified has expired: [client 127.0.0.1:51306] AH01075: Error dispatching request to : (polling)
+[Sat Nov 02 08:05:01.849954 2019] [proxy_fcgi:error] [pid 3441] (70007)The timeout specified has expired: [client 127.0.0.1:51309] AH01075: Error dispatching request to : (polling)
+[Sat Nov 02 16:05:01.443606 2019] [proxy_fcgi:error] [pid 29314] (70007)The timeout specified has expired: [client 127.0.0.1:33102] AH01075: Error dispatching request to : (polling)
+[Sat Nov 02 16:05:01.465681 2019] [proxy_fcgi:error] [pid 29129] (70007)The timeout specified has expired: [client 127.0.0.1:33110] AH01075: Error dispatching request to : (polling)
+[Sun Nov 03 00:05:01.429772 2019] [proxy_fcgi:error] [pid 7158] (70007)The timeout specified has expired: [client 127.0.0.1:43238] AH01075: Error dispatching request to : (polling)
+[Sun Nov 03 00:05:01.464724 2019] [proxy_fcgi:error] [pid 6846] (70007)The timeout specified has expired: [client 127.0.0.1:43254] AH01075: Error dispatching request to : (polling)
+[Sun Nov 03 08:05:02.101847 2019] [proxy_fcgi:error] [pid 35305] (70007)The timeout specified has expired: [client 127.0.0.1:48470] AH01075: Error dispatching request to : (polling)
+[Sun Nov 03 08:05:02.104991 2019] [proxy_fcgi:error] [pid 35498] (70007)The timeout specified has expired: [client 127.0.0.1:48474] AH01075: Error dispatching request to : (polling)
+[Sun Nov 03 16:05:01.728191 2019] [proxy_fcgi:error] [pid 34837] (70007)The timeout specified has expired: [client 127.0.0.1:54790] AH01075: Error dispatching request to : (polling)
+[Sun Nov 03 16:05:01.729110 2019] [proxy_fcgi:error] [pid 11304] (70007)The timeout specified has expired: [client 127.0.0.1:54798] AH01075: Error dispatching request to : (polling)
+[Mon Nov 04 00:05:01.910501 2019] [proxy_fcgi:error] [pid 34837] (70007)The timeout specified has expired: [client 127.0.0.1:33674] AH01075: Error dispatching request to : (polling)
+[Mon Nov 04 08:05:01.728254 2019] [proxy_fcgi:error] [pid 22686] (70007)The timeout specified has expired: [client 127.0.0.1:41146] AH01075: Error dispatching request to : (polling)
+[Mon Nov 04 08:05:01.848908 2019] [proxy_fcgi:error] [pid 22687] (70007)The timeout specified has expired: [client 127.0.0.1:41148] AH01075: Error dispatching request to : (polling)
+[Mon Nov 04 08:05:01.849640 2019] [proxy_fcgi:error] [pid 22726] (70007)The timeout specified has expired: [client 127.0.0.1:41152] AH01075: Error dispatching request to : (polling)
+[Mon Nov 04 16:05:01.431503 2019] [proxy_fcgi:error] [pid 14243] (70007)The timeout specified has expired: [client 127.0.0.1:56882] AH01075: Error dispatching request to : (polling)
+[Mon Nov 04 16:05:01.456582 2019] [proxy_fcgi:error] [pid 14691] (70007)The timeout specified has expired: [client 127.0.0.1:56868] AH01075: Error dispatching request to : (polling)
+[Tue Nov 05 00:05:01.911195 2019] [proxy_fcgi:error] [pid 35538] (70007)The timeout specified has expired: [client 127.0.0.1:43566] AH01075: Error dispatching request to : (polling)
+[Tue Nov 05 08:05:01.936899 2019] [proxy_fcgi:error] [pid 36512] (70007)The timeout specified has expired: [client 127.0.0.1:51472] AH01075: Error dispatching request to : (polling)
+[Tue Nov 05 08:05:02.138599 2019] [proxy_fcgi:error] [pid 35120] (70007)The timeout specified has expired: [client 127.0.0.1:51478] AH01075: Error dispatching request to : (polling)
+[Tue Nov 05 08:05:02.709941 2019] [proxy_fcgi:error] [pid 37375] (70007)The timeout specified has expired: [client 127.0.0.1:51488] AH01075: Error dispatching request to : (polling)
+[Tue Nov 05 16:05:01.383757 2019] [proxy_fcgi:error] [pid 26412] (70007)The timeout specified has expired: [client 127.0.0.1:56638] AH01075: Error dispatching request to : (polling)
+[Tue Nov 05 16:05:01.490063 2019] [proxy_fcgi:error] [pid 26497] (70007)The timeout specified has expired: [client 127.0.0.1:56656] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 00:05:01.570090 2019] [proxy_fcgi:error] [pid 5269] (70007)The timeout specified has expired: [client 127.0.0.1:44368] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 00:05:01.587826 2019] [proxy_fcgi:error] [pid 3810] (70007)The timeout specified has expired: [client 127.0.0.1:44382] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 00:35:01.888807 2019] [proxy_fcgi:error] [pid 10477] (70007)The timeout specified has expired: [client 127.0.0.1:45208] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 08:05:01.708377 2019] [proxy_fcgi:error] [pid 36806] (70007)The timeout specified has expired: [client 127.0.0.1:53606] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 08:05:01.708553 2019] [proxy_fcgi:error] [pid 37303] (70007)The timeout specified has expired: [client 127.0.0.1:53612] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 08:05:01.784447 2019] [proxy_fcgi:error] [pid 37495] (70007)The timeout specified has expired: [client 127.0.0.1:53610] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 13:35:02.001938 2019] [proxy_fcgi:error] [pid 14853] (70007)The timeout specified has expired: [client 127.0.0.1:51548] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 14:01:41.661899 2019] [proxy_fcgi:error] [pid 4133] (70007)The timeout specified has expired: [client 127.0.0.1:33486] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 16:05:01.149677 2019] [proxy_fcgi:error] [pid 17126] (70007)The timeout specified has expired: [client 127.0.0.1:58780] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 16:05:01.152215 2019] [proxy_fcgi:error] [pid 17275] (70007)The timeout specified has expired: [client 127.0.0.1:58782] AH01075: Error dispatching request to : (polling)
+[Wed Nov 06 16:35:01.684239 2019] [proxy_fcgi:error] [pid 22005] (70007)The timeout specified has expired: [client 127.0.0.1:34124] AH01075: Error dispatching request to : (polling)
+[Thu Nov 07 00:05:02.040302 2019] [proxy_fcgi:error] [pid 43238] (70007)The timeout specified has expired: [client 127.0.0.1:51568] AH01075: Error dispatching request to : (polling)
+[Thu Nov 07 00:05:02.052228 2019] [proxy_fcgi:error] [pid 42091] (70007)The timeout specified has expired: [client 127.0.0.1:51574] AH01075: Error dispatching request to : (polling)
+[Thu Nov 07 08:05:01.306585 2019] [proxy_fcgi:error] [pid 25217] (70007)The timeout specified has expired: [client 127.0.0.1:60244] AH01075: Error dispatching request to : (polling)
+[Thu Nov 07 08:05:01.306612 2019] [proxy_fcgi:error] [pid 26865] (70007)The timeout specified has expired: [client 127.0.0.1:60248] AH01075: Error dispatching request to : (polling)
+[Thu Nov 07 08:05:01.306667 2019] [proxy_fcgi:error] [pid 25218] (70007)The timeout specified has expired: [client 127.0.0.1:60246] AH01075: Error dispatching request to : (polling)
+[Thu Nov 07 16:05:01.164452 2019] [proxy_fcgi:error] [pid 19373] (70007)The timeout specified has expired: [client 127.0.0.1:47576] AH01075: Error dispatching request to : (polling)
+[Thu Nov 07 16:05:01.224164 2019] [proxy_fcgi:error] [pid 19495] (70007)The timeout specified has expired: [client 127.0.0.1:47578] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 00:05:01.224197 2019] [proxy_fcgi:error] [pid 28221] (70007)The timeout specified has expired: [client 127.0.0.1:42758] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 00:05:01.248160 2019] [proxy_fcgi:error] [pid 26966] (70007)The timeout specified has expired: [client 127.0.0.1:42762] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 08:05:01.940201 2019] [proxy_fcgi:error] [pid 29845] (70007)The timeout specified has expired: [client 127.0.0.1:52172] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 08:05:01.942739 2019] [proxy_fcgi:error] [pid 29510] (70007)The timeout specified has expired: [client 127.0.0.1:52180] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 08:05:01.986791 2019] [proxy_fcgi:error] [pid 29683] (70007)The timeout specified has expired: [client 127.0.0.1:52178] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 13:48:14.006225 2019] [proxy:error] [pid 15903] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Fri Nov 08 13:48:14.006254 2019] [proxy_fcgi:error] [pid 15903] [client 127.0.0.1:59918] AH01079: failed to make connection to backend: httpd-UDS
+[Fri Nov 08 16:05:01.333200 2019] [proxy_fcgi:error] [pid 14550] (70007)The timeout specified has expired: [client 127.0.0.1:56476] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 16:05:01.346220 2019] [proxy_fcgi:error] [pid 14643] (70007)The timeout specified has expired: [client 127.0.0.1:56480] AH01075: Error dispatching request to : (polling)
+[Fri Nov 08 16:35:01.517536 2019] [proxy_fcgi:error] [pid 19212] (70007)The timeout specified has expired: [client 127.0.0.1:58150] AH01075: Error dispatching request to : (polling)
+[Sat Nov 09 13:57:12.740047 2019] [proxy:error] [pid 35975] (111)Connection refused: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Sat Nov 09 13:57:12.740538 2019] [proxy:error] [pid 36003] (111)Connection refused: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Sat Nov 09 13:57:12.741027 2019] [proxy_fcgi:error] [pid 35975] [client 127.0.0.1:43086] AH01079: failed to make connection to backend: httpd-UDS
+[Sat Nov 09 13:57:12.741036 2019] [proxy_fcgi:error] [pid 36003] [client 127.0.0.1:43078] AH01079: failed to make connection to backend: httpd-UDS
+[Sat Nov 09 13:57:15.552854 2019] [proxy:error] [pid 15556] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Sat Nov 09 13:57:15.552879 2019] [proxy_fcgi:error] [pid 15556] [client 127.0.0.1:43462] AH01079: failed to make connection to backend: httpd-UDS
+[Mon Nov 11 14:56:10.652226 2019] [proxy:error] [pid 13817] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Mon Nov 11 14:56:10.663955 2019] [proxy_fcgi:error] [pid 13817] [client 127.0.0.1:48976] AH01079: failed to make connection to backend: httpd-UDS
+[Thu Nov 14 14:35:01.508850 2019] [proxy_fcgi:error] [pid 3391] (70007)The timeout specified has expired: [client 127.0.0.1:60388] AH01075: Error dispatching request to : (polling)
+[Thu Nov 14 16:02:01.570674 2019] [proxy_fcgi:error] [pid 12730] [client 127.0.0.1:50066] AH01067: Failed to read FastCGI header
+[Thu Nov 14 16:02:01.570727 2019] [proxy_fcgi:error] [pid 12730] (104)Connection reset by peer: [client 127.0.0.1:50066] AH01075: Error dispatching request to : 
+[Thu Nov 14 16:02:01.570826 2019] [proxy_fcgi:error] [pid 13579] [client 127.0.0.1:50064] AH01067: Failed to read FastCGI header
+[Thu Nov 14 16:02:01.570861 2019] [proxy_fcgi:error] [pid 13579] (104)Connection reset by peer: [client 127.0.0.1:50064] AH01075: Error dispatching request to : 
+[Thu Nov 14 16:35:01.812762 2019] [proxy_fcgi:error] [pid 18396] (70007)The timeout specified has expired: [client 127.0.0.1:52938] AH01075: Error dispatching request to : (polling)
+[Fri Nov 15 00:02:01.473305 2019] [proxy_fcgi:error] [pid 2508] [client 127.0.0.1:46020] AH01067: Failed to read FastCGI header
+[Fri Nov 15 00:02:01.473343 2019] [proxy_fcgi:error] [pid 2501] [client 127.0.0.1:46018] AH01067: Failed to read FastCGI header
+[Fri Nov 15 00:02:01.473375 2019] [proxy_fcgi:error] [pid 2508] (104)Connection reset by peer: [client 127.0.0.1:46020] AH01075: Error dispatching request to : 
+[Fri Nov 15 00:02:01.473385 2019] [proxy_fcgi:error] [pid 2501] (104)Connection reset by peer: [client 127.0.0.1:46018] AH01075: Error dispatching request to : 
+[Fri Nov 15 08:02:01.322374 2019] [proxy_fcgi:error] [pid 41653] [client 127.0.0.1:55952] AH01067: Failed to read FastCGI header
+[Fri Nov 15 08:02:01.322400 2019] [proxy_fcgi:error] [pid 41653] (104)Connection reset by peer: [client 127.0.0.1:55952] AH01075: Error dispatching request to : 
+[Fri Nov 15 08:02:01.322753 2019] [proxy_fcgi:error] [pid 42866] [client 127.0.0.1:55934] AH01067: Failed to read FastCGI header
+[Fri Nov 15 08:02:01.322787 2019] [proxy_fcgi:error] [pid 42866] (104)Connection reset by peer: [client 127.0.0.1:55934] AH01075: Error dispatching request to : 
+[Fri Nov 15 08:02:01.323060 2019] [proxy_fcgi:error] [pid 42074] [client 127.0.0.1:55936] AH01067: Failed to read FastCGI header
+[Fri Nov 15 08:02:01.323089 2019] [proxy_fcgi:error] [pid 42074] (104)Connection reset by peer: [client 127.0.0.1:55936] AH01075: Error dispatching request to : 
+[Fri Nov 15 16:02:01.983812 2019] [proxy_fcgi:error] [pid 31060] [client 127.0.0.1:39988] AH01067: Failed to read FastCGI header
+[Fri Nov 15 16:02:01.983946 2019] [proxy_fcgi:error] [pid 20819] [client 127.0.0.1:40004] AH01067: Failed to read FastCGI header
+[Fri Nov 15 16:02:02.002413 2019] [proxy_fcgi:error] [pid 31060] (104)Connection reset by peer: [client 127.0.0.1:39988] AH01075: Error dispatching request to : 
+[Fri Nov 15 16:02:02.002456 2019] [proxy_fcgi:error] [pid 20819] (104)Connection reset by peer: [client 127.0.0.1:40004] AH01075: Error dispatching request to : 
+[Fri Nov 15 18:35:01.271816 2019] [proxy_fcgi:error] [pid 46360] (70007)The timeout specified has expired: [client 127.0.0.1:49824] AH01075: Error dispatching request to : (polling)
+[Fri Nov 15 22:02:01.427147 2019] [proxy:error] [pid 9982] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Fri Nov 15 22:02:01.427167 2019] [proxy_fcgi:error] [pid 9982] [client 127.0.0.1:55060] AH01079: failed to make connection to backend: httpd-UDS
+[Fri Nov 15 23:02:01.269467 2019] [proxy:error] [pid 12635] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Fri Nov 15 23:02:01.269520 2019] [proxy_fcgi:error] [pid 12635] [client 127.0.0.1:56576] AH01079: failed to make connection to backend: httpd-UDS
+[Sat Nov 16 00:02:01.290782 2019] [proxy_fcgi:error] [pid 13858] [client 127.0.0.1:58772] AH01067: Failed to read FastCGI header
+[Sat Nov 16 00:02:01.290778 2019] [proxy_fcgi:error] [pid 21118] [client 127.0.0.1:58778] AH01067: Failed to read FastCGI header
+[Sat Nov 16 00:02:01.290821 2019] [proxy_fcgi:error] [pid 13858] (104)Connection reset by peer: [client 127.0.0.1:58772] AH01075: Error dispatching request to : 
+[Sat Nov 16 00:02:01.290832 2019] [proxy_fcgi:error] [pid 21118] (104)Connection reset by peer: [client 127.0.0.1:58778] AH01075: Error dispatching request to : 
+[Sat Nov 16 07:35:01.554106 2019] [proxy_fcgi:error] [pid 23004] (70007)The timeout specified has expired: [client 127.0.0.1:39608] AH01075: Error dispatching request to : (polling)
+[Sat Nov 16 11:02:01.487047 2019] [proxy:error] [pid 37209] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Sat Nov 16 11:02:01.487075 2019] [proxy_fcgi:error] [pid 37209] [client 127.0.0.1:44196] AH01079: failed to make connection to backend: httpd-UDS
+[Sat Nov 16 16:02:01.455092 2019] [proxy_fcgi:error] [pid 5288] [client 127.0.0.1:53430] AH01067: Failed to read FastCGI header
+[Sat Nov 16 16:02:01.455127 2019] [proxy_fcgi:error] [pid 5288] (104)Connection reset by peer: [client 127.0.0.1:53430] AH01075: Error dispatching request to : 
+[Sat Nov 16 16:02:01.457073 2019] [proxy_fcgi:error] [pid 7129] [client 127.0.0.1:53440] AH01067: Failed to read FastCGI header
+[Sat Nov 16 16:02:01.457099 2019] [proxy_fcgi:error] [pid 7129] (104)Connection reset by peer: [client 127.0.0.1:53440] AH01075: Error dispatching request to : 
+[Sun Nov 17 00:02:01.937978 2019] [proxy_fcgi:error] [pid 36760] [client 127.0.0.1:34936] AH01067: Failed to read FastCGI header
+[Sun Nov 17 00:02:01.938017 2019] [proxy_fcgi:error] [pid 36760] (104)Connection reset by peer: [client 127.0.0.1:34936] AH01075: Error dispatching request to : 
+[Sun Nov 17 00:02:01.938209 2019] [proxy_fcgi:error] [pid 41314] [client 127.0.0.1:34954] AH01067: Failed to read FastCGI header
+[Sun Nov 17 00:02:01.938257 2019] [proxy_fcgi:error] [pid 41314] (104)Connection reset by peer: [client 127.0.0.1:34954] AH01075: Error dispatching request to : 
+[Sun Nov 17 08:02:01.627520 2019] [proxy_fcgi:error] [pid 38402] [client 127.0.0.1:43238] AH01067: Failed to read FastCGI header
+[Sun Nov 17 08:02:01.627554 2019] [proxy_fcgi:error] [pid 38402] (104)Connection reset by peer: [client 127.0.0.1:43238] AH01075: Error dispatching request to : 
+[Sun Nov 17 08:02:01.627568 2019] [proxy_fcgi:error] [pid 40866] [client 127.0.0.1:43242] AH01067: Failed to read FastCGI header
+[Sun Nov 17 08:02:01.627598 2019] [proxy_fcgi:error] [pid 40866] (104)Connection reset by peer: [client 127.0.0.1:43242] AH01075: Error dispatching request to : 
+[Sun Nov 17 16:02:01.640285 2019] [proxy_fcgi:error] [pid 18645] [client 127.0.0.1:52160] AH01067: Failed to read FastCGI header
+[Sun Nov 17 16:02:01.640322 2019] [proxy_fcgi:error] [pid 18645] (104)Connection reset by peer: [client 127.0.0.1:52160] AH01075: Error dispatching request to : 
+[Sun Nov 17 16:02:01.641064 2019] [proxy_fcgi:error] [pid 22515] [client 127.0.0.1:52164] AH01067: Failed to read FastCGI header
+[Sun Nov 17 16:02:01.641089 2019] [proxy_fcgi:error] [pid 22515] (104)Connection reset by peer: [client 127.0.0.1:52164] AH01075: Error dispatching request to : 
+[Mon Nov 18 08:05:01.962044 2019] [proxy_fcgi:error] [pid 4517] (70007)The timeout specified has expired: [client 127.0.0.1:45738] AH01075: Error dispatching request to : (polling)
+[Mon Nov 18 08:05:02.073200 2019] [proxy_fcgi:error] [pid 3102] (70007)The timeout specified has expired: [client 127.0.0.1:45748] AH01075: Error dispatching request to : (polling)
+[Mon Nov 18 08:05:02.397355 2019] [proxy_fcgi:error] [pid 7117] (70007)The timeout specified has expired: [client 127.0.0.1:45754] AH01075: Error dispatching request to : (polling)
+[Mon Nov 18 08:35:01.324897 2019] [proxy_fcgi:error] [pid 3103] (70007)The timeout specified has expired: [client 127.0.0.1:50240] AH01075: Error dispatching request to : (polling)
+[Mon Nov 18 09:35:01.149938 2019] [proxy_fcgi:error] [pid 15060] (70007)The timeout specified has expired: [client 127.0.0.1:55202] AH01075: Error dispatching request to : (polling)
+[Mon Nov 18 10:35:01.698756 2019] [proxy_fcgi:error] [pid 20771] (70007)The timeout specified has expired: [client 127.0.0.1:33794] AH01075: Error dispatching request to : (polling)
+[Mon Nov 18 13:45:42.144671 2019] [proxy_fcgi:error] [pid 38498] (70007)The timeout specified has expired: [client 127.0.0.1:55468] AH01075: Error dispatching request to : (polling)
+[Mon Nov 18 16:00:01.685830 2019] [proxy:error] [pid 5588] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Mon Nov 18 16:00:01.685856 2019] [proxy_fcgi:error] [pid 5588] [client 127.0.0.1:42796] AH01079: failed to make connection to backend: httpd-UDS
+[Mon Nov 18 16:00:01.697151 2019] [proxy:error] [pid 5429] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Mon Nov 18 16:00:01.697173 2019] [proxy_fcgi:error] [pid 5429] [client 127.0.0.1:42798] AH01079: failed to make connection to backend: httpd-UDS
+[Mon Nov 18 16:30:01.921897 2019] [proxy:error] [pid 9972] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Mon Nov 18 16:30:01.921926 2019] [proxy_fcgi:error] [pid 9972] [client 127.0.0.1:44212] AH01079: failed to make connection to backend: httpd-UDS
+[Mon Nov 18 17:30:01.802274 2019] [proxy:error] [pid 21083] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Mon Nov 18 17:30:01.802308 2019] [proxy_fcgi:error] [pid 21083] [client 127.0.0.1:46678] AH01079: failed to make connection to backend: httpd-UDS
+[Mon Nov 18 18:30:01.766620 2019] [proxy:error] [pid 20130] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Mon Nov 18 18:30:01.766655 2019] [proxy_fcgi:error] [pid 20130] [client 127.0.0.1:47816] AH01079: failed to make connection to backend: httpd-UDS
+[Mon Nov 18 19:30:01.902373 2019] [proxy:error] [pid 26373] (2)No such file or directory: AH02454: FCGI: attempt to connect to Unix domain socket /var/run/php/php7.3-fpm.sock (*) failed
+[Mon Nov 18 19:30:01.902677 2019] [proxy_fcgi:error] [pid 26373] [client 127.0.0.1:48878] AH01079: failed to make connection to backend: httpd-UDS
+[Tue Dec 10 11:31:34.387165 2019] [php7:error] [pid 15904] [client 127.0.0.1:56010] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /var/www/mlab/vendor/guzzlehttp/guzzle/src/Handler/CurlFactory.php on line 553
