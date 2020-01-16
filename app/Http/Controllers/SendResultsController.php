@@ -60,7 +60,7 @@ class SendResultsController extends Controller
                 $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
             
                 $encr =  base64_encode($msgmlb);
-                $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
+                $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
 
                 $date = date('Y-m-d H:i:s', time());
                 $result->processed = '1';
@@ -141,7 +141,7 @@ class SendResultsController extends Controller
                     $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
         
                     $encr =  base64_encode($msgmlb);
-                    $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
+                    $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
     
                     $res->message = $encr;
 		            array_push($finalres, $res);	
@@ -192,7 +192,7 @@ class SendResultsController extends Controller
                         $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                     
                         $encr =  base64_encode($msgmlb);
-                        $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
+                        $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
         
                         array_push($res, $finalmsg);
 
@@ -323,7 +323,7 @@ class SendResultsController extends Controller
 
                     $encr =  base64_encode($msgmlb);
 
-                    $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
+                    $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
             date_default_timezone_set('Africa/Nairobi');
                    $date = date('Y-m-d H:i:s', time());
                     $res->message =  $encr;                
@@ -385,7 +385,7 @@ class SendResultsController extends Controller
 
                     $encr =  base64_encode($msgmlb);
 
-                    $finalmsg = "<# ". $encr . " ukmLMZrTc2e>";
+                    $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
             
                     array_push($res, $finalmsg);
                     // date_default_timezone_set('Africa/Nairobi');
