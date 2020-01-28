@@ -63,7 +63,7 @@ class TasksController extends Controller
                                 $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                             
                                 $encr =  base64_encode($msgmlb);
-                                $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
+                                $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
                     
                                 date_default_timezone_set('Africa/Nairobi');
                                 $date = date('Y-m-d H:i:s', time());
@@ -178,7 +178,7 @@ class TasksController extends Controller
                                     $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                                  
                                     $encr =  base64_encode($msgmlb);
-                                    $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
+                                    $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
                         
                         
                                     $sender = new SenderController;
@@ -230,7 +230,7 @@ class TasksController extends Controller
                                         $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
                                     
                                         $encr =  base64_encode($msgmlb);
-                                        $finalmsg = "<# ". $encr . " qt54FS+Udrci>";
+                                        $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
                         
                             
                             
