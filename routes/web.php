@@ -18,7 +18,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
-
     Route::get('/home', ['uses' => 'HomeController@index', 'as' => 'home']);
     Route::get('/dashboard', ['uses' => 'DashboardController@index', 'as' => 'dashboard']);
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
@@ -67,9 +66,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/hts/results', 'DataController@hts_results')->name('hts_results');
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
     Route::get('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
-
-
-
 });
 
 Route::get('/send/results', ['uses' => 'SendResultsController@sendVLEID', 'as' => 'sendvleid']);
