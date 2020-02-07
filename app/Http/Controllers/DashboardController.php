@@ -2,14 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Dashboard;
 use DB;
+use App\Partner;
+use App\County;
+use App\SubCounty;
+use App\Facility;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        return view('dashboard.highcharts_dashboard');
+    }
+
+    public function get_data()
+    {
         $data                = [];
+
+        $all_partners = Partner::select('id', 'name')->get();
+        $all_counties = County::select('id', 'name')->get();
+
         $all_records         = Dashboard::count();
         $sent_records        = Dashboard::whereNotNull('date_sent')->count();
         $counties            = DB::table('mlab_data')->distinct('county_id')->count('county_id');
@@ -38,6 +52,8 @@ class DashboardController extends Controller
         ->where('date_collected', '!=', '0000-00-00')
         ->get();
 
+        $data["all_counties"]         = $all_counties;
+        $data["all_partners"]         = $all_partners;
         $data["all_records"]         = $all_records;
         $data["sent_records"]        = $sent_records;
         $data["counties"]            = $counties;
@@ -51,6 +67,47 @@ class DashboardController extends Controller
         $data["vl_tat"]              = $average_vl_collect_sent_diff;
         $data["county_numbers"]      = $county_numbers;
 
-        echo json_encode($data);
+        return $data;
+    }
+
+
+    public function get_dashboard_counties(Request $request)
+    {
+        $partner_ids = array();
+        $strings_array = $request->partners;
+
+        foreach ($strings_array as $each_id) {
+            $partner_ids[] = (int) $each_id;
+        }
+
+        $all_counties = County::join('sub_county', 'county.id', '=', 'sub_county.county_id')->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')->select('county.id as id', 'county.name as name')->wherein('health_facilities.partner_id', $partner_ids)->groupBy('county.id', 'county.name')->get();
+        return $all_counties;
+    }
+
+    public function get_dashboard_sub_counties(Request $request)
+    {
+        $county_ids = array();
+        $strings_array = $request->counties;
+
+        foreach ($strings_array as $each_id) {
+            $county_ids[] = (int) $each_id;
+        }
+        $all_sub_counties = SubCounty::select('id', 'name')->wherein('county_id', $county_ids)->groupBy('id', 'name')->get();
+        return $all_sub_counties;
+    }
+
+    public function get_dashboard_facilities(Request $request)
+    {
+        $sub_county_ids = array();
+        $strings_array = $request->sub_counties;
+
+        foreach ($strings_array as $each_id) {
+            $sub_county_ids[] = (int) $each_id;
+        }
+
+        $withResults = Dashboard::select('mfl_code')->groupBy('mfl_code')->get();
+
+        $all_facilities = Facility::select('id', 'name')->wherein('Sub_County_ID', $sub_county_ids)->wherein('code', $withResults)->groupBy('id', 'name')->get();
+        return $all_facilities;
     }
 }

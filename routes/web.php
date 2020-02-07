@@ -19,7 +19,6 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', ['uses' => 'HomeController@index', 'as' => 'home']);
-    Route::get('/dashboard', ['uses' => 'DashboardController@index', 'as' => 'dashboard']);
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);
@@ -66,6 +65,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/hts/results', 'DataController@hts_results')->name('hts_results');
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
     Route::get('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
+
+
+    //Dashboard Routes
+    Route::get('/dashboard', ['uses' => 'DashboardController@index', 'as' => 'dashboard']);
+    Route::get('/get_data', ['uses' => 'DashboardController@get_data', 'as' => 'get_data']);
+    Route::post('/get_dashboard_counties', ['uses' => 'DashboardController@get_dashboard_counties', 'as' => 'get_dashboard_counties']);
+    Route::post('/get_dashboard_sub_counties', ['uses' => 'DashboardController@get_dashboard_sub_counties', 'as' => 'get_dashboard_sub_counties']);
+    Route::post('/get_dashboard_facilities', ['uses' => 'DashboardController@get_dashboard_facilities', 'as' => 'get_dashboard_facilities']);
 });
 
 Route::get('/send/results', ['uses' => 'SendResultsController@sendVLEID', 'as' => 'sendvleid']);
