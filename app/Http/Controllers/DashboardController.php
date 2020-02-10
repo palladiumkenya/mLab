@@ -21,8 +21,10 @@ class DashboardController extends Controller
     {
         $data                = [];
 
-        $all_partners = Partner::select('id', 'name')->get();
-        $all_counties = County::select('id', 'name')->get();
+        $partners_with_data = Dashboard::select('partner_id')->groupBy('partner_id')->get();
+        $counties_with_data = Dashboard::select('county_id')->groupBy('county_id')->get();
+        $all_partners = Partner::select('id', 'name')->whereIn('id', $partners_with_data)->get();
+        $all_counties = County::select('id', 'name')->whereIn('id', $counties_with_data)->get();
 
         $all_records         = Dashboard::count();
         $sent_records        = Dashboard::whereNotNull('date_sent')->count();
@@ -79,8 +81,9 @@ class DashboardController extends Controller
         foreach ($strings_array as $each_id) {
             $partner_ids[] = (int) $each_id;
         }
+        $counties_with_data = Dashboard::select('county_id')->groupBy('county_id')->get();
 
-        $all_counties = County::join('sub_county', 'county.id', '=', 'sub_county.county_id')->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')->select('county.id as id', 'county.name as name')->wherein('health_facilities.partner_id', $partner_ids)->groupBy('county.id', 'county.name')->get();
+        $all_counties = County::join('sub_county', 'county.id', '=', 'sub_county.county_id')->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')->select('county.id as id', 'county.name as name')->wherein('health_facilities.partner_id', $partner_ids)->wherIn('county.id', $counties_with_data)->groupBy('county.id', 'county.name')->get();
         return $all_counties;
     }
 
@@ -92,7 +95,9 @@ class DashboardController extends Controller
         foreach ($strings_array as $each_id) {
             $county_ids[] = (int) $each_id;
         }
-        $all_sub_counties = SubCounty::select('id', 'name')->wherein('county_id', $county_ids)->groupBy('id', 'name')->get();
+        $sub_counties_with_data = Dashboard::select('Sub_County_ID')->groupBy('Sub_County_ID')->get();
+
+        $all_sub_counties = SubCounty::select('id', 'name')->wherein('county_id', $county_ids)->wherein('id', $sub_counties_with_data)->groupBy('id', 'name')->get();
         return $all_sub_counties;
     }
 

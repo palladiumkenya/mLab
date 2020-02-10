@@ -81,12 +81,14 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js">
         </script>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js">
         </script>
 
         <?php echo $__env->yieldContent('bottom-js'); ?>
         </script>
     </body>
+
     <?php echo toastr_js(); ?>
     <?php echo app('toastr')->render(); ?>
 

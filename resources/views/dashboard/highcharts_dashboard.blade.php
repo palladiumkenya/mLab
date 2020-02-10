@@ -114,12 +114,12 @@
         </div>
 
         <div class="col-lg-2 col-md-6 col-sm-6">
-            <div class="card card-icon-bg card-icon-bg-danger o-hidden mb-4">
+            <div class="card card-icon-bg card-icon-bg-warning o-hidden mb-4">
                 <div class="card-body text-center">
                     <i class="i-Mail-Unread"></i>
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">Unpulled Results </p>
-                        <p id="unsent_records" class="text-danger text-24 line-height-1 mb-2"></p>
+                        <p id="unsent_records" class="text-warning text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -128,6 +128,26 @@
 
     <div class="separator-breadcrumb border-top"></div>
 
+    <div class="row">
+
+        <div class="col">
+            <div id="vlEIDNumbers" class="row"></div>
+            <div id="tats" class="row">
+                <div id="tateid"></div>
+                <div id="tatvl"></div>
+            </div>
+
+        </div>
+
+        <div class="col" id="viralSuppression">
+
+        </div>
+        <div class="col" id="eidPositivity">
+
+        </div>
+    </div>
+
+    <div class="row" id="map"></div>
 </div>
 <div id="dashboard_overlay">
     <img style="  position:absolute;
@@ -227,8 +247,11 @@
         type: 'GET',
         url: "{{ route('get_data') }}",
         success: function(data) {
-            $("#dashboard_overlay").hide();
-            console.log(typeof(data.all_partners));
+            vlEIDNumbersChart(data.vl_records, data.eid_records);
+            viralSuppressionRateChart(data.vl_classifications);
+            eidPositivityChart(data.eid_classifications);
+            tats(data.vl_tat, data.eid_tat);
+            maps(data.county_numbers);
             $.each(data.all_partners, function(number, partner) {
                 $("#partners").append($('<option>').text(partner.name).attr('value',
                     partner.id));
@@ -245,6 +268,7 @@
             $("#partner_numbers").html(data.partners);
             $("#sent_records").html(data.sent_records);
             $("#unsent_records").html(data.all_records - data.sent_records);
+            $("#dashboard_overlay").hide();
         }
     });
     st = '{!! Auth::user()->first_login !!}';
@@ -337,6 +361,309 @@
             });
         });
     });
+</script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/bullet.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+    //Highcharts
+    //VLEIDNUMBERSCHART
+    function vlEIDNumbersChart(vl, eid) {}
+    //VIRAL SUPPRESSION CHART
+    function viralSuppressionRateChart(data) {
+        let displayData = [];
+        for (let i = 0; i < data.length; i++) {
+            let innerObject = {};
+            if (data[i].data_key == 1) {
+                innerObject.name = 'Suppressed';
+                innerObject.y = data[i].number;
+                innerObject.color = '#006200';
+            } else if (data[i].data_key == 2) {
+                innerObject.name = 'Un-Suppressed';
+                innerObject.y = data[i].number;
+                innerObject.color = '#ffd500';
+            } else if (data[i].data_key == 3) {
+                innerObject.name = 'Invalid';
+                innerObject.y = data[i].number;
+                innerObject.color = '#cc0000';
+            } else {
+                innerObject.name = 'Indeterminate';
+                innerObject.y = data[i].number;
+                innerObject.color = '#d3d3d3';
+            }
+            displayData.push(innerObject);
+        }
+        Highcharts.setOptions({
+            colors: Highcharts.map(Highcharts.getOptions().colors, function(color) {
+                return {
+                    radialGradient: {
+                        cx: 0.5,
+                        cy: 0.3,
+                        r: 0.7
+                    },
+                    stops: [
+                        [0, color],
+                        [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                    ]
+                };
+            })
+        });
+        // Build the chart
+        Highcharts.chart('viralSuppression', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Viral Suppression Rates'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        connectorColor: 'silver'
+                    }
+                }
+            },
+            series: [{
+                name: 'Viral Loads',
+                data: displayData
+            }]
+        });
+    }
+    //EID Positivity Chart
+    function eidPositivityChart(data) {
+        let displayData = [];
+        for (let i = 0; i < data.length; i++) {
+            let innerObject = {};
+            if (data[i].data_key == 4) {
+                innerObject.name = 'Negative';
+                innerObject.y = data[i].number;
+                innerObject.color = '#000062';
+            } else if (data[i].data_key == 5) {
+                innerObject.name = 'Positive';
+                innerObject.y = data[i].number;
+                innerObject.color = '#623100';
+            } else if (data[i].data_key == 6) {
+                innerObject.name = 'Invalid';
+                innerObject.y = data[i].number;
+                innerObject.color = '#620000';
+            } else {
+                innerObject.name = 'Indeterminate';
+                innerObject.y = data[i].number;
+                innerObject.color = '#d3d3d3';
+            }
+            displayData.push(innerObject);
+        }
+        Highcharts.setOptions({
+            colors: Highcharts.map(Highcharts.getOptions().colors, function(color) {
+                return {
+                    radialGradient: {
+                        cx: 0.5,
+                        cy: 0.3,
+                        r: 0.7
+                    },
+                    stops: [
+                        [0, color],
+                        [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                    ]
+                };
+            })
+        });
+        // Build the chart
+        Highcharts.chart('eidPositivity', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'EID Positivity Chart'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        connectorColor: 'silver'
+                    }
+                }
+            },
+            series: [{
+                name: 'Viral Loads',
+                data: displayData
+            }]
+        });
+    }
+
+    function tats(vl, eid) {
+        Highcharts.setOptions({
+            chart: {
+                inverted: true,
+                marginLeft: 135,
+                type: 'bullet'
+            },
+            title: {
+                text: null
+            },
+            legend: {
+                enabled: false
+            },
+            yAxis: {
+                gridLineWidth: 0
+            },
+            plotOptions: {
+                series: {
+                    pointPadding: 0.25,
+                    borderWidth: 0,
+                    color: '#000062',
+                    targetOptions: {
+                        width: '200%'
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            }
+        });
+        Highcharts.chart('tateid', {
+            chart: {
+                marginTop: 40,
+                height: 200
+            },
+            title: {
+                text: 'Turn Around Times (days)'
+            },
+            xAxis: {
+                categories: ['<span class="hc-cat-title">EID</span><br/>']
+            },
+            yAxis: {
+                title: "EID TaT"
+            },
+            series: [{
+                data: [{
+                    y: Math.floor(eid[0].avg),
+                    target: Math.floor(eid[0].avg)
+                }]
+            }],
+            tooltip: {
+                pointFormat: '<b>{point.y}</b> (days)'
+            }
+        });
+        Highcharts.setOptions({
+            chart: {
+                inverted: true,
+                marginLeft: 135,
+                type: 'bullet'
+            },
+            title: {
+                text: null
+            },
+            legend: {
+                enabled: false
+            },
+            yAxis: {
+                gridLineWidth: 0
+            },
+            plotOptions: {
+                series: {
+                    pointPadding: 0.25,
+                    borderWidth: 0,
+                    color: '#006200',
+                    targetOptions: {
+                        width: '200%'
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            }
+        });
+        Highcharts.chart('tatvl', {
+            chart: {
+                marginTop: 40,
+                height: 200
+            },
+            xAxis: {
+                categories: ['<span class="hc-cat-title">Viral Load</span><br/>']
+            },
+            yAxis: {
+                title: "VL TaT"
+            },
+            series: [{
+                data: [{
+                    y: Math.floor(vl[0].avg),
+                    target: Math.floor(vl[0].avg)
+                }]
+            }],
+            tooltip: {
+                pointFormat: '<b>{point.y}</b> (days)'
+            }
+        });
+    }
+
+    function maps(data) {
+        // console.log(data);
+        Highcharts.getJSON(
+            'https://africaopendata.org/dataset/a8f8b195-aafd-449b-9b1a-ab337fd9925f/resource/4fb2e27e-c001-4b7f-b71d-4fee4a96a0f8/download/kenyan-counties.geojson',
+            function(geojson) {
+                // Initiate the chart
+                Highcharts.mapChart('map', {
+                    chart: {
+                        map: geojson
+                    },
+                    title: {
+                        text: 'GeoJSON in Highmaps'
+                    },
+                    mapNavigation: {
+                        enabled: true,
+                        buttonOptions: {
+                            verticalAlign: 'bottom'
+                        }
+                    },
+                    colorAxis: {
+                        tickPixelInterval: 100
+                    },
+                    series: [{
+                        data: [],
+                        // keys: ['COUNTY', 'value'],
+                        // joinBy: 'COUNTY',
+                        name: 'Random data',
+                        states: {
+                            hover: {
+                                color: '#a4edba'
+                            }
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.properties.COUNTY}'
+                        }
+                    }]
+                });
+            });
+    }
 </script>
 
 @endsection
