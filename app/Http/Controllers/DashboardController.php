@@ -36,6 +36,7 @@ class DashboardController extends Controller
         $vl_classifications  = Dashboard::where('result_type', 1)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->get();
         $eid_classifications = Dashboard::where('result_type', 2)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->get();
         $county_numbers      = Dashboard::selectRaw('county_id, count(*) AS results, count(DISTINCT(mfl_code)) as facilities')->groupBy('county_id')->get();
+        $pulled_data      = Dashboard::join('county', 'county.id', '=', 'mlab_data.county_id')->selectRaw('county.NAME, COUNT ( mlab_data.created_at ) AS all_results,  count (mlab_data.date_sent) AS  pulled_results ')->groupBy('county.name')->orderBy('county.name')->get();
 
         $average_vl_collect_sent_diff = DB::table('mlab_data')
         ->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')
@@ -54,8 +55,8 @@ class DashboardController extends Controller
         ->where('date_collected', '!=', '0000-00-00')
         ->get();
 
-        $data["all_counties"]         = $all_counties;
-        $data["all_partners"]         = $all_partners;
+        $data["all_counties"]        = $all_counties;
+        $data["all_partners"]        = $all_partners;
         $data["all_records"]         = $all_records;
         $data["sent_records"]        = $sent_records;
         $data["counties"]            = $counties;
@@ -68,6 +69,7 @@ class DashboardController extends Controller
         $data["eid_tat"]             = $average_eid_collect_sent_diff;
         $data["vl_tat"]              = $average_vl_collect_sent_diff;
         $data["county_numbers"]      = $county_numbers;
+        $data["pulled_data"]         = $pulled_data;
 
         return $data;
     }
