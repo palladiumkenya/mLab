@@ -17,7 +17,7 @@ class DashboardController extends Controller
         return view('dashboard.highcharts_dashboard');
     }
 
-    public function get_data()
+    public function get_data(Request $request)
     {
         $data                = [];
 
@@ -79,13 +79,29 @@ class DashboardController extends Controller
     {
         $partner_ids = array();
         $strings_array = $request->partners;
-
-        foreach ($strings_array as $each_id) {
-            $partner_ids[] = (int) $each_id;
+        if (!empty($strings_array)) {
+            foreach ($strings_array as $each_id) {
+                $partner_ids[] = (int) $each_id;
+            }
         }
         $counties_with_data = Dashboard::select('county_id')->groupBy('county_id')->get();
 
-        $all_counties = County::join('sub_county', 'county.id', '=', 'sub_county.county_id')->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')->select('county.id as id', 'county.name as name')->wherein('health_facilities.partner_id', $partner_ids)->wherIn('county.id', $counties_with_data)->groupBy('county.id', 'county.name')->get();
+        if (!empty($partner_ids)) {
+            $all_counties = County::join('sub_county', 'county.id', '=', 'sub_county.county_id')
+                ->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
+                ->select('county.id as id', 'county.name as name')
+                ->whereIn('health_facilities.partner_id', $partner_ids)
+                ->whereIn('county.id', $counties_with_data)
+                ->groupBy('county.id', 'county.name')
+                ->get();
+        } else {
+            $all_counties = County::join('sub_county', 'county.id', '=', 'sub_county.county_id')
+            ->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
+            ->select('county.id as id', 'county.name as name')
+            ->whereIn('county.id', $counties_with_data)
+            ->groupBy('county.id', 'county.name')
+            ->get();
+        }
         return $all_counties;
     }
 
@@ -93,13 +109,17 @@ class DashboardController extends Controller
     {
         $county_ids = array();
         $strings_array = $request->counties;
-
-        foreach ($strings_array as $each_id) {
-            $county_ids[] = (int) $each_id;
+        if (!empty($strings_array)) {
+            foreach ($strings_array as $each_id) {
+                $county_ids[] = (int) $each_id;
+            }
         }
         $sub_counties_with_data = Dashboard::select('Sub_County_ID')->groupBy('Sub_County_ID')->get();
-
-        $all_sub_counties = SubCounty::select('id', 'name')->wherein('county_id', $county_ids)->wherein('id', $sub_counties_with_data)->groupBy('id', 'name')->get();
+        if (!empty($county_ids)) {
+            $all_sub_counties = SubCounty::select('id', 'name')->wherein('county_id', $county_ids)->wherein('id', $sub_counties_with_data)->groupBy('id', 'name')->get();
+        } else {
+            $all_sub_counties = SubCounty::select('id', 'name')->wherein('id', $sub_counties_with_data)->groupBy('id', 'name')->get();
+        }
         return $all_sub_counties;
     }
 
@@ -107,14 +127,16 @@ class DashboardController extends Controller
     {
         $sub_county_ids = array();
         $strings_array = $request->sub_counties;
-
-        foreach ($strings_array as $each_id) {
-            $sub_county_ids[] = (int) $each_id;
+        if (!empty($strings_array)) {
+            foreach ($strings_array as $each_id) {
+                $sub_county_ids[] = (int) $each_id;
+            }
         }
 
         $withResults = Dashboard::select('mfl_code')->groupBy('mfl_code')->get();
-
+     
         $all_facilities = Facility::select('id', 'name')->wherein('Sub_County_ID', $sub_county_ids)->wherein('code', $withResults)->groupBy('id', 'name')->get();
+        
         return $all_facilities;
     }
 }
