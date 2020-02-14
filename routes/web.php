@@ -73,6 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/get_dashboard_counties', ['uses' => 'DashboardController@get_dashboard_counties', 'as' => 'get_dashboard_counties']);
     Route::post('/get_dashboard_sub_counties', ['uses' => 'DashboardController@get_dashboard_sub_counties', 'as' => 'get_dashboard_sub_counties']);
     Route::post('/get_dashboard_facilities', ['uses' => 'DashboardController@get_dashboard_facilities', 'as' => 'get_dashboard_facilities']);
+    Route::post('/filter/dashboard', ['uses' => 'DashboardController@get_filtered_data', 'as' => 'filterDashboard']);
 });
 
 Route::get('/send/results', ['uses' => 'SendResultsController@sendVLEID', 'as' => 'sendvleid']);

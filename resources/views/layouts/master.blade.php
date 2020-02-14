@@ -77,13 +77,6 @@
         <script src="{{asset('assets/js/es5/script.min.js')}}"></script>
 
         {{-- laravel js --}}
-        <script src="{{mix('assets/js/laravel/app.js')}}"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js">
-        </script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js">
-        </script>
 
         @yield('bottom-js')
         </script>

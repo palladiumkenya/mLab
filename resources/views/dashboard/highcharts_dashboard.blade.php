@@ -46,8 +46,14 @@
                     <label for="daterange" class="col-form-label"><b>Select Date Range</b></label>
                     <input class="form-control" id="daterange" type="text" name="daterange" />
                 </div>
+                <div class="form-group">
+                    <label for="daterange" class="col-form-label"></label>
+                    <button type="submit" class="btn btn-warning"><b>Filter Results</b> <i
+                            class="i-Filter"></i></button>
+                </div>
             </div>
         </div>
+
     </form>
     <div class="separator-breadcrumb border-top"></div>
 
@@ -222,6 +228,13 @@
     @endsection
 
     @section('page-js')
+    <script src="{{mix('assets/js/laravel/app.js')}}"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js">
+    </script>
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
     <script src="https://code.highcharts.com/maps/modules/data.js"></script>
     <script src="https://code.highcharts.com/maps/modules/data.js"></script>
@@ -231,6 +244,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
     <script type="text/javascript">
         $(function() {
             $('#daterange').daterangepicker({
@@ -245,8 +259,8 @@
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
                         'month').endOf('month')]
                 },
-                "startDate": "01/31/2020",
-                "endDate": "02/06/2020",
+                "startDate": "04/10/2017",
+                "endDate": moment().format('MM/DD/YYYY'),
                 "opens": "left"
             }, function(start, end, label) {});
         });
@@ -280,8 +294,76 @@
                 $("#partner_numbers").html(data.partners);
                 $("#sent_records").html(data.sent_records);
                 $("#unsent_records").html(data.all_records - data.sent_records);
+                let userlevel = '{!!Auth::user()->user_level!!}';
+                if (userlevel == 2) {
+                    let partnerId = '{!!Auth::user()->partner_id!!}';
+                    $('#partners').attr("disabled", true);
+                    $('#partners').selectpicker('val', partnerId);
+                    $("#partners").selectpicker('refresh');
+                }
+                if (userlevel == 3) {
+                    let partnerId = '{!!Auth::user()->partner_id!!}';
+                    $('#partners').attr("disabled", true);
+                    $('#partners').selectpicker('val', partnerId);
+                    $("#partners").selectpicker('refresh');
+                    let countyId = data.all_counties[0].id;
+                    $('#counties').attr("disabled", true);
+                    $('#counties').selectpicker('val', countyId);
+                    $("#counties").selectpicker('refresh');
+                    $('#subcounties').attr("disabled", true);
+                    $('#facilities').attr("disabled", true);
+                }
                 $("#dashboard_overlay").hide();
             }
+        });
+        $('#dataFilter').on('submit', function(e) {
+            e.preventDefault();
+            $("#dashboard_overlay").show();
+            let partners = $('#partners').val();
+            let counties = $('#counties').val();
+            let subcounties = $('#subcounties').val();
+            let facilities = $('#facilities').val();
+            let daterange = $('#daterange').val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                data: {
+                    "partners": partners,
+                    "counties": counties,
+                    "subcounties": subcounties,
+                    "facilities": facilities,
+                    "daterange": daterange
+                },
+                url: "{{ route('filterDashboard') }}",
+                success: function(data) {
+                    viralSuppressionRateChart(data.vl_classifications);
+                    eidPositivityChart(data.eid_classifications);
+                    tats(data.vl_tat, data.eid_tat);
+                    maps(data.county_numbers);
+                    pullCheck(data.pulled_data);
+                    $.each(data.all_partners, function(number, partner) {
+                        $("#partners").append($('<option>').text(partner.name).attr('value',
+                            partner.id));
+                    });
+                    $.each(data.all_counties, function(number, county) {
+                        $("#counties").append($('<option>').text(county.name).attr('value',
+                            county.id));
+                    });
+                    $("#partners").selectpicker('refresh');
+                    $("#counties").selectpicker('refresh');
+                    $("#all_records").html(data.all_records);
+                    $("#all_facilities").html(data.facilities);
+                    $("#county_numbers").html(data.counties);
+                    $("#partner_numbers").html(data.partners);
+                    $("#sent_records").html(data.sent_records);
+                    $("#unsent_records").html(data.all_records - data.sent_records);
+                    $("#dashboard_overlay").hide();
+                }
+            });
         });
         st = '{!! Auth::user()->first_login !!}';
         if (st == 'Yes') {
@@ -314,7 +396,8 @@
                     success: function(data) {
                         $('#counties').empty();
                         $.each(data, function(number, county) {
-                            $("#counties").append($('<option>').text(county.name)
+                            $("#counties").append($('<option>').text(
+                                    county.name)
                                 .attr(
                                     'value',
                                     county.id));
@@ -339,7 +422,8 @@
                     success: function(data) {
                         $('#subcounties').empty();
                         $.each(data, function(number, subcounty) {
-                            $("#subcounties").append($('<option>').text(subcounty
+                            $("#subcounties").append($('<option>').text(
+                                    subcounty
                                     .name)
                                 .attr(
                                     'value',
@@ -351,6 +435,7 @@
             });
             $("#subcounties").change(function() {
                 let sub_counties = $('#subcounties').val();
+                let partners = $('#partners').val();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -359,17 +444,19 @@
                 $.ajax({
                     type: 'POST',
                     data: {
-                        "sub_counties": sub_counties
+                        "sub_counties": sub_counties,
+                        "partners": partners
                     },
                     url: "{{ route('get_dashboard_facilities') }}",
                     success: function(data) {
                         $('#facilities').empty();
                         $.each(data, function(number, facility) {
-                            $("#facilities").append($('<option>').text(facility
+                            $("#facilities").append($('<option>').text(
+                                    facility
                                     .name)
                                 .attr(
                                     'value',
-                                    facility.id));
+                                    facility.code));
                         });
                         $("#facilities").selectpicker('refresh');
                     }
@@ -388,7 +475,7 @@
                 if (data[i].data_key == 1) {
                     innerObject.name = 'Suppressed';
                     innerObject.y = data[i].number;
-                    innerObject.color = '#006200';
+                    innerObject.color = '#004D1A';
                 } else if (data[i].data_key == 2) {
                     innerObject.name = 'Un-Suppressed';
                     innerObject.y = data[i].number;
@@ -597,7 +684,7 @@
                     series: {
                         pointPadding: 0.25,
                         borderWidth: 0,
-                        color: '#006200',
+                        color: '#004D1A',
                         targetOptions: {
                             width: '200%'
                         }
@@ -639,7 +726,8 @@
             // Initiate the chart
             Highcharts.mapChart('map', {
                 chart: {
-                    map: geojson
+                    map: geojson,
+                    height: 600
                 },
                 title: {
                     text: 'Results by County'
@@ -677,7 +765,7 @@
                     name: 'Results by County',
                     states: {
                         hover: {
-                            color: '#000062'
+                            color: '#004D1A'
                         }
                     },
                     dataLabels: {
@@ -702,7 +790,8 @@
             }
             Highcharts.chart('pulledUnpulled', {
                 chart: {
-                    type: 'column'
+                    type: 'column',
+                    height: 600
                 },
                 title: {
                     text: 'Results Pulled by County'
