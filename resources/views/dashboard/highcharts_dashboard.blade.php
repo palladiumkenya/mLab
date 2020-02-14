@@ -278,6 +278,8 @@
                 tats(data.vl_tat, data.eid_tat);
                 maps(data.county_numbers);
                 pullCheck(data.pulled_data);
+                $('#partners').empty();
+                $('#counties').empty();
                 $.each(data.all_partners, function(number, partner) {
                     $("#partners").append($('<option>').text(partner.name).attr('value',
                         partner.id));
@@ -345,8 +347,11 @@
                     tats(data.vl_tat, data.eid_tat);
                     maps(data.county_numbers);
                     pullCheck(data.pulled_data);
+                    $('#partners').empty();
+                    $('#counties').empty();
                     $.each(data.all_partners, function(number, partner) {
-                        $("#partners").append($('<option>').text(partner.name).attr('value',
+                        $("#partners").append($('<option>').text(partner.name).attr(
+                            'value',
                             partner.id));
                     });
                     $.each(data.all_counties, function(number, county) {
