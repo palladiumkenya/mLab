@@ -53,7 +53,7 @@ class DashboardController extends Controller
         $all_records         = Dashboard::whereNotNull('mfl_code')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $sent_records        = Dashboard::whereNotNull('date_sent')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $counties            = Dashboard::distinct('county_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-        $facilities          = Dashboard::distinct('mfl_code')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
+        $facilities          = Dashboard::distinct('mfl_code');
         $partners            = Dashboard::distinct('partner_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $vl_records          = Dashboard::where('result_type', 1)->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $eid_records         = Dashboard::where('result_type', 2)->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
