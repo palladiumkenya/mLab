@@ -60,7 +60,7 @@ class DashboardController extends Controller
         $vl_classifications  = Dashboard::where('result_type', 1)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $eid_classifications = Dashboard::where('result_type', 2)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $county_numbers      = Dashboard::selectRaw('county_id, count(*) AS results, count(DISTINCT(mfl_code)) as facilities')->groupBy('county_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-        $pulled_data      = Dashboard::join('county', 'county.id', '=', 'mlab_data.county_id')->selectRaw('county.NAME, COUNT ( mlab_data.created_at ) AS all_results,  count (mlab_data.date_sent) AS  pulled_results ')
+        $pulled_data      = Dashboard::join('county', 'county.id', '=', 'mlab_data_materialized.county_id')->selectRaw('county.NAME, COUNT ( mlab_data_materialized.created_at ) AS all_results,  count (mlab_data_materialized.date_sent) AS  pulled_results ')
                             ->groupBy('county.name')->orderBy('county.name')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
 
         $average_vl_collect_sent_diff = Dashboard::selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '1')->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])
@@ -70,7 +70,7 @@ class DashboardController extends Controller
     
         if (!empty($selected_partners)) {
             $all_partners = Partner::select('id', 'name')->whereIn('id', $selected_partners);
-            $all_counties = $all_counties->join('mlab_data', 'county.id', '=', 'mlab_data.county_id')->whereIn('partner_id', $selected_partners);
+            $all_counties = $all_counties->join('mlab_data', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('partner_id', $selected_partners);
             $all_records = $all_records->whereIn('partner_id', $selected_partners);
             $sent_records = $sent_records->whereIn('partner_id', $selected_partners);
             $counties = $counties->whereIn('partner_id', $selected_partners);
@@ -106,7 +106,7 @@ class DashboardController extends Controller
 
         if (!empty($selected_facilities)) {
             $all_partners = Partner::select('id', 'name')->where('id', Auth::user()->partner_id);
-            $all_counties = $all_counties->join('mlab_data', 'county.id', '=', 'mlab_data.county_id')->whereIn('mfl_code', $selected_facilities);
+            $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('mfl_code', $selected_facilities);
             $all_records = $all_records->whereIn('mfl_code', $selected_facilities);
             $sent_records = $sent_records->whereIn('mfl_code', $selected_facilities);
             $counties = $counties->whereIn('mfl_code', $selected_facilities);
@@ -193,16 +193,16 @@ class DashboardController extends Controller
         $vl_classifications  = Dashboard::where('result_type', 1)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $eid_classifications = Dashboard::where('result_type', 2)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $county_numbers      = Dashboard::selectRaw('county_id, count(*) AS results, count(DISTINCT(mfl_code)) as facilities')->groupBy('county_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-        $pulled_data      = Dashboard::join('county', 'county.id', '=', 'mlab_data.county_id')->selectRaw('county.NAME, COUNT ( mlab_data.created_at ) AS all_results,  count (mlab_data.date_sent) AS  pulled_results ')
+        $pulled_data      = Dashboard::join('county', 'county.id', '=', 'mlab_data_materialized.county_id')->selectRaw('county.NAME, COUNT ( mlab_data_materialized.created_at ) AS all_results,  count (mlab_data_materialized.date_sent) AS  pulled_results ')
                             ->groupBy('county.name')->orderBy('county.name')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
 
         $average_vl_collect_sent_diff = Dashboard::selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '1')->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])
                             ->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-        $average_eid_collect_sent_diff = DB::table('mlab_data')->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '2')
+        $average_eid_collect_sent_diff = DB::table('mlab_data_materialized')->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '2')
                             ->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
     
         if (!empty($selected_partners)) {
-            $all_counties = $all_counties->join('mlab_data', 'county.id', '=', 'mlab_data.county_id')->whereIn('partner_id', $selected_partners);
+            $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('partner_id', $selected_partners);
             $all_records = $all_records->whereIn('partner_id', $selected_partners);
             $sent_records = $sent_records->whereIn('partner_id', $selected_partners);
             $counties = $counties->whereIn('partner_id', $selected_partners);
