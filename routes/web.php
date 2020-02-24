@@ -68,12 +68,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     //Dashboard Routes
+    Route::get('/printers_dashboard', ['uses' => 'DashboardController@printers_dashboard', 'as' => 'printers_dashboard']);
     Route::get('/dashboard', ['uses' => 'DashboardController@index', 'as' => 'dashboard']);
     Route::get('/get_data', ['uses' => 'DashboardController@get_data', 'as' => 'get_data']);
+    Route::get('/get_printers_data', ['uses' => 'DashboardController@get_printers_data', 'as' => 'get_printers_data']);
     Route::post('/get_dashboard_counties', ['uses' => 'DashboardController@get_dashboard_counties', 'as' => 'get_dashboard_counties']);
     Route::post('/get_dashboard_sub_counties', ['uses' => 'DashboardController@get_dashboard_sub_counties', 'as' => 'get_dashboard_sub_counties']);
     Route::post('/get_dashboard_facilities', ['uses' => 'DashboardController@get_dashboard_facilities', 'as' => 'get_dashboard_facilities']);
     Route::post('/filter/dashboard', ['uses' => 'DashboardController@get_filtered_data', 'as' => 'filterDashboard']);
+    Route::post('/filter/printers/dashboard', ['uses' => 'DashboardController@get_filtered_printers_data', 'as' => 'filterPrintersDashboard']);
 });
 
 Route::get('/send/results', ['uses' => 'SendResultsController@sendVLEID', 'as' => 'sendvleid']);
