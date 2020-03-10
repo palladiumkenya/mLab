@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 Route::post('/login', 'PassportController@login');
 Route::post('/register', 'PassportController@register');
-Route::post('/receive/results',  ['uses' => 'VLResultsController@index', 'as' => 'receive_results']);
+Route::post('/receive/results', ['uses' => 'VLResultsController@index', 'as' => 'receive_results']);
 Route::get('/get_vl_results', ['uses' => 'VLResultsController@getResults', 'as' => 'get_vl_results']);
 Route::get('/get_eid_results', ['uses' => 'VLResultsController@getEIDResults', 'as' => 'get_eid_results']);
 Route::post('/receive/tb_results', 'TBResultsController@index');
@@ -30,4 +30,5 @@ Route::post('/get/il/viral_loads', 'SendResultsController@sendILInternet');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/viral/loads', 'SendResultsController@ViralLoads');
+    Route::post('/sms/gateway', 'SmsGatewayController@sender');
 });
