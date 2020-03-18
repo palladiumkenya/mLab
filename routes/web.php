@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/home', ['uses' => 'HomeController@index', 'as' => 'home']);
+    Route::get('/home', ['uses' => 'DashboardController@index', 'as' => 'home']);
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);
@@ -88,8 +88,8 @@ Route::get('/process/inbox/{id}', ['uses' => 'TasksController@read', 'as' => 're
 Route::get('/classify/{id}', ['uses' => 'TasksController@classify', 'as' => 'classify']);
 Route::get('/classifyone', ['uses' => 'TasksController@classifyOne', 'as' => 'classifyOne']);
 Route::get('/get/eid/results', ['uses' => 'VLResultsController@getEIDResults', 'as' => 'getEIDResults']);
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/notify', 'SendResultsController@notify')->name('notify');
+
+// Auth::routes();
+
+// Route::get('/home', 'DashboardController@index')->name('home');
