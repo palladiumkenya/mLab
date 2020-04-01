@@ -21,7 +21,7 @@ class SmsGatewayController extends Controller
         $sms      = $AT->sms();
         // Use the service
         $send   = $sms->send([
-                        'from' => '40147',
+                        'from' => '40146',
                         'to'      => $phone,
                         'message' => $message
                     ]);
