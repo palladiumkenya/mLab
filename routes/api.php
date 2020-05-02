@@ -27,6 +27,9 @@ Route::post('/tb_results', 'SendResultsController@sendTB');
 Route::post('/remote/login/results', 'RemoteLoginController@results');
 Route::post('/remote/login/hts', 'RemoteLoginController@hts');
 Route::post('/get/il/viral_loads', 'SendResultsController@sendILInternet');
+Route::post('/ushauri/get/results', 'UshauriController@getResults');
+Route::get('/notify/clients', 'UshauriController@notifyClients');
+
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/viral/loads', 'SendResultsController@ViralLoads');

@@ -477,13 +477,15 @@ class SendResultsController extends Controller
             $facility  = Facility::where('code', $mfl)->first();
             
             $unpulled_count = Result::where('mfl_code', $mfl)->whereNull('date_sent')->where('processed', '0')->count();
+            $unpulled_count_high_vl = Result::where('mfl_code', $mfl)->whereNull('date_sent')->where('data_key', 2)->where('processed', '0')->count();
+
 
 
             $facility_name = $facility->name;
             $facility_number = $facility->mobile;
             if ($facility_number != '' || $facility_number != null) {
                 $facility_msg =  'This is a reminder that your facility, MFL: ' .$mfl . ' has ' . $unpulled_count .
-                ' results pending and have not been pulled to mLab. Kindly login to the application to pull and refresh.';
+                ' results pending, '. $unpulled_count_high_vl .'. of which are high VLs, which have not been pulled to mLab. Kindly login to the application to pull and refresh.';
                 
                 $sender = new SenderController;
                
@@ -493,7 +495,7 @@ class SendResultsController extends Controller
                         $name = $user->f_name . ' ' . $user->l_name;
         
                         $msg = 'Hello '. $name . ', your facility, MFL: ' .$mfl . ' has ' . $unpulled_count .
-                        ' results pending and have not been pulled to mLab. Kindly ensure to login to the application to pull and refresh.';
+                        ' results pending, '. $unpulled_count_high_vl .'. of which are high VLs, which have not been pulled to mLab. Kindly ensure to login to the application to pull and refresh.';
         
                         if ($sender->send($phone_no, $msg)) {
                             echo 'notified';
@@ -503,6 +505,8 @@ class SendResultsController extends Controller
             }
         }
     }
+
+
 
 
     public function sendILInternet(Request $request)

@@ -35,6 +35,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/delete/user', 'UserController@deleteuser')->name('deleteuser');
     Route::post('/change/password', 'UserController@changepass')->name('changepass');
 
+    Route::get('/get/ushauri/clients', 'UshauriController@index')->name('clients');
+    Route::post('/list/ushauri/clients', 'UshauriController@getClients')->name('fetchclients');
+    Route::post('/list/more/ushauri/clients', 'UshauriController@getMoreClients')->name('fetchmoreclients');
+
 
     Route::get('/partners', 'PartnerController@index')->name('partners');
     Route::get('/add/partner/form', 'PartnerController@addpartnerform')->name('addpartnerform');
@@ -65,6 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/hts/results', 'DataController@hts_results')->name('hts_results');
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
     Route::get('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
+
 
 
     //Dashboard Routes
