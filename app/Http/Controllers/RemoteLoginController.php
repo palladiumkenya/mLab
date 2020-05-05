@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Facility;
 use Carbon\Carbon;
@@ -10,139 +11,133 @@ use App\SRLHTS;
 
 class RemoteLoginController extends Controller
 {
-    public function results(Request $request){
+    public function results(Request $request)
+    {
         $phone = base64_decode($request->phone);
         $msg = base64_decode($request->message);
 
 
         $fac = Facility::where('mobile', $phone)->first();
       
-        if(!empty($fac)){
+        if (!empty($fac)) {
             $val = explode("*", $msg);
 
             
 
-            if($val[0] == 'VL'){
-                if(sizeof($val) < 12){
+            if ($val[0] == 'VL') {
+                if (sizeof($val) < 12) {
                     echo "Kindly ensure all fields are included";
-                    
-               }else{
+                } else {
+                    $ccc = $val[1];
+                    $patient_name = $val[2];
+                    $dob = $val[3];
+                    $date_collected = $val[4];
+                    $art_start = $val[5];
+                    $current_regimen = $val[6];
+                    $date_art_regimen = $val[7];
+                    $art_line = $val[8];
+                    $just_code = $val[9];
+                    $selected_type = $val[10];
+                    $selected_sex = $val[11];
 
-                $ccc = $val[1];
-                $patient_name = $val[2];
-                $dob = $val[3];
-                $date_collected = $val[4];
-                $art_start = $val[5];
-                $current_regimen = $val[6];
-                $date_art_regimen = $val[7];
-                $art_line = $val[8];
-                $just_code = $val[9];
-                $selected_type = $val[10];
-                $selected_sex = $val[11];
+                    $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
+                    $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
+                    $art_start =  Carbon::parse(str_replace('/', '-', $art_start))->format('Y-m-d');
+                    $date_art_regimen =  Carbon::parse(str_replace('/', '-', $date_art_regimen))->format('Y-m-d');
 
-                $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
-                $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
-                $art_start =  Carbon::parse(str_replace('/', '-', $art_start))->format('Y-m-d');
-                $date_art_regimen =  Carbon::parse(str_replace('/', '-', $date_art_regimen))->format('Y-m-d');
+                    $rl = new SRLVLs;
 
-                $rl = new SRLVLs;
+                    $rl->ccc_num = $ccc;
+                    $rl->patient_name = $patient_name;
+                    $rl->dob = $dob;
+                    $rl->date_collected = $date_collected;
+                    $rl->art_start_date =$art_start;
+                    $rl->current_regimen = $current_regimen;
+                    $rl->date_art_regimen = $date_art_regimen;
+                    $rl->art_line = $art_line;
+                    $rl->justification_code = $just_code;
+                    $rl->selected_type = $selected_type;
+                    $rl->selected_sex = $selected_sex;
+                    $rl->facility = $fac->code;
 
-                $rl->ccc_num = $ccc;
-                $rl->patient_name = $patient_name;
-                $rl->dob = $dob;
-                $rl->date_collected = $date_collected;
-                $rl->art_start_date =$art_start;
-                $rl->current_regimen = $current_regimen;
-                $rl->date_art_regimen = $date_art_regimen;
-                $rl->art_line = $art_line;
-                $rl->justification_code = $just_code;
-                $rl->selected_type = $selected_type;
-                $rl->selected_sex = $selected_sex;
 
-                if($rl->save()){
-                    echo "Sample Remote Login Successful";
-                }else{
-                    echo "An error occured, kindly try again";
+                    if ($rl->save()) {
+                        echo "Sample Remote Login Successful";
+                    } else {
+                        echo "An error occured, kindly try again";
+                    }
+                }
+            } elseif ($val[0] == 'EID') {
+                if (sizeof($val) < 15) {
+                    echo "Kindly ensure all fields are included";
+                } else {
+                    $selected_sex = $val[1];
+                    $selected_regimen= $val[2];
+                    $selected_alive = $val[3];
+                    $hein_number = $val[4];
+                    $patient_name = $val[5];
+                    $dob = $val[6];
+                    $entry_point = $val[7];
+                    $date_collected = $val[8];
+                    $prophylaxis_code = $val[9];
+                    $infant_feeding = $val[10];
+                    $pcr = $val[11];
+                    $alive_dead = $val[12];
+                    $mother_age = $val[13];
+                    $haart_date = $val[14];
+
+                    $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
+                    $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
+                    $haart_date =  Carbon::parse(str_replace('/', '-', $haart_date))->format('Y-m-d');
+
+                    $rl = new SRLEIDs;
+
+                    $rl->selected_sex = $selected_sex;
+                    $rl->selected_regimen = $selected_regimen;
+                    $rl->dob = $dob;
+                    $rl->selected_alive = $selected_alive;
+                    $rl->hein_number =$hein_number;
+                    $rl->patient_name = $patient_name;
+                    $rl->entry_point = $entry_point;
+                    $rl->date_collected = $date_collected;
+                    $rl->prophylaxis_code = $prophylaxis_code;
+                    $rl->infant_feeding = $infant_feeding;
+                    $rl->pcr = $pcr;
+                    $rl->alive_dead = $alive_dead;
+                    $rl->mother_age = $mother_age;
+                    $rl->haart_date = $haart_date;
+                    $rl->facility = $fac->code;
+
+
+                    if ($rl->save()) {
+                        echo "Sample Remote Login Successful";
+                    } else {
+                        echo "An error occured, kindly try again";
+                    }
                 }
             }
-
-            }elseif($val[0] == 'EID'){
-                if(sizeof($val) < 15){
-                    echo "Kindly ensure all fields are included";
-                    
-               }else{
-                $selected_sex = $val[1];                
-                $selected_regimen= $val[2];
-                $selected_alive = $val[3];
-                $hein_number = $val[4];
-                $patient_name = $val[5];
-                $dob = $val[6];
-                $entry_point = $val[7];
-                $date_collected = $val[8];
-                $prophylaxis_code = $val[9];
-                $infant_feeding = $val[10];
-                $pcr = $val[11];
-                $alive_dead = $val[12];
-                $mother_age = $val[13];
-                $haart_date = $val[14];
-
-                $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
-                $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
-                $haart_date =  Carbon::parse(str_replace('/', '-', $haart_date))->format('Y-m-d');
-
-                $rl = new SRLEIDs;
-
-                $rl->selected_sex = $selected_sex;
-                $rl->selected_regimen = $selected_regimen;
-                $rl->dob = $dob;
-                $rl->selected_alive = $selected_alive;
-                $rl->hein_number =$hein_number;
-                $rl->patient_name = $patient_name;
-                $rl->entry_point = $entry_point;
-                $rl->date_collected = $date_collected;
-                $rl->prophylaxis_code = $prophylaxis_code;
-                $rl->infant_feeding = $infant_feeding;
-                $rl->pcr = $pcr;
-                $rl->alive_dead = $alive_dead;
-                $rl->mother_age = $mother_age;
-                $rl->haart_date = $haart_date;
-
-                if($rl->save()){
-                    echo "Sample Remote Login Successful";
-                }else{
-                    echo "An error occured, kindly try again";
-                }
-            }
-
-            }
-
-            
-        }else{
+        } else {
             echo "Phone Number not Authorised to send remote samples";
         }
-
-  
-
     }
 
-    public function hts(Request $request){
+    public function hts(Request $request)
+    {
         $phone = base64_decode($request->phone);
         $msg = base64_decode($request->message);
 
 
         $fac = Facility::where('mobile', $phone)->first();
 
-        if(!empty($fac)){
+        if (!empty($fac)) {
             $val = explode("*", $msg);
 
-            if(sizeof($val) < 18){
+            if (sizeof($val) < 18) {
                 echo "Kindly ensure all fields are included";
-                
-           }else{
-
+            } else {
                 $sample_number = $val[0];
                 $client_name = $val[1];
-                $dob = $val[2];                
+                $dob = $val[2];
                 $selected_sex = $val[3];
                 $telephone = $val[4];
                 $test_date = $val[5];
@@ -170,7 +165,7 @@ class RemoteLoginController extends Controller
 
                 $rl->sample_number = $sample_number;
                 $rl->client_name = $client_name;
-                $rl->dob = $dob;                
+                $rl->dob = $dob;
                 $rl->selected_sex = $selected_sex;
                 $rl->telephone = $telephone;
                 $rl->test_date =$test_date;
@@ -186,20 +181,58 @@ class RemoteLoginController extends Controller
                 $rl->dbs_date = $dbs_date;
                 $rl->dbs_dispatch_date = $dbs_dispatch_date;
                 $rl->requesting_provider = $requesting_provider;
+                $rl->facility = $fac->code;
 
 
-                if($rl->save()){
+                if ($rl->save()) {
                     echo "Sample Remote Login Successful";
-                }else{
+                } else {
                     echo "An error occured, kindly try again";
                 }
             }
-         
-        }else{
+        } else {
             echo "Phone Number not Authorised to send remote samples";
         }
+    }
 
-  
+    public function SendVLsLab()
+    {
+        $remote_vls = SRLVLs::where('processed', 0)->limit(10)->get();
+        foreach ($remote_vls as $remote_vl) {
+            if ($remote_vl->selected_sex == 'Female') {
+                $sex = 2;
+            } elseif ($remote_vl->selected_sex == 'Male') {
+                $sex = 1;
+            } else {
+                $sex = 3;
+            }
 
+            $data = 'mflCode='.$remote_vl->facility.'&patient_identifier='.$remote_vl->ccc_num.'&dob='.$remote_vl->dob.
+                '&datecollected='.$remote_vl->date_collected.'&sex='.$sex.'&sampletype=1&justification='.$remote_vl->justification_code.
+                '&pmtct=3&prophylaxis=4231';
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://lab.test.nascop.org/api/vl",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/x-www-form-urlencoded",
+                "apikey: ZXmknmaI9MfE642",
+                "Content-Type: application/x-www-form-urlencoded"
+            ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            echo $response;
+        }
     }
 }

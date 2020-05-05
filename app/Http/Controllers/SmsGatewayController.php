@@ -7,6 +7,10 @@ use Auth;
 use App\SmsGateway;
 use AfricasTalking\SDK\AfricasTalking;
 
+date_default_timezone_set('Africa/Nairobi');
+ini_set('max_execution_time', 0);
+ini_set('memory_limit', '1024M');
+
 class SmsGatewayController extends Controller
 {
     public function sender(Request $request)
