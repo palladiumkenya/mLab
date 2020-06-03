@@ -109,10 +109,9 @@
         <div class="col-lg-2 col-md-6 col-sm-6">
             <div class="card card-icon-bg card-icon-bg-success o-hidden mb-4">
                 <div class="card-body text-center">
-                    <i class="i-Mail-Read"></i>
                     <div class="content">
-                        <p class="text-muted mt-4 mb-0">Pulled Results</p>
-                        <p id="sent_records" class="text-success text-24 line-height-1 mb-2"></p>
+                        <p class="text-muted mt-4 mb-0">Suppressed/Negative EID Total</p>
+                        <p id="suppressed_negative" class="text-success text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -121,10 +120,9 @@
         <div class="col-lg-2 col-md-6 col-sm-6">
             <div class="card card-icon-bg card-icon-bg-warning o-hidden mb-4">
                 <div class="card-body text-center">
-                    <i class="i-Mail-Unread"></i>
                     <div class="content">
-                        <p class="text-muted mt-4 mb-0">Unpulled Results </p>
-                        <p id="unsent_records" class="text-warning text-24 line-height-1 mb-2"></p>
+                        <p class="text-muted mt-4 mb-0">Unsupressed/Positive EID Total</p>
+                        <p id="unsuppressed_positive" class="text-warning text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -272,6 +270,7 @@
             type: 'GET',
             url: "{{ route('get_data') }}",
             success: function(data) {
+                const arr = sumClassifications(data.vl_classifications, data.eid_classifications)
                 viralSuppressionRateChart(data.vl_classifications);
                 eidPositivityChart(data.eid_classifications);
                 tats(data.vl_tat, data.eid_tat);
@@ -293,8 +292,8 @@
                 $("#all_facilities").html(data.facilities);
                 $("#county_numbers").html(data.counties);
                 $("#partner_numbers").html(data.partners);
-                $("#sent_records").html(data.sent_records);
-                $("#unsent_records").html(data.all_records - data.sent_records);
+                $("#suppressed_negative").html(arr[0]);
+                $("#unsuppressed_positive").html(arr[1]);
                 let userlevel = '{!!Auth::user()->user_level!!}';
                 if (userlevel == 2) {
                     let partnerId = '{!!Auth::user()->partner_id!!}';
@@ -341,6 +340,8 @@
                 },
                 url: "{{ route('filterDashboard') }}",
                 success: function(data) {
+                    const arr = sumClassifications(data.vl_classifications,
+                        data.eid_classifications)
                     viralSuppressionRateChart(data.vl_classifications);
                     eidPositivityChart(data.eid_classifications);
                     tats(data.vl_tat, data.eid_tat);
@@ -363,8 +364,8 @@
                     $("#all_facilities").html(data.facilities);
                     $("#county_numbers").html(data.counties);
                     $("#partner_numbers").html(data.partners);
-                    $("#sent_records").html(data.sent_records);
-                    $("#unsent_records").html(data.all_records - data.sent_records);
+                    $("#suppressed_negative").html(arr[0]);
+                    $("#unsuppressed_positive").html(arr[1]);
                     $("#dashboard_overlay").hide();
                 }
             });
@@ -470,6 +471,25 @@
     </script>
 
     <script>
+        function sumClassifications(vls, eids) {
+            let suppressed_total = 0;
+            let unsuppressed_total = 0;
+            for (let i = 0; i < vls.length; i++) {
+                if (vls[i].data_key == 1) {
+                    suppressed_total = suppressed_total + vls[i].number;
+                } else {
+                    unsuppressed_total = unsuppressed_total + vls[i].number;
+                }
+            }
+            for (let i = 0; i < eids.length; i++) {
+                if (eids[i].data_key == 4) {
+                    suppressed_total = suppressed_total + eids[i].number;
+                } else {
+                    unsuppressed_total = unsuppressed_total + eids[i].number;
+                }
+            }
+            return [suppressed_total, unsuppressed_total];
+        }
         //Highcharts
         //VIRAL SUPPRESSION CHART
         function viralSuppressionRateChart(data) {

@@ -49,7 +49,7 @@ class UshauriController extends Controller
 
     public function notifyClients()
     {
-        $results = Result::whereDate('created_at', Carbon::today())->where('client_notified', false)->where('mfl_code', 12345)->limit(10)->get();
+        $results = Result::where('client_notified', false)->where('mfl_code', 12345)->limit(10)->get();
 
         foreach ($results as $result) {
             if ($result->result_type == 1) {
@@ -58,15 +58,24 @@ class UshauriController extends Controller
                 $type = "EID";
             }
             $facility = Facility::where('code', $result->mfl_code)->first();
+           
             $client = new Client();
+<<<<<<< HEAD
 
             $res = $client->request('POST', 'http://ushaurinode.localhost/api/mlab/check/consent', [
                         'form_params' => [
                             'mfl_code' => $result->mfl_code,
                             'ccc_number' => $result->client_id
                         ]
+=======
+            $res = $client->request('POST', 'http://localhost:5000/api/mlab/check/consent', [
+                            'json' => [
+                                'mfl_code' => $result->mfl_code,
+                                'ccc_number' => $result->client_id
+                            ]
+                            
+>>>>>>> 2e8dffa2e2cd317beccd1166dad9ad67db4c4f64
                     ]);
-
             if ($res->getStatusCode() == 200) { // 200 OK
                 $data = json_decode($res->getBody()->getContents());
                 if ($data->smsenable == 'Yes') {
@@ -122,6 +131,10 @@ class UshauriController extends Controller
         if ($res->getStatusCode() == 200) { // 200 OK
             $data = json_decode($res->getBody()->getContents());
            
+            if (count($data->clients) === 0) {
+                toastr()->error('Client with the given CCC number not found');
+                return redirect()->back();
+            }
             $data->mfl_code = $data->clients[0]->mfl_code;
             
             return view('client.clients')->with('data', $data);

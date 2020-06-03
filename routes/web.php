@@ -97,6 +97,7 @@ Route::get('/classifyone', ['uses' => 'TasksController@classifyOne', 'as' => 'cl
 Route::get('/get/eid/results', ['uses' => 'VLResultsController@getEIDResults', 'as' => 'getEIDResults']);
 Route::get('/notify', 'SendResultsController@notify')->name('notify');
 Route::get('/send/vls/to/lab', 'RemoteLoginController@SendVLsLab')->name('SendVLsLab');
+Route::get('/client/notify', 'UshauriController@notifyClients')->name('notifyClients');
 
 
 // Auth::routes();
