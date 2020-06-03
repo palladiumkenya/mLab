@@ -60,7 +60,7 @@ class UshauriController extends Controller
             $facility = Facility::where('code', $result->mfl_code)->first();
             $client = new Client();
 
-            $res = $client->request('POST', 'http://localhost:5000/api/mlab/check/consent', [
+            $res = $client->request('POST', 'http://ushaurinode.localhost/api/mlab/check/consent', [
                         'form_params' => [
                             'mfl_code' => $result->mfl_code,
                             'ccc_number' => $result->client_id
@@ -90,7 +90,7 @@ class UshauriController extends Controller
         
         $client = new Client();
 
-        $res = $client->request('POST', 'http://localhost:5000/api/mlab/list/clients', [
+        $res = $client->request('POST', 'http://ushaurinode.localhost/api/mlab/list/clients', [
                     'form_params' => [
                         'mfl_code' => $mfl,
                         'page' => $page
