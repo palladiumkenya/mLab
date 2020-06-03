@@ -110,8 +110,8 @@
             <div class="card card-icon-bg card-icon-bg-success o-hidden mb-4">
                 <div class="card-body text-center">
                     <div class="content">
-                        <p class="text-muted mt-4 mb-0">Suppressed/Negative EID Total</p>
-                        <p id="suppressed_negative" class="text-success text-24 line-height-1 mb-2"></p>
+                        <p class="text-muted mt-4 mb-0">Unsuppressed VL Total</p>
+                        <p id="suppressed_negative" class="text-danger text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
             <div class="card card-icon-bg card-icon-bg-warning o-hidden mb-4">
                 <div class="card-body text-center">
                     <div class="content">
-                        <p class="text-muted mt-4 mb-0">Unsupressed/Positive EID Total</p>
+                        <p class="text-muted mt-4 mb-0">Positive EID Total</p>
                         <p id="unsuppressed_positive" class="text-warning text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
@@ -472,23 +472,19 @@
 
     <script>
         function sumClassifications(vls, eids) {
-            let suppressed_total = 0;
             let unsuppressed_total = 0;
+            let positive_total = 0;
             for (let i = 0; i < vls.length; i++) {
-                if (vls[i].data_key == 1) {
-                    suppressed_total = suppressed_total + vls[i].number;
-                } else {
+                if (vls[i].data_key !== 1) {
                     unsuppressed_total = unsuppressed_total + vls[i].number;
                 }
             }
             for (let i = 0; i < eids.length; i++) {
                 if (eids[i].data_key == 4) {
-                    suppressed_total = suppressed_total + eids[i].number;
-                } else {
-                    unsuppressed_total = unsuppressed_total + eids[i].number;
+                    positive_total = positive_total + eids[i].number;
                 }
             }
-            return [suppressed_total, unsuppressed_total];
+            return [unsuppressed_total, positive_total];
         }
         //Highcharts
         //VIRAL SUPPRESSION CHART
