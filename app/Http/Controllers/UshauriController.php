@@ -122,6 +122,10 @@ class UshauriController extends Controller
         if ($res->getStatusCode() == 200) { // 200 OK
             $data = json_decode($res->getBody()->getContents());
            
+            if (count($data->clients) === 0) {
+                toastr()->error('Client with the given CCC number not found');
+                return redirect()->back();
+            }
             $data->mfl_code = $data->clients[0]->mfl_code;
             
             return view('client.clients')->with('data', $data);

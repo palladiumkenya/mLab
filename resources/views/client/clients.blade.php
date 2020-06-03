@@ -50,6 +50,38 @@
     </div>
 </div>
 
+<div id="ClientResults" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title res"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="resultTable" class="display table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>CCC Number</th>
+                            <th>MFL Code</th>
+                            <th>Date Collected</th>
+                            <th>Result</th>
+                            <th>Lab Name</th>
+                            <th>Date Available</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('page-js')
@@ -70,8 +102,21 @@
                 if (data.length === 0) {
                     toastr.success("No results found for this client in mLab!");
                 }
-                console.log(data)
-                // $('#ClientResults').modal('show');
+                for (let i = 0; i < data.length; i++) {
+                    let num = i + 1;
+                    $('#resultTable').append(
+                        '<tr>' +
+                        '<td> ' + num + '</td>' +
+                        '<td>' + data[i].client_id + '</td>' +
+                        '<td>' + data[i].mfl_code + '</td>' +
+                        '<td>' + data[i].date_collected + '</td>' +
+                        '<td>' + data[i].result_content + '</td>' +
+                        '<td>' + data[i].lab_name + '</td>' +
+                        '<td>' + data[i].created_at.substr(0, 10) + '</td>' +
+                        '</tr>');
+                }
+                $('.res').html(`Client ${data[0].client_id} Results`)
+                $('#ClientResults').modal('show');
             }
         })
     }
