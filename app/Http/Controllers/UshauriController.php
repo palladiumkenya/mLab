@@ -49,7 +49,7 @@ class UshauriController extends Controller
 
     public function notifyClients()
     {
-        $results = Result::whereDate('created_at', Carbon::today())->where('client_notified', false)->where('mfl_code', 12345)->limit(10)->get();
+        $results = Result::where('client_notified', false)->where('mfl_code', 12345)->limit(10)->get();
 
         foreach ($results as $result) {
             if ($result->result_type == 1) {
@@ -58,15 +58,15 @@ class UshauriController extends Controller
                 $type = "EID";
             }
             $facility = Facility::where('code', $result->mfl_code)->first();
+           
             $client = new Client();
-
             $res = $client->request('POST', 'http://localhost:5000/api/mlab/check/consent', [
-                        'form_params' => [
-                            'mfl_code' => $result->mfl_code,
-                            'ccc_number' => $result->client_id
-                        ]
+                            'json' => [
+                                'mfl_code' => $result->mfl_code,
+                                'ccc_number' => $result->client_id
+                            ]
+                            
                     ]);
-
             if ($res->getStatusCode() == 200) { // 200 OK
                 $data = json_decode($res->getBody()->getContents());
                 if ($data->smsenable == 'Yes') {
