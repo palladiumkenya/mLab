@@ -37,7 +37,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/get/ushauri/clients', 'UshauriController@index')->name('clients');
     Route::post('/list/ushauri/clients', 'UshauriController@getClients')->name('fetchclients');
+    Route::post('/list/ushauri/client', 'UshauriController@getOneClient')->name('fetchOneClient');
     Route::post('/list/more/ushauri/clients', 'UshauriController@getMoreClients')->name('fetchmoreclients');
+    Route::post('/get/client/results', 'UshauriController@getClientResults')->name('getResults');
 
 
     Route::get('/partners', 'PartnerController@index')->name('partners');
