@@ -10,68 +10,84 @@
             <div class="card-body">
                 <div class="card-title mb-3">Raw Data</div>
 
+                <h4>Enter the client's CCC Number....</h4>
+                <div class="border-bottom my-3">
+                    <form role="form" method="post" action="{{route('fetchOneClient')}}">
+                        {{ csrf_field() }}
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName1">CCC Number</label>
+                            <input class="form-control" name="ccc_number" name='ccc_number' type="text" />
+                        </div>
+                        <button type="submit" class="btn btn-info">Submit</button>
+                    </form>
+                </div>
+                <div class="my-10"> Or ... </div>
                 <h4>Select any of the filters below, and click Fetch when complete. All are required fields.</h4>
-                <form role="form" method="post" action="{{route('fetchclients')}}">
-                    {{ csrf_field() }}
-                    <div class="row">
-                        @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
-                        @if(Auth::user()->user_level < 3) <div class="col-md-6 form-group mb-3">
-                            <label for="firstName1">Partner</label>
-                            <select class="form-control" data-width="100%" id="partner" name="partner_id">
-                                <option value="">Select Partner</option>
-                                @if(Auth::user()->user_level < 2) @if (count($partners)> 0)
-                                    @foreach($partners as $partner)
-                                    <option value="{{$partner->id}}">{{ ucwords($partner->name) }}</option>
-                                    @endforeach
-                                    @endif
-                                    @endif
-                                    @if(Auth::user()->user_level == 2)
+                <div class="my-3">
 
-                                    <option value="{{Auth::user()->partner->id}}">
-                                        {{ ucwords(Auth::user()->partner->name) }}</option>
-                                    @endif
+                    <form role="form" method="post" action="{{route('fetchclients')}}">
+                        {{ csrf_field() }}
+                        <div class="row">
+                            @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
+                            @if(Auth::user()->user_level < 3) <div class="col-md-6 form-group mb-3">
+                                <label for="firstName1">Partner</label>
+                                <select class="form-control" data-width="100%" id="partner" name="partner_id">
+                                    <option value="">Select Partner</option>
+                                    @if(Auth::user()->user_level < 2) @if (count($partners)> 0)
+                                        @foreach($partners as $partner)
+                                        <option value="{{$partner->id}}">{{ ucwords($partner->name) }}</option>
+                                        @endforeach
+                                        @endif
+                                        @endif
+                                        @if(Auth::user()->user_level == 2)
+
+                                        <option value="{{Auth::user()->partner->id}}">
+                                            {{ ucwords(Auth::user()->partner->name) }}</option>
+                                        @endif
+
+                                </select>
+                        </div>
+                        @endif
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName1">County</label>
+                            <select class="form-control" data-width="100%" id="county" name="county_id">
+                                <option value="">Select County</option>
+                                @if(Auth::user()->user_level == 5)
+
+                                <option value="{{Auth::user()->county->id}}">{{ ucwords(Auth::user()->county->name) }}
+                                </option>
+                                @endif
 
                             </select>
-                    </div>
-                    @endif
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="firstName1">County</label>
-                        <select class="form-control" data-width="100%" id="county" name="county_id">
-                            <option value="">Select County</option>
-                            @if(Auth::user()->user_level == 5)
+                        </div>
 
-                            <option value="{{Auth::user()->county->id}}">{{ ucwords(Auth::user()->county->name) }}
-                            </option>
-                            @endif
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName1">Sub County</label>
+                            <select class="form-control" data-width="100%" id="sub_county" name="sub_county_id">
+                                <option value="">Select Sub County</option>
 
-                        </select>
-                    </div>
+                            </select>
+                        </div>
+                        @endif
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName1">Facility</label>
+                            <select class="form-control" data-width="100%" id="facility" name="code">
+                                @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
+                                <option value="">Select Facility</option>
+                                @else
 
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="firstName1">Sub County</label>
-                        <select class="form-control" data-width="100%" id="sub_county" name="sub_county_id">
-                            <option value="">Select Sub County</option>
+                                <option value="{{Auth::user()->facility->code}}">
+                                    {{ ucwords(Auth::user()->facility->name) }}
+                                </option>
+                                @endif
 
-                        </select>
-                    </div>
-                    @endif
-                    <div class="col-md-6 form-group mb-3">
-                        <label for="firstName1">Facility</label>
-                        <select class="form-control" data-width="100%" id="facility" name="code">
-                            @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
-                            <option value="">Select Facility</option>
-                            @else
+                            </select>
+                        </div>
 
-                            <option value="{{Auth::user()->facility->code}}">{{ ucwords(Auth::user()->facility->name) }}
-                            </option>
-                            @endif
-
-                        </select>
-                    </div>
-
+                </div>
+                <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-block btn-primary">Submit</button>
-            </form>
         </div>
     </div>
 </div>

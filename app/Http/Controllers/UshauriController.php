@@ -106,4 +106,35 @@ class UshauriController extends Controller
             return redirect()->back();
         }
     }
+
+    public function getOneClient(Request $request)
+    {
+        $ccc_number = $request->ccc_number;
+        
+        $client = new Client();
+
+        $res = $client->request('POST', 'http://localhost:5000/api/mlab/get/one/client', [
+                    'form_params' => [
+                        'ccc_number' => $ccc_number
+                    ]
+                ]);
+
+        if ($res->getStatusCode() == 200) { // 200 OK
+            $data = json_decode($res->getBody()->getContents());
+           
+            $data->mfl_code = $data->clients[0]->mfl_code;
+            
+            return view('client.clients')->with('data', $data);
+        } else {
+            return redirect()->back();
+        }
+    }
+
+    public function getClientResults(Request $request)
+    {
+        $ccc_number = $request->ccc_number;
+        $results = Result::where('client_id', $ccc_number)->get();
+
+        return $results;
+    }
 }

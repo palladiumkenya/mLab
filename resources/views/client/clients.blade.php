@@ -31,7 +31,9 @@
                         @foreach($data->clients as $client)
                         <tr>
                             <td> {{ $loop->iteration }}</td>
-                            <td> {{ $client->clinic_number }}</td>
+                            <td> <a class="btn btn-secondary"
+                                    onclick="getResults({{ $client->clinic_number }});">{{ $client->clinic_number }}</a>
+                            </td>
                             <td> {{ $client->f_name }}</td>
                             <td> {{ $client->m_name }}</td>
                             <td> {{ $client->l_name }}</td>
@@ -54,5 +56,24 @@
 
 <script src="{{asset('assets/js/vendor/datatables.min.js')}}"></script>
 <script src="{{asset('assets/js/datatables.script.js')}}"></script>
-
+<script type="text/javascript">
+    function getResults(ccc) {
+        $.ajax({
+            type: "POST",
+            url: '/get/client/results',
+            data: {
+                "ccc_number": ccc,
+                "_token": "{{ csrf_token()}}"
+            },
+            dataType: "json",
+            success: function(data) {
+                if (data.length === 0) {
+                    toastr.success("No results found for this client in mLab!");
+                }
+                console.log(data)
+                // $('#ClientResults').modal('show');
+            }
+        })
+    }
+</script>
 @endsection
