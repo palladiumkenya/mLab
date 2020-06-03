@@ -60,12 +60,21 @@ class UshauriController extends Controller
             $facility = Facility::where('code', $result->mfl_code)->first();
            
             $client = new Client();
+<<<<<<< HEAD
+
+            $res = $client->request('POST', 'http://ushaurinode.localhost/api/mlab/check/consent', [
+                        'form_params' => [
+                            'mfl_code' => $result->mfl_code,
+                            'ccc_number' => $result->client_id
+                        ]
+=======
             $res = $client->request('POST', 'http://localhost:5000/api/mlab/check/consent', [
                             'json' => [
                                 'mfl_code' => $result->mfl_code,
                                 'ccc_number' => $result->client_id
                             ]
                             
+>>>>>>> 2e8dffa2e2cd317beccd1166dad9ad67db4c4f64
                     ]);
             if ($res->getStatusCode() == 200) { // 200 OK
                 $data = json_decode($res->getBody()->getContents());
@@ -90,7 +99,7 @@ class UshauriController extends Controller
         
         $client = new Client();
 
-        $res = $client->request('POST', 'http://localhost:5000/api/mlab/list/clients', [
+        $res = $client->request('POST', 'http://ushaurinode.localhost/api/mlab/list/clients', [
                     'form_params' => [
                         'mfl_code' => $mfl,
                         'page' => $page
