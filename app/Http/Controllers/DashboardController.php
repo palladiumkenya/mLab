@@ -71,10 +71,10 @@ class DashboardController extends Controller
         $pulled_data      = Dashboard::join('county', 'county.id', '=', 'mlab_data_materialized.county_id')->selectRaw('county.NAME, COUNT ( mlab_data_materialized.created_at ) AS all_results,  count (mlab_data_materialized.date_sent) AS  pulled_results ')
                             ->groupBy('county.name')->orderBy('county.name')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
 
-        $average_vl_collect_sent_diff = Dashboard::selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '1')->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])
-                            ->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-        $average_eid_collect_sent_diff = DB::table('mlab_data_materialized')->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '2')
-                            ->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
+        $average_vl_collect_sent_diff = Dashboard::selectRaw('AVG( created_at::DATE - date_collected::DATE)')->where('result_type', '1')->whereRaw('(created_at::DATE - date_collected::DATE) <= ?', [30])
+                           ->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
+        $average_eid_collect_sent_diff = DB::table('mlab_data_materialized')->selectRaw('AVG( created_at::DATE - date_collected::DATE)')->where('result_type', '2')
+                            ->whereRaw('(created_at::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
     
         if (!empty($selected_partners)) {
             $all_partners = Partner::select('id', 'name')->whereIn('id', $selected_partners);
