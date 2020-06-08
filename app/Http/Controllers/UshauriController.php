@@ -28,14 +28,14 @@ class UshauriController extends Controller
         $mfl = $request->mfl_code;
         $ccc = $request->ccc_number;
 
-        if ($ccc) {
+        if (!empty($ccc)) {
             $results = Result::where('client_id', $ccc)->get();
             if (!$results->isEmpty()) {
                 return response()->json(['message' => 'success', 'results' => $results], 200);
             } else {
-                return response()->json(['message' => 'No results for the given MFL code were found'], 200);
+                return response()->json(['message' => 'No results for the given CCC Number were found'], 200);
             }
-        } elseif ($mfl) {
+        } elseif (!empty($mfl)) {
             $results = Result::where('mfl_code', $mfl)->get();
             if (!$results->isEmpty()) {
                 return response()->json(['message' => 'success', 'results' => $results], 200);
