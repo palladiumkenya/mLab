@@ -29,7 +29,7 @@
                             <th>County</th>
                             <th>Phone No.</th>
                             <th>Date Added</th>
-                            <th>Action</th>
+                            @if(Auth::user()->user_level < 2) <th>Action</th> @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -44,13 +44,13 @@
                             <td> {{ucwords($facility->facility->sub_county->county->name)}}</td>
                             <td> {{$facility->phone_no}}</td>
                             <td> {{date('Y-m-d', strtotime($facility->created_at))}}</td>
-                            <td>
+                            @if(Auth::user()->user_level < 2) <td>
                                 <button onclick="editFacility({{$facility}});" data-toggle="modal"
                                     data-target="#editFacility" type="button"
                                     class="btn btn-primary btn-sm">Edit</button>
                                 <button onclick="deleteFacility({{$facility->mfl_code}});" type="button"
                                     class="btn btn-danger btn-sm">Delete</button>
-                            </td>
+                                </td> @endif
                         </tr>
                         @endforeach
                         @endif

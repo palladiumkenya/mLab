@@ -45,6 +45,8 @@
                         <div class="menu-icon-grid w-auto p-0">
                             <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
                             <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
+                            <a href="{{route('il_facilities')}}"><i class="i-Hospital1"></i>IL Facilities</a>
+
                             <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                             <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                             <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
