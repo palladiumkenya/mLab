@@ -306,9 +306,8 @@
     });
 
     function editUser(user) {
-        var p = {
-            !!Auth::user() !!
-        };
+        var p = '{!!Auth::user() !!}';
+        console.log(p);
         if (p.user_level < 2) {
             if (user.user_level < 2) {
                 $('#affiliation').val('National');
