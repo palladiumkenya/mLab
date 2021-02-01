@@ -89,7 +89,11 @@
         "paging": true,
         "responsive":true,
         "ordering": true,
-        "info": true
+        "info": true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });</script>
 
 

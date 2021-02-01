@@ -64,18 +64,44 @@ class DataController extends Controller
         return view('data.results')->with('results', $results->paginate(100));
     }
 
-    public function hts_results()
+    public function partnerform()
     {
-        $results = HTSData::orderBy('hts_result_id', 'DESC');
+        $partners = Partner::all();
+
+        $data = array(
+            'partners' => $partners,
+        );
+        return view('data.hts_filter')->with($data);
+    }
+
+    public function hts_results(Request $request)
+    {
+        $results = HTSData::select('*');
+        if (!empty($request->partner_id)) {
+            $partner = Partner::find($request->partner_id);
+            $results->where('partner', $partner->name);
+        }
+        if (!empty($request->county_id)) {
+            $county = County::find($request->county_id);
+            $results->where('county', $county->name);
+        }
+        if (!empty($request->sub_county_id)) {
+            $subcounty = SubCounty::find($request->sub_county_id);
+            $results->where('sub_county', $subcounty->name);
+        }
+        if (!empty($request->code)) {
+            $facility = Facility::where('code', $request->code)->first();
+            $results->where('facility', $facility->name);
+        }
+        if (!empty($request->from)) {
+            $results->where('date_sent', '>=', date($request->from));
+        }
+        if (!empty($request->to)) {
+            $results->where('date_sent', '<=', date($request->to));
+        }
 
         if (Auth::user()->user_level == 2) {
             $results->where('partner', Auth::user()->partner->name);
-        }
-        if (Auth::user()->user_level == 5) {
-            $results->where('county', Auth::user()->county->name);
-        }
-        if (Auth::user()->user_level == 3 || Auth::user()->user_level == 4) {
-            $results->where('facility', Auth::user()->facility->name);
         }
 
         return view('data.hts_results')->with('results', $results->paginate(100));
