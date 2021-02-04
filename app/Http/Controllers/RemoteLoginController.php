@@ -209,7 +209,7 @@ class RemoteLoginController extends Controller
 
             $data = 'mflCode='.$remote_vl->facility.'&patient_identifier='.$remote_vl->ccc_num.'&dob='.$remote_vl->dob.
                 '&datecollected='.$remote_vl->date_collected.'&sex='.$sex.'&sampletype=1&justification='.$remote_vl->justification_code.
-                '&pmtct=3&prophylaxis=4231';
+                '&pmtct=3&prophylaxis=AF2A';
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
@@ -228,6 +228,52 @@ class RemoteLoginController extends Controller
                 "Content-Type: application/x-www-form-urlencoded"
             ),
             ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            echo $response;
+        }
+    }
+
+    public function SendEIDLab()
+    {
+        $remote_eids = SRLEIDs::where('processed', 0)->limit(10)->get();
+        foreach ($remote_eids as $remote_eid) {
+            if ($remote_eid->selected_sex == 'Female') {
+                $sex = 2;
+            } elseif ($remote_eid->selected_sex == 'Male') {
+                $sex = 1;
+            } else {
+                $sex = 3;
+            }
+
+            // entry point must be integer
+            // add lab in payload as integer
+            // add regimen as integer
+            // pcr type should be integer
+
+            $data = 'mflCode='.$remote_eid->facility.'&patient_identifier='.$remote_eid->hein_number.'&dob='.$remote_eid->dob.
+                '&datecollected='.$remote_eid->date_collected.'&sex='.$sex.'&feeding='.$remote_eid->infant_feeding.'&pcrtype=1'.
+                '&regimen=16&entry_point='.$remote_eid->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_eid->mother_age.'&lab=3';
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'http://lab.test.nascop.org/api/eid',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                  'Content-Type: application/x-www-form-urlencoded',
+                  'apikey: ZXmknmaI9MfE642'
+                ),
+              ));
 
             $response = curl_exec($curl);
 
