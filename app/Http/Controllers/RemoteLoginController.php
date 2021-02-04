@@ -232,6 +232,12 @@ class RemoteLoginController extends Controller
             $response = curl_exec($curl);
 
             curl_close($curl);
+
+            if($response->status_code === 201) {
+                $remote_vls->processed = 1;
+                $remote_vls->save();
+            }
+
             echo $response;
         }
     }
@@ -278,7 +284,65 @@ class RemoteLoginController extends Controller
             $response = curl_exec($curl);
 
             curl_close($curl);
+
+            if($response->status_code === 201) {
+                $remote_eid->processed = 1;
+                $remote_eid->save();
+            }
             echo $response;
         }
     }
+
+    public function SendHTSLab()
+    {
+        $remote_htss = SRLHTS::where('processed', 0)->limit(10)->get();
+        foreach ($remote_htss as $remote_hts) {
+            if ($remote_hts->selected_sex == 'Female') {
+                $sex = 2;
+            } elseif ($remote_hts->selected_sex == 'Male') {
+                $sex = 1;
+            } else {
+                $sex = 3;
+            }
+
+            // entry point must be integer
+            // add lab in payload as integer
+            // add regimen as integer
+            // pcr type should be integer
+
+            $data = 'mflCode='.$remote_hts->facility.'&patient_identifier='.$remote_hts->hein_number.'&dob='.$remote_hts->dob.
+                '&datecollected='.$remote_hts->date_collected.'&sex='.$sex.'&feeding='.$remote_hts->infant_feeding.'&pcrtype=1'.
+                '&regimen=16&entry_point='.$remote_hts->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_hts->mother_age.'&lab=3';
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'http://lab.test.nascop.org/api/eid',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                  'Content-Type: application/x-www-form-urlencoded',
+                  'apikey: ZXmknmaI9MfE642'
+                ),
+              ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+
+            if($response->status_code === 201) {
+                $remote_hts->processed = 1;
+                $remote_hts->save();
+            }
+
+            echo $response;
+        }
+    }
+
 }
