@@ -24,6 +24,10 @@ return [
         'key' => env('SRL_API_KEY'),
     ],
 
+    'vlr' => [
+        'key' => env('VL_RESULTS'),
+    ],
+
     'ses' => [
         'key' => env('SES_KEY'),
         'secret' => env('SES_SECRET'),
