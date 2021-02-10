@@ -6,6 +6,8 @@
 /storage/logs
 /vendor
 .env
+access.log
+error.log
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
