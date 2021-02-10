@@ -224,8 +224,7 @@ class RemoteLoginController extends Controller
             CURLOPT_POSTFIELDS => $data,
             CURLOPT_HTTPHEADER => array(
                 "Content-Type: application/x-www-form-urlencoded",
-                "apikey: ZXmknmaI9MfE642",
-                "Content-Type: application/x-www-form-urlencoded"
+                "apikey" => Config::get('services.srl.key'),
             ),
             ));
 
@@ -277,7 +276,7 @@ class RemoteLoginController extends Controller
                 CURLOPT_POSTFIELDS => $data,
                 CURLOPT_HTTPHEADER => array(
                   'Content-Type: application/x-www-form-urlencoded',
-                  'apikey: ZXmknmaI9MfE642'
+                  'apikey' => Config::get('services.srl.key'),
                 ),
               ));
 
@@ -328,7 +327,7 @@ class RemoteLoginController extends Controller
                 CURLOPT_POSTFIELDS => $data,
                 CURLOPT_HTTPHEADER => array(
                   'Content-Type: application/x-www-form-urlencoded',
-                  'apikey: ZXmknmaI9MfE642'
+                  'apikey' => Config::get('services.srl.key'),
                 ),
               ));
 
