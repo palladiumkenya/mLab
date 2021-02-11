@@ -210,6 +210,255 @@ class RemoteLoginController extends Controller
             $data = 'mflCode='.$remote_vl->facility.'&patient_identifier='.$remote_vl->ccc_num.'&dob='.$remote_vl->dob.
                 '&datecollected='.$remote_vl->date_collected.'&sex='.$sex.'&sampletype=1&justification='.$remote_vl->justification_code.
                 '&pmtct=3&prophylaxis=AF2A';
+
+            if($remote_vl->lab === 'Kemri Nairobi') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kemrinairobi.nascop.org/api/  ",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+
+            }  else if($remote_vl->lab === 'KEMRI Kisumu') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kemrikisumu.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+
+            }  else if($remote_vl->lab === 'KEMRI Alupe') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kemrialupe.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab === 'Walter Reed') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://wrpkericho.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab === 'Ampath MTRH') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://ampath.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab === 'Coast lab') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://lab.test.nascop.org/api/vl",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab === 'KNH') {
+                
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://knh.nascop.org/api",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+            }  else if($remote_vl->lab === 'KU Teaching and Referring Hospital') {
+                
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kutrrh.nascop.org/api",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response->status_code === 201) {
+                    $remote_vls->processed = 1;
+                    $remote_vls->save();
+                }
+
+                echo $response;
+            }  
+
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
@@ -262,33 +511,253 @@ class RemoteLoginController extends Controller
                 '&datecollected='.$remote_eid->date_collected.'&sex='.$sex.'&feeding='.$remote_eid->infant_feeding.'&pcrtype=1'.
                 '&regimen=16&entry_point='.$remote_eid->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_eid->mother_age.'&lab=3';
 
-            $curl = curl_init();
+                if($remote_eid->lab === 'Kemri Nairobi') {
 
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'http://lab.test.nascop.org/api/eid',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $data,
-                CURLOPT_HTTPHEADER => array(
-                  'Content-Type: application/x-www-form-urlencoded',
-                  'apikey' => Config::get('services.srl.key'),
-                ),
-              ));
-
-            $response = curl_exec($curl);
-
-            curl_close($curl);
-
-            if($response->status_code === 201) {
-                $remote_eid->processed = 1;
-                $remote_eid->save();
-            }
-            echo $response;
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kemrinairobi.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+    
+                }  else if($remote_eid->lab === 'KEMRI Kisumu') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kemrikisumu.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+    
+                }  else if($remote_eid->lab === 'KEMRI Alupe') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kemrialupe.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab === 'Walter Reed') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://wrpkericho.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab === 'Ampath MTRH') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://ampath.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab === 'Coast lab') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "http://lab.test.nascop.org/api/vl",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab === 'KNH') {
+                    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://knh.nascop.org/api",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+                }  else if($remote_eid->lab === 'KU Teaching and Referring Hospital') {
+                    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kutrrh.nascop.org/api",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    if($response->status_code === 201) {
+                        $remote_eid->processed = 1;
+                        $remote_eid->save();
+                    }
+    
+                    echo $response;
+                }  
         }
     }
 
