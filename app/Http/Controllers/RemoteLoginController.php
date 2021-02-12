@@ -39,6 +39,7 @@ class RemoteLoginController extends Controller
                     $just_code = $val[9];
                     $selected_type = $val[10];
                     $selected_sex = $val[11];
+                    $lab = $val[12];
 
                     $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
                     $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
@@ -59,6 +60,7 @@ class RemoteLoginController extends Controller
                     $rl->selected_type = $selected_type;
                     $rl->selected_sex = $selected_sex;
                     $rl->facility = $fac->code;
+                    $r1->lab = $lab;
 
 
                     if ($rl->save()) {
@@ -85,6 +87,7 @@ class RemoteLoginController extends Controller
                     $alive_dead = $val[12];
                     $mother_age = $val[13];
                     $haart_date = $val[14];
+                    $lab = $val[15];
 
                     $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
                     $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
@@ -107,6 +110,7 @@ class RemoteLoginController extends Controller
                     $rl->mother_age = $mother_age;
                     $rl->haart_date = $haart_date;
                     $rl->facility = $fac->code;
+                    $r1->lab = $lab;
 
 
                     if ($rl->save()) {
@@ -236,8 +240,21 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
@@ -267,8 +284,21 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
@@ -298,8 +328,21 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
@@ -329,8 +372,21 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
@@ -360,8 +416,21 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
@@ -391,8 +460,21 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
@@ -422,8 +504,21 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
@@ -452,41 +547,26 @@ class RemoteLoginController extends Controller
                 curl_close($curl);
 
                 if($response->status_code === 201) {
-                    $remote_vls->processed = 1;
-                    $remote_vls->save();
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($response->batch->batch_no === 10) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
                 }
 
                 echo $response;
             }  
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://lab.test.nascop.org/api/vl",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_HTTPHEADER => array(
-                "Content-Type: application/x-www-form-urlencoded",
-                "apikey" => Config::get('services.srl.key'),
-            ),
-            ));
-
-            $response = curl_exec($curl);
-
-            curl_close($curl);
-
-            if($response->status_code === 201) {
-                $remote_vls->processed = 1;
-                $remote_vls->save();
-            }
-
-            echo $response;
+            
         }
     }
 
@@ -539,6 +619,19 @@ class RemoteLoginController extends Controller
                         $remote_eid->processed = 1;
                         $remote_eid->save();
                     }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
     
                     echo $response;
     
@@ -569,6 +662,19 @@ class RemoteLoginController extends Controller
                     if($response->status_code === 201) {
                         $remote_eid->processed = 1;
                         $remote_eid->save();
+                    }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
                     }
     
                     echo $response;
@@ -601,6 +707,19 @@ class RemoteLoginController extends Controller
                         $remote_eid->processed = 1;
                         $remote_eid->save();
                     }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
     
                     echo $response;
                     
@@ -631,6 +750,19 @@ class RemoteLoginController extends Controller
                     if($response->status_code === 201) {
                         $remote_eid->processed = 1;
                         $remote_eid->save();
+                    }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
                     }
     
                     echo $response;
@@ -663,6 +795,19 @@ class RemoteLoginController extends Controller
                         $remote_eid->processed = 1;
                         $remote_eid->save();
                     }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
     
                     echo $response;
                     
@@ -693,6 +838,19 @@ class RemoteLoginController extends Controller
                     if($response->status_code === 201) {
                         $remote_eid->processed = 1;
                         $remote_eid->save();
+                    }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
                     }
     
                     echo $response;
@@ -725,9 +883,23 @@ class RemoteLoginController extends Controller
                         $remote_eid->processed = 1;
                         $remote_eid->save();
                     }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
     
                     echo $response;
-                }  else if($remote_eid->lab === 'KU Teaching and Referring Hospital') {
+
+                } else if($remote_eid->lab === 'KU Teaching and Referring Hospital') {
                     
                     $curl = curl_init();
     
@@ -755,8 +927,18 @@ class RemoteLoginController extends Controller
                         $remote_eid->processed = 1;
                         $remote_eid->save();
                     }
+
+                    if($response->batch->batch_no === 10) {
+
+                        $msg = "Hello ".$remote_eid->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch." ";
+
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+
+                    }
     
                     echo $response;
+
                 }  
         }
     }
