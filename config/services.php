@@ -28,6 +28,13 @@ return [
         'key' => env('VL_RESULTS'),
     ],
 
+    'at' => [
+        'key' => env('AT_KEY'),
+    ],
+    'at_gt' => [
+        'key' => env('AT_SMSGT'),
+    ],
+
     'ses' => [
         'key' => env('SES_KEY'),
         'secret' => env('SES_SECRET'),

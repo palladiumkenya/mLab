@@ -16,7 +16,7 @@ class SmsGatewayController extends Controller
     public function sender(Request $request)
     {
         $username = "mhealthuser";
-        $apiKey = "1f6943f6c8f0d5d6b0dd54cd940935bdec8f7454c4e7863672048dae496ae355";
+        $apiKey = Config::get('services.at_gt.key');;
         $AT       = new AfricasTalking($username, $apiKey);
          
         $phone = $request->phone_no;
