@@ -26,7 +26,7 @@ class RemoteLoginController extends Controller
 
             if ($val[0] == 'VL') {
                 if (sizeof($val) < 12) {
-                    echo "Kindly ensure all fields are included";
+                    return response()->json(['Kindly ensure all fields are included'], 500);
                 } else {
                     $ccc = $val[1];
                     $patient_name = $val[2];
@@ -65,14 +65,14 @@ class RemoteLoginController extends Controller
 
 
                     if ($rl->save()) {
-                        echo "Sample Remote Login Successful";
+                        return response()->json(['Sample Remote Login Successful'], 201);
                     } else {
-                        echo "An error occured, kindly try again";
+                        return response()->json(['An error occured, kindly try again'], 500);
                     }
                 }
             } elseif ($val[0] == 'EID') {
                 if (sizeof($val) < 15) {
-                    echo "Kindly ensure all fields are included";
+                    return response()->json(['Kindly ensure all fields are included'], 500);
                 } else {
                     $selected_sex = $val[1];
                     $selected_regimen= $val[2];
@@ -117,14 +117,14 @@ class RemoteLoginController extends Controller
 
 
                     if ($rl->save()) {
-                        echo "Sample Remote Login Successful";
+                        return response()->json(['Sample Remote Login Successful'], 201);
                     } else {
-                        echo "An error occured, kindly try again";
+                        return response()->json(['An error occured, kindly try again'], 500);
                     }
                 }
             }
         } else {
-            echo "Phone Number not Authorised to send remote samples";
+            return response()->json(['Phone Number not Authorised to send remote samples'], 500);
         }
     }
 
@@ -140,7 +140,7 @@ class RemoteLoginController extends Controller
             $val = explode("*", $msg);
 
             if (sizeof($val) < 18) {
-                echo "Kindly ensure all fields are included";
+                return response()->json(['Kindly ensure all fields are included'], 500);
             } else {
                 $sample_number = $val[0];
                 $client_name = $val[1];
@@ -196,13 +196,13 @@ class RemoteLoginController extends Controller
 
 
                 if ($rl->save()) {
-                    echo "Sample Remote Login Successful";
+                    return response()->json(['Sample Remote Login Successful'], 201);
                 } else {
-                    echo "An error occured, kindly try again";
+                    return response()->json(['An error occured, kindly try again'], 500);
                 }
             }
         } else {
-            echo "Phone Number not Authorised to send remote samples";
+            return response()->json(['Phone Number not Authorised to send remote samples'], 500);
         }
     }
 
