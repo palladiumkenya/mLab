@@ -98,7 +98,7 @@ class VLResultsController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $fields_string,
             CURLOPT_HTTPHEADER => array(
-                "apikey: 11gu6fIIcviGJW4fLq2i"
+                "apikey" => Config::get('services.vlr.key'),
             ),
             ));
 
@@ -290,7 +290,7 @@ class VLResultsController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $fields_string,
             CURLOPT_HTTPHEADER => array(
-                "apikey: 11gu6fIIcviGJW4fLq2i"
+                "apikey" => Config::get('services.vlr.key')
             ),
             ));
 
@@ -384,7 +384,7 @@ class VLResultsController extends Controller
                     CURLOPT_CUSTOMREQUEST => "POST",
                     CURLOPT_POSTFIELDS => $fields_string,
                     CURLOPT_HTTPHEADER => array(
-                        "apikey: 11gu6fIIcviGJW4fLq2i"
+                        "apikey" => Config::get('services.vlr.key')
                     ),
                     ));
             

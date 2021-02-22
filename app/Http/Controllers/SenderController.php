@@ -12,7 +12,7 @@ class SenderController extends Controller
     public function send($to, $message)
     {
         $username = "mhealthkenya";
-        $apiKey = "9318d173cb9841f09c73bdd117b3c7ce3e6d1fd559d3ca5f547ff2608b6f3212";
+        $apiKey = Config::get('services.at.key');
         $AT       = new AfricasTalking($username, $apiKey);
 
         // Get one of the services
