@@ -63,11 +63,12 @@ class RemoteLoginController extends Controller
                     $rl->facility = $fac->code;
                     $r1->lab_name = $lab_name;
 
+                    $saved = $r1->save();
 
-                    if ($rl->save()) {
-                        return response()->json(['Sample Remote Login Successful'], 201);
-                    } else {
+                    if (!$saved) {
                         return response()->json(['An error occured, kindly try again'], 500);
+                    } else {
+                        return response()->json(['Sample Remote Login Successful'], 201);
                     }
                 }
             } elseif ($val[0] == 'EID') {
@@ -115,11 +116,12 @@ class RemoteLoginController extends Controller
                     $r1->lab_id = $lab_id;
                     $r1->lab_name = $lab_name;
 
+                    $saved = $r1->save();
 
-                    if ($rl->save()) {
-                        return response()->json(['Sample Remote Login Successful'], 201);
-                    } else {
+                    if (!$saved) {
                         return response()->json(['An error occured, kindly try again'], 500);
+                    } else {
+                        return response()->json(['Sample Remote Login Successful'], 201);
                     }
                 }
             }
@@ -194,12 +196,13 @@ class RemoteLoginController extends Controller
                 $r1->lab_id = $lab_id;
                 $r1->lab_name = $lab_name;
 
+                $saved = $r1->save();
 
-                if ($rl->save()) {
-                    return response()->json(['Sample Remote Login Successful'], 201);
-                } else {
-                    return response()->json(['An error occured, kindly try again'], 500);
-                }
+                    if (!$saved) {
+                        return response()->json(['An error occured, kindly try again'], 500);
+                    } else {
+                        return response()->json(['Sample Remote Login Successful'], 201);
+                    }
             }
         } else {
             return response()->json(['Phone Number not Authorised to send remote samples'], 500);
