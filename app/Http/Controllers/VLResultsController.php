@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 ini_set('max_execution_time', 0);
 ini_set('memory_limit', '1024M');
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class VLResultsController extends Controller
 {
     public function index(Request $request)
     {
-        try{
+        try {
             $r = new Result;
             $r->source = $request->source;
             $r->result_id = $request->result_id;
@@ -32,14 +33,11 @@ class VLResultsController extends Controller
             $r->lab_order_date = $request->lab_order_date;
             $r->date_collected = $request->date_collected;
 
-            if($r->save()){
-
+            if ($r->save()) {
                 return response(['status' => 'Success']);
-            }
-            else{
+            } else {
                 return response(['status' => 'Error']);
             }
-
         } catch (Exception $e) {
             return response(['status' => 'Error']);
         }
@@ -47,48 +45,44 @@ class VLResultsController extends Controller
 
     public function getResults()
     {
-
-
-    
         $ilfs = ILFacility::all();
 
         $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
 
         $facilities = array();
 
-            foreach($ilfs as $ilf){
+        foreach ($ilfs as $ilf) {
+            $code = $ilf->mfl_code;
 
-                $code = $ilf->mfl_code;
+            array_push($facilities, $code);
+        }
+        foreach ($mlabfs as $mlabf) {
+            $code = $mlabf->code;
 
-                array_push($facilities,$code);
-            }
-            foreach($mlabfs as $mlabf){
-
-                $code = $mlabf->code;
-
-                array_push($facilities,$code);
-            }
+            array_push($facilities, $code);
+        }
        
 
        
         $results= array_unique($facilities);
 
-        $a =  implode( ',', $results );
-
+     
+        $a =  implode(',', $results);
+      
         $today = date("Y-m-d");
-        $yester = date('Y-m-d', strtotime("-14 days"));
-            $curl = curl_init();
+        $yester = date('Y-m-d', strtotime("-31 days"));
+        $curl = curl_init();
 
-            $fields = array(
+        $fields = array(
                 'test' => 1,
                 'facility_code' =>$a,
                 'date_dispatched_start' => $yester,
                 'date_dispatched_end' => $today
 
             );
-            $fields_string = http_build_query($fields);
+        $fields_string = http_build_query($fields);
 
-            curl_setopt_array($curl, array(
+        curl_setopt_array($curl, array(
             CURLOPT_URL => "https://eiddash.nascop.org/api/mlab",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
@@ -98,77 +92,73 @@ class VLResultsController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $fields_string,
             CURLOPT_HTTPHEADER => array(
-                "apikey" => Config::get('services.vlr.key'),
+                "apikey: 11gu6fIIcviGJW4fLq2i"
             ),
             ));
 
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
 
-            curl_close($curl);
+        curl_close($curl);
 
-            if ($err) {
-                echo "cURL Error #:" . $err;
-            } else {
-
-                echo "page: 1".'<br>';
-                $objects = json_decode($response);
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo "page: 1".'<br>';
+            $objects = json_decode($response);
             
-                $data = $objects->data;
-                echo "last_page: ".$objects->last_page.'<br>';
+            $data = $objects->data;
+            echo "last_page: ".$objects->last_page.'<br>';
+        
 
-                foreach($data as $dat){
-                
-                    $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
+            foreach ($data as $dat) {
+                $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
 
-                    if(empty($res)){
-
-                        $r = new Result;
-                        $r->source = $dat->source;
-                        $r->result_id = $dat->result_id;
-                        $r->result_type = $dat->result_type;
-                        $r->client_id = $dat->client_id;
-                        $r->age = $dat->age;
-                        $r->request_id = $dat->request_id;
-                        $r->result_content = $dat->result_content;
-                        $r->units = $dat->units;
-                        $r->gender =  $dat->gender;
-                        $r->mfl_code = $dat->mfl_code;
-                        $r->lab_id = $dat->lab_id;
-                        $r->cj = $dat->cj;
-                        $r->cst = $dat->cst;
-                        $r->csr = $dat->csr;
-                        $r->lab_order_date = $dat->lab_order_date;
-                        $r->date_collected = $dat->date_collected;                        
-                        $r->lab_name = $dat->lab_name;
+                if (empty($res)) {
+                    $r = new Result;
+                    $r->source = $dat->source;
+                    $r->result_id = $dat->result_id;
+                    $r->result_type = $dat->result_type;
+                    $r->client_id = $dat->client_id;
+                    $r->age = $dat->age;
+                    $r->request_id = $dat->request_id;
+                    $r->result_content = $dat->result_content;
+                    $r->units = $dat->units;
+                    $r->gender =  $dat->gender;
+                    $r->mfl_code = $dat->mfl_code;
+                    $r->lab_id = $dat->lab_id;
+                    $r->cj = $dat->cj;
+                    $r->cst = $dat->cst;
+                    $r->csr = $dat->csr;
+                    $r->lab_order_date = $dat->lab_order_date;
+                    $r->date_collected = $dat->date_collected;
+                    $r->lab_name = $dat->lab_name;
             
-                        if($r->save()){
-                            $task = new Task;
+                    if ($r->save()) {
+                        $task = new Task;
 
-                            $task->classify($r->id);
-                        }
+                        $task->classify($r->id);
                     }
-
                 }
+            }
 
                 
 
-                for($j = 2; $j <= $objects->last_page; $j++){
+            for ($j = 2; $j <= $objects->last_page; $j++) {
+                echo "page: ".$j.'<br>';
 
-                        echo "page: ".$j.'<br>';
+                $curl = curl_init();
 
-                    $curl = curl_init();
-
-                    $fields = array(
+                $fields = array(
                         'test' => 1,
                         'facility_code' => $a,
                         'date_dispatched_start' => $yester,
                         'date_dispatched_end' => $today
             
                     );
-                    $fields_string = http_build_query($fields);
+                $fields_string = http_build_query($fields);
             
-                    curl_setopt_array($curl, array(
+                curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://eiddash.nascop.org/api/mlab?page=".$j,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => "",
@@ -182,65 +172,57 @@ class VLResultsController extends Controller
                     ),
                     ));
             
-                    $response = curl_exec($curl);
-                    $err = curl_error($curl);
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
             
-                    curl_close($curl);
+                curl_close($curl);
             
-                    if ($err) {
-                        echo "cURL Error #:" . $err;
-                    }else {
-
-                        $objects = json_decode($response);
+                if ($err) {
+                    echo "cURL Error #:" . $err;
+                } else {
+                    $objects = json_decode($response);
                     
-                        $data = $objects->data;
+                    $data = $objects->data;
             
-                        foreach($data as $dat){
-                        
-                            $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
+                    foreach ($data as $dat) {
+                        $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
             
-                            if(empty($res)){
-            
-                                $r = new Result;
-                                $r->source = $dat->source;
-                                $r->result_id = $dat->result_id;
-                                $r->result_type = $dat->result_type;
-                                $r->client_id = $dat->client_id;
-                                $r->age = $dat->age;
-                                $r->request_id = $dat->request_id;
-                                $r->result_content = $dat->result_content;
-                                $r->units = $dat->units;
-                                $r->gender =  $dat->gender;
-                                $r->mfl_code = $dat->mfl_code;
-                                $r->lab_id = $dat->lab_id;
-                                $r->cj = $dat->cj;
-                                $r->cst = $dat->cst;
-                                $r->csr = $dat->csr;
-                                $r->lab_order_date = $dat->lab_order_date;
-                                $r->date_collected = $dat->date_collected;                                
-                                $r->lab_name = $dat->lab_name;
+                        if (empty($res)) {
+                            $r = new Result;
+                            $r->source = $dat->source;
+                            $r->result_id = $dat->result_id;
+                            $r->result_type = $dat->result_type;
+                            $r->client_id = $dat->client_id;
+                            $r->age = $dat->age;
+                            $r->request_id = $dat->request_id;
+                            $r->result_content = $dat->result_content;
+                            $r->units = $dat->units;
+                            $r->gender =  $dat->gender;
+                            $r->mfl_code = $dat->mfl_code;
+                            $r->lab_id = $dat->lab_id;
+                            $r->cj = $dat->cj;
+                            $r->cst = $dat->cst;
+                            $r->csr = $dat->csr;
+                            $r->lab_order_date = $dat->lab_order_date;
+                            $r->date_collected = $dat->date_collected;
+                            $r->lab_name = $dat->lab_name;
                     
-                                if($r->save()){
-                                    $task = new Task;
+                            if ($r->save()) {
+                                $task = new Task;
         
-                                    $task->classify($r->id);
-                                }
+                                $task->classify($r->id);
                             }
-            
                         }
                     }
-
                 }
-                
-                    
             }
-
+        }
     }
 
     public function getEIDResults()
     {
         $today = date("Y-m-d");
-        $yester = date('Y-m-d', strtotime("-14 days"));
+        $yester = date('Y-m-d', strtotime("-31 days"));
 
 
         $ilfs = ILFacility::all();
@@ -251,36 +233,34 @@ class VLResultsController extends Controller
 
         $facilities = array();
 
-            foreach($ilfs as $ilf){
+        foreach ($ilfs as $ilf) {
+            $code = $ilf->mfl_code;
 
-                $code = $ilf->mfl_code;
+            array_push($facilities, $code);
+        }
+        foreach ($mlabfs as $mlabf) {
+            $code = $mlabf->code;
 
-                array_push($facilities,$code);
-            }
-            foreach($mlabfs as $mlabf){
-
-                $code = $mlabf->code;
-
-                array_push($facilities,$code);
-            }
+            array_push($facilities, $code);
+        }
            
 
        
         $results= array_unique($facilities);
 
-        $a =  implode( ',', $results );
-            $curl = curl_init();
+        $a =  implode(',', $results);
+        $curl = curl_init();
 
-            $fields = array(
+        $fields = array(
                 'test' => 2,
                 'facility_code' =>$a,
                 'date_dispatched_start' => $yester,
                 'date_dispatched_end' => $today
 
             );
-            $fields_string = http_build_query($fields);
+        $fields_string = http_build_query($fields);
 
-            curl_setopt_array($curl, array(
+        curl_setopt_array($curl, array(
             CURLOPT_URL => "https://eiddash.nascop.org/api/mlab",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
@@ -290,91 +270,80 @@ class VLResultsController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $fields_string,
             CURLOPT_HTTPHEADER => array(
-                "apikey" => Config::get('services.vlr.key')
+                "apikey: 11gu6fIIcviGJW4fLq2i"
             ),
             ));
 
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
 
-            curl_close($curl);
+        curl_close($curl);
 
-            if ($err) {
+        if ($err) {
             echo "cURL Error #:" . $err;
-            } else {
-
-                echo "page: 1".'<br>';
-                $objects = json_decode($response);
+        } else {
+            echo "page: 1".'<br>';
+            $objects = json_decode($response);
             
-                $data = $objects->data;
-                echo "last_page: ".$objects->last_page.'<br>';
+            $data = $objects->data;
+            echo "last_page: ".$objects->last_page.'<br>';
 
-                foreach($data as $dat){
-                
-                    $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
+            foreach ($data as $dat) {
+                $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
 
-                    if(empty($res)){
-
-                        if($dat->result_content == '1'){
-
-                            $cnt = "Negative";
-
-                        }
-                        else if($dat->result_content == '2'){
-
-                            $cnt = "Positive";
-
-                        }
-                        else{
-                            $cnt = $dat->result_content;
-                        }
-
-                        $r = new Result;
-                        $r->source = $dat->source;
-                        $r->result_id = $dat->result_id;
-                        $r->result_type = $dat->result_type;
-                        $r->client_id = $dat->client_id;
-                        $r->age = $dat->age;
-                        $r->request_id = $dat->request_id;
-                        $r->result_content = $cnt;
-                        $r->units = $dat->units;
-                        $r->gender =  $dat->gender;
-                        $r->mfl_code = $dat->mfl_code;
-                        $r->lab_id = $dat->lab_id;
-                        $r->cj = $dat->cj;
-                        $r->cst = $dat->cst;
-                        $r->csr = $dat->csr;
-                        $r->lab_order_date = $dat->lab_order_date;
-                        $r->date_collected = $dat->date_collected;                        
-                        $r->lab_name = $dat->lab_name;
-            
-                        if($r->save()){
-                            $task = new Task;
-
-                            $task->classify($r->id);
-                        }
+                if (empty($res)) {
+                    if ($dat->result_content == '1') {
+                        $cnt = "Negative";
+                    } elseif ($dat->result_content == '2') {
+                        $cnt = "Positive";
+                    } else {
+                        $cnt = $dat->result_content;
                     }
 
+                    $r = new Result;
+                    $r->source = $dat->source;
+                    $r->result_id = $dat->result_id;
+                    $r->result_type = $dat->result_type;
+                    $r->client_id = $dat->client_id;
+                    $r->age = $dat->age;
+                    $r->request_id = $dat->request_id;
+                    $r->result_content = $cnt;
+                    $r->units = $dat->units;
+                    $r->gender =  $dat->gender;
+                    $r->mfl_code = $dat->mfl_code;
+                    $r->lab_id = $dat->lab_id;
+                    $r->cj = $dat->cj;
+                    $r->cst = $dat->cst;
+                    $r->csr = $dat->csr;
+                    $r->lab_order_date = $dat->lab_order_date;
+                    $r->date_collected = $dat->date_collected;
+                    $r->lab_name = $dat->lab_name;
+            
+                    if ($r->save()) {
+                        $task = new Task;
+
+                        $task->classify($r->id);
+                    }
                 }
+            }
 
                 
 
-                for($j = 2; $j <= $objects->last_page; $j++){
+            for ($j = 2; $j <= $objects->last_page; $j++) {
+                echo "page: ".$j.'<br>';
 
-                        echo "page: ".$j.'<br>';
+                $curl = curl_init();
 
-                    $curl = curl_init();
-
-                    $fields = array(
+                $fields = array(
                         'test' => 2,
                         'facility_code' =>$a,
                         'date_dispatched_start' => $yester,
                         'date_dispatched_end' => $today
             
                     );
-                    $fields_string = http_build_query($fields);
+                $fields_string = http_build_query($fields);
             
-                    curl_setopt_array($curl, array(
+                curl_setopt_array($curl, array(
                     CURLOPT_URL => "https://eiddash.nascop.org/api/mlab?page=".$j,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => "",
@@ -384,76 +353,62 @@ class VLResultsController extends Controller
                     CURLOPT_CUSTOMREQUEST => "POST",
                     CURLOPT_POSTFIELDS => $fields_string,
                     CURLOPT_HTTPHEADER => array(
-                        "apikey" => Config::get('services.vlr.key')
+                        "apikey: 11gu6fIIcviGJW4fLq2i"
                     ),
                     ));
             
-                    $response = curl_exec($curl);
-                    $err = curl_error($curl);
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
             
-                    curl_close($curl);
+                curl_close($curl);
             
-                    if ($err) {
+                if ($err) {
                     echo "cURL Error #:" . $err;
-                    }else {
-
-                        $objects = json_decode($response);
+                } else {
+                    $objects = json_decode($response);
                     
-                        $data = $objects->data;
+                    $data = $objects->data;
             
-                        foreach($data as $dat){
-                        
-                            $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
+                    foreach ($data as $dat) {
+                        $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
             
-                            if(empty($res)){
-
-                                if($dat->result_content == '1'){
-
-                                    $cnt = "Negative";
-        
-                                }
-                                else if($dat->result_content == '2'){
-        
-                                    $cnt = "Positive";
-        
-                                }
-                                else{
-                                    $cnt = $dat->result_content;
-                                }
-            
-                                $r = new Result;
-                                $r->source = $dat->source;
-                                $r->result_id = $dat->result_id;
-                                $r->result_type = $dat->result_type;
-                                $r->client_id = $dat->client_id;
-                                $r->age = $dat->age;
-                                $r->request_id = $dat->request_id;
-                                $r->result_content = $cnt;
-                                $r->units = $dat->units;
-                                $r->gender =  $dat->gender;
-                                $r->mfl_code = $dat->mfl_code;
-                                $r->lab_id = $dat->lab_id;
-                                $r->cj = $dat->cj;
-                                $r->cst = $dat->cst;
-                                $r->csr = $dat->csr;
-                                $r->lab_order_date = $dat->lab_order_date;
-                                $r->date_collected = $dat->date_collected;                                
-                                $r->lab_name = $dat->lab_name;
-                    
-                                if($r->save()){
-                                    $task = new Task;
-        
-                                    $task->classify($r->id);
-                                }
+                        if (empty($res)) {
+                            if ($dat->result_content == '1') {
+                                $cnt = "Negative";
+                            } elseif ($dat->result_content == '2') {
+                                $cnt = "Positive";
+                            } else {
+                                $cnt = $dat->result_content;
                             }
             
+                            $r = new Result;
+                            $r->source = $dat->source;
+                            $r->result_id = $dat->result_id;
+                            $r->result_type = $dat->result_type;
+                            $r->client_id = $dat->client_id;
+                            $r->age = $dat->age;
+                            $r->request_id = $dat->request_id;
+                            $r->result_content = $cnt;
+                            $r->units = $dat->units;
+                            $r->gender =  $dat->gender;
+                            $r->mfl_code = $dat->mfl_code;
+                            $r->lab_id = $dat->lab_id;
+                            $r->cj = $dat->cj;
+                            $r->cst = $dat->cst;
+                            $r->csr = $dat->csr;
+                            $r->lab_order_date = $dat->lab_order_date;
+                            $r->date_collected = $dat->date_collected;
+                            $r->lab_name = $dat->lab_name;
+                    
+                            if ($r->save()) {
+                                $task = new Task;
+        
+                                $task->classify($r->id);
+                            }
                         }
                     }
-
                 }
-                
-                    
             }
-
+        }
     }
 }
