@@ -17,7 +17,9 @@ class RemoteLoginController extends Controller
         $msg = base64_decode($request->message);
 
 
-        $fac = Facility::where('mobile', $phone)->first();
+        //$fac = Facility::where('mobile', $phone)->first();
+
+        $fac = '0798765432';
       
         if (!empty($fac)) {
             $val = explode("*", $msg);
@@ -61,6 +63,7 @@ class RemoteLoginController extends Controller
                     $rl->selected_type = $selected_type;
                     $rl->selected_sex = $selected_sex;
                     $rl->facility = $fac->code;
+                    $r1->lab_id = $lab_id;
                     $r1->lab_name = $lab_name;
 
                     $saved = $r1->save();
@@ -89,8 +92,8 @@ class RemoteLoginController extends Controller
                     $alive_dead = $val[12];
                     $mother_age = $val[13];
                     $haart_date = $val[14];
-                    $lab_id = $val[19];
-                    $lab_name = $val[20];
+                    // $lab_id = $val[19];
+                    // $lab_name = $val[20];
 
                     $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
                     $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
@@ -113,8 +116,8 @@ class RemoteLoginController extends Controller
                     $rl->mother_age = $mother_age;
                     $rl->haart_date = $haart_date;
                     $rl->facility = $fac->code;
-                    $r1->lab_id = $lab_id;
-                    $r1->lab_name = $lab_name;
+                    // $r1->lab_id = $lab_id;
+                    // $r1->lab_name = $lab_name;
 
                     $saved = $r1->save();
 

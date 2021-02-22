@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div class="card-title mb-3">Raw Data</div>
+                            <div class="card-title mb-3">HTS Raw Data</div>
 
                             <h4>Select any of the filters below, and click Fetch when complete. None is a required field.</h4>
                             <form role="form" method="get"action="{{route('hts_results')}}">
