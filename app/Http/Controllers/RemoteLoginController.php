@@ -71,8 +71,8 @@ class RemoteLoginController extends Controller
                         return response()->json(['Sample Remote Login Successful'], 201);
                     }
                 }
-            } elseif ($val[0] == 'EID') {
-                if (sizeof($val) < 15) {
+            } else if ($val[0] == 'EID') {
+                if (sizeof($val) < 12) {
                     return response()->json(['Kindly ensure all fields are included'], 500);
                 } else {
                     $selected_sex = $val[1];
@@ -88,9 +88,9 @@ class RemoteLoginController extends Controller
                     $pcr = $val[11];
                     $alive_dead = $val[12];
                     $mother_age = $val[13];
-                    $haart_date = $val[14];
-                    $lab_id = $val[19];
+                    $haart_date = $val[14];                    
                     $lab_name = $val[20];
+                    $lab_id = $val[21];
 
                     $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
                     $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
