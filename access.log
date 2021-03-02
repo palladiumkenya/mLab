@@ -166,3 +166,17 @@
 ::1 - - [02/Mar/2021:19:14:07 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
 ::1 - - [02/Mar/2021:19:16:58 +0300] "GET /remote-login/vl/results HTTP/1.1" 500 669169
 ::1 - - [02/Mar/2021:19:16:59 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [02/Mar/2021:19:22:00 +0300] "GET /remote-login/vl/results HTTP/1.1" 500 669211
+::1 - - [02/Mar/2021:19:22:01 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [02/Mar/2021:19:22:45 +0300] "GET /remote-login/vl/results HTTP/1.1" 200 137265
+::1 - - [02/Mar/2021:19:22:46 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [02/Mar/2021:19:25:46 +0300] "GET /remote-login/vl/results HTTP/1.1" 200 138265
+::1 - - [02/Mar/2021:19:25:47 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [02/Mar/2021:19:25:52 +0300] "GET /remote-login/vl/results HTTP/1.1" 200 138265
+::1 - - [02/Mar/2021:19:25:53 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [02/Mar/2021:19:28:06 +0300] "GET /remote-login/vl/results HTTP/1.1" 200 138259
+::1 - - [02/Mar/2021:19:28:07 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [02/Mar/2021:19:29:38 +0300] "GET /remote-login/vl/results HTTP/1.1" 200 138759
+::1 - - [02/Mar/2021:19:29:39 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [02/Mar/2021:19:30:22 +0300] "GET /remote-login/vl/results HTTP/1.1" 200 140742
+::1 - - [02/Mar/2021:19:30:23 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
