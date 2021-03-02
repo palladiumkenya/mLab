@@ -15,6 +15,7 @@ class RemoteLoginController extends Controller
     public function vl_results(Request $request)
     {
         $phone = base64_decode($request->phone);
+
         $msg = base64_decode($request->message);
 
         $fac = Facility::where('mobile', $phone)->first();
@@ -26,7 +27,7 @@ class RemoteLoginController extends Controller
         }    
 
         $validator = Validator::make($request->all(), [
-            'ccc' => 'required|number|max:10',
+            'ccc' => 'required|max:10',
             'patient_name' => 'required',
             'dob' => 'required',
             'date_collected' => 'required',
@@ -94,7 +95,7 @@ class RemoteLoginController extends Controller
         } 
 
         $validator = Validator::make($request->all(), [
-            'hein_number' => 'required|number|max:15',
+            'hein_number' => 'required',
             'patient_name' => 'required',
             'dob' => 'required',
             'date_collected' => 'required',
@@ -122,23 +123,23 @@ class RemoteLoginController extends Controller
 
         $r2 = new SRLEIDs;
 
-        $r2->selected_sex = $request('selected_sex');
-        $r2->selected_regimen = $request('selected_regimen');
+        $r2->selected_sex = $request->get('selected_sex');
+        $r2->selected_regimen = $request->get('selected_regimen');
         $r2->dob = $dob;
-        $r2->selected_alive = $request('selected_alive');
-        $r2->hein_number =$request('hein_number');
-        $r2->patient_name = $request('patient_name');
-        $r2->entry_point = $request('entry_point');
+        $r2->selected_alive = $request->get('selected_alive');
+        $r2->hein_number =$request->get('hein_number');
+        $r2->patient_name = $request->get('patient_name');
+        $r2->entry_point = $request->get('entry_point');
         $r2->date_collected = $date_collected;
-        $r2->prophylaxis_code = $request('prophylaxis_code');
-        $r2->infant_feeding = $request('infant_feeding');
-        $r2->pcr = $request('pcr');
-        $r2->alive_dead = $request('alive_dead');
-        $r2->mother_age = $request('mother_age');
+        $r2->prophylaxis_code = $request->get('prophylaxis_code');
+        $r2->infant_feeding = $request->get('infant_feeding');
+        $r2->pcr = $request->get('pcr');
+        $r2->alive_dead = $request->get('alive_dead');
+        $r2->mother_age = $request->get('mother_age');
         $r2->haart_date = $haart_date;
         $r2->facility = $fac->code;
-        $r2->lab_id = $request('lab_id');
-        $r2->lab_name = $request('lab_name');
+        $r2->lab_id = $request->get('lab_id');
+        $r2->lab_name = $request->get('lab_name');
 
         $saved = $r2->save();
 
