@@ -8,133 +8,149 @@ use Carbon\Carbon;
 use App\SRLVLs;
 use App\SRLEIDs;
 use App\SRLHTS;
+use Illuminate\Support\Facades\Validator;
 
 class RemoteLoginController extends Controller
 {
-    public function results(Request $request)
+    public function vl_results(Request $request)
     {
         $phone = base64_decode($request->phone);
         $msg = base64_decode($request->message);
 
-
         $fac = Facility::where('mobile', $phone)->first();
-      
-        if (!empty($fac)) {
-            $val = explode("*", $msg);
+
+        if (empty($fac)) {
             
-
-            if ($val[0] == 'VL') {
-                if (sizeof($val) < 12) {
-                    return response()->json(['Kindly ensure all fields are included'], 500);
-                } else {
-                    $ccc = $val[1];
-                    $patient_name = $val[2];
-                    $dob = $val[3];
-                    $date_collected = $val[4];
-                    $art_start = $val[5];
-                    $current_regimen = $val[6];
-                    $date_art_regimen = $val[7];
-                    $art_line = $val[8];
-                    $just_code = $val[9];
-                    $selected_type = $val[10];
-                    $selected_sex = $val[11];
-                    $lab_id = $val[16];
-                    $lab_name = $val[17];
-
-                    $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
-                    $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
-                    $art_start =  Carbon::parse(str_replace('/', '-', $art_start))->format('Y-m-d');
-                    $date_art_regimen =  Carbon::parse(str_replace('/', '-', $date_art_regimen))->format('Y-m-d');
-
-                    $rl = new SRLVLs;
-
-                    $rl->ccc_num = $ccc;
-                    $rl->patient_name = $patient_name;
-                    $rl->dob = $dob;
-                    $rl->date_collected = $date_collected;
-                    $rl->art_start_date =$art_start;
-                    $rl->current_regimen = $current_regimen;
-                    $rl->date_art_regimen = $date_art_regimen;
-                    $rl->art_line = $art_line;
-                    $rl->justification_code = $just_code;
-                    $rl->selected_type = $selected_type;
-                    $rl->selected_sex = $selected_sex;
-                    $rl->facility = $fac->code;
-                    $rl->lab_id = $lab_id;
-                    $rl->lab_name = $lab_name;
-
-                    $saved = $rl->save();
-
-                    if (!$saved) {
-                        return response()->json(['An error occured, kindly try again'], 500);
-                    } else {
-                        return response()->json(['Sample Remote Login Successful'], 201);
-                    }
-                }
-            } else if ($val[0] == 'EID') {
-                if (sizeof($val) < 12) {
-                    return response()->json(['Kindly ensure all fields are included'], 500);
-                } else {
-                    $selected_sex = $val[1];
-                    $selected_regimen= $val[2];
-                    $selected_alive = $val[3];
-                    $hein_number = $val[4];
-                    $patient_name = $val[5];
-                    $dob = $val[6];
-                    $entry_point = $val[7];
-                    $date_collected = $val[8];
-                    $prophylaxis_code = $val[9];
-                    $infant_feeding = $val[10];
-                    $pcr = $val[11];
-                    $alive_dead = $val[12];
-                    $mother_age = $val[13];
-                    $haart_date = $val[14];                    
-                    $lab_name = $val[20];
-                    $lab_id = $val[21];
-
-                    $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
-                    $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
-                    $haart_date =  Carbon::parse(str_replace('/', '-', $haart_date))->format('Y-m-d');
-
-                    $rl = new SRLEIDs;
-
-                    $rl->selected_sex = $selected_sex;
-                    $rl->selected_regimen = $selected_regimen;
-                    $rl->dob = $dob;
-                    $rl->selected_alive = $selected_alive;
-                    $rl->hein_number =$hein_number;
-                    $rl->patient_name = $patient_name;
-                    $rl->entry_point = $entry_point;
-                    $rl->date_collected = $date_collected;
-                    $rl->prophylaxis_code = $prophylaxis_code;
-                    $rl->infant_feeding = $infant_feeding;
-                    $rl->pcr = $pcr;
-                    $rl->alive_dead = $alive_dead;
-                    $rl->mother_age = $mother_age;
-                    $rl->haart_date = $haart_date;
-                    $rl->facility = $fac->code;
-                    $rl->lab_id = $lab_id;
-                    $rl->lab_name = $lab_name;
-
-                    $saved = $rl->save();
-
-                    if (!$saved) {
-                        return response()->json(['An error occured, kindly try again'], 500);
-                    } else {
-                        return response()->json(['Sample Remote Login Successful'], 201);
-                    }
-                }
-            }
-        } 
-        
-        else {
-
             return response()->json(['Phone Number not Authorised to send remote samples'], 500);
 
+        }    
+
+        $validator = Validator::make($request->all(), [
+            'ccc' => 'required|number|max:10',
+            'patient_name' => 'required',
+            'dob' => 'required',
+            'date_collected' => 'required',
+            'art_start' => 'required',
+            'selected_sex' => 'required',
+            'lab_id' => 'required',
+            'lab_name' => 'required',
+            'art_line' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
         }
+       
+        $dob = $request->get('dob');
+        $date_collected = $request->get('date_collected ');
+        $art_start = $request->get('art_start');
+        $date_art_regimen = $request->get('date_art_regimen');
+
+        $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
+        $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
+        $art_start =  Carbon::parse(str_replace('/', '-', $art_start))->format('Y-m-d');
+        $date_art_regimen =  Carbon::parse(str_replace('/', '-', $date_art_regimen))->format('Y-m-d');
+
+        $rl = new SRLVLs;
+
+        $rl->ccc_num = $request->get('ccc');
+        $rl->patient_name = $request->get('patient_name');
+        $rl->dob = $dob;
+        $rl->date_collected = $date_collected;
+        $rl->art_start_date =$art_start;
+        $rl->current_regimen = $request->get('current_regimen');
+        $rl->date_art_regimen = $date_art_regimen;
+        $rl->art_line = $request->get('art_line');
+        $rl->justification_code = $request->get('just_code');
+        $rl->selected_type = $request->get('selected_type');
+        $rl->selected_sex = $request->get('selected_sex');
+        $rl->facility = $fac->code;
+        $rl->lab_id = $request->get('lab_id');
+        $rl->lab_name = $request->get('lab_name');
+        $rl->processed = 0;
+        $rl->created_at = Carbon::now();
+
+        $saved = $rl->save();
+
+        if (!$saved) {
+            return response()->json(['An error occured, kindly try again'], 500);
+        } else {
+            return response()->json(['Sample Remote Login Successful'], 201);
+        }
+                
     }
 
-    public function hts(Request $request)
+    public function eid_results(Request $request)
+    {
+        $phone = base64_decode($request->phone);
+        $msg = base64_decode($request->message);
+
+        $fac = Facility::where('mobile', $phone)->first();
+
+        if (empty($fac)) {
+            
+            return response()->json(['Phone Number not Authorised to send remote samples'], 500);
+
+        } 
+
+        $validator = Validator::make($request->all(), [
+            'hein_number' => 'required|number|max:15',
+            'patient_name' => 'required',
+            'dob' => 'required',
+            'date_collected' => 'required',
+            'entry_point' => 'required',
+            'selected_sex' => 'required',
+            'selected_regimen' => 'required',
+            'selected_alive' => 'required',
+            'pcr' => 'required',
+            'lab_id' => 'required',
+            'lab_name' => 'required',
+            'alive_dead' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $dob = $request->get('dob');
+        $date_collected = $request->get('date_collected');
+        $haart_date = $request->get('haart_date');
+        
+        $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
+        $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
+        $haart_date =  Carbon::parse(str_replace('/', '-', $haart_date))->format('Y-m-d');
+
+        $r2 = new SRLEIDs;
+
+        $r2->selected_sex = $request('selected_sex');
+        $r2->selected_regimen = $request('selected_regimen');
+        $r2->dob = $dob;
+        $r2->selected_alive = $request('selected_alive');
+        $r2->hein_number =$request('hein_number');
+        $r2->patient_name = $request('patient_name');
+        $r2->entry_point = $request('entry_point');
+        $r2->date_collected = $date_collected;
+        $r2->prophylaxis_code = $request('prophylaxis_code');
+        $r2->infant_feeding = $request('infant_feeding');
+        $r2->pcr = $request('pcr');
+        $r2->alive_dead = $request('alive_dead');
+        $r2->mother_age = $request('mother_age');
+        $r2->haart_date = $haart_date;
+        $r2->facility = $fac->code;
+        $r2->lab_id = $request('lab_id');
+        $r2->lab_name = $request('lab_name');
+
+        $saved = $r2->save();
+
+        if (!$saved) {
+            return response()->json(['An error occured, kindly try again'], 500);
+        } else {
+            return response()->json(['Sample Remote Login Successful'], 201);
+        }
+
+    }    
+            
+    public function hts_results(Request $request)
     {
         $phone = base64_decode($request->phone);
         $msg = base64_decode($request->message);
@@ -176,31 +192,31 @@ class RemoteLoginController extends Controller
                 $dbs_date =  Carbon::parse(str_replace('/', '-', $dbs_date))->format('Y-m-d');
                 $dbs_dispatch_date =  Carbon::parse(str_replace('/', '-', $dbs_dispatch_date))->format('Y-m-d');
 
-                $rl = new SRLHTS;
+                $r2 = new SRLHTS;
 
-                $rl->sample_number = $sample_number;
-                $rl->client_name = $client_name;
-                $rl->dob = $dob;
-                $rl->selected_sex = $selected_sex;
-                $rl->telephone = $telephone;
-                $rl->test_date =$test_date;
-                $rl->selected_delivery_point = $selected_delivery_point;
-                $rl->selected_test_kit1 = $selected_test_kit_1;
-                $rl->lot_number1 = $lot_number_1;
-                $rl->expiry_date1 = $expiry_date_1;
-                $rl->selected_test_kit2 = $selectec_test_kit_2;
-                $rl->lot_number2 = $lot_number_2;
-                $rl->expiry_date2 = $expiry_date_2;
-                $rl->selected_final_result = $selected_final_result;
-                $rl->sample_tester_name = $sample_tester_name;
-                $rl->dbs_date = $dbs_date;
-                $rl->dbs_dispatch_date = $dbs_dispatch_date;
-                $rl->requesting_provider = $requesting_provider;
-                $rl->facility = $fac->code;
-                $r1->lab_id = $lab_id;
-                $r1->lab_name = $lab_name;
+                $r2->sample_number = $sample_number;
+                $r2->client_name = $client_name;
+                $r2->dob = $dob;
+                $r2->selected_sex = $selected_sex;
+                $r2->telephone = $telephone;
+                $r2->test_date =$test_date;
+                $r2->selected_delivery_point = $selected_delivery_point;
+                $r2->selected_test_kit1 = $selected_test_kit_1;
+                $r2->lot_number1 = $lot_number_1;
+                $r2->expiry_date1 = $expiry_date_1;
+                $r2->selected_test_kit2 = $selectec_test_kit_2;
+                $r2->lot_number2 = $lot_number_2;
+                $r2->expiry_date2 = $expiry_date_2;
+                $r2->selected_final_result = $selected_final_result;
+                $r2->sample_tester_name = $sample_tester_name;
+                $r2->dbs_date = $dbs_date;
+                $r2->dbs_dispatch_date = $dbs_dispatch_date;
+                $r2->requesting_provider = $requesting_provider;
+                $r2->facility = $fac->code;
+                $r2->lab_id = $lab_id;
+                $r2->lab_name = $lab_name;
 
-                $saved = $r1->save();
+                $saved = $r2->save();
 
                     if (!$saved) {
                         return response()->json(['An error occured, kindly try again'], 500);
