@@ -156,79 +156,79 @@ class RemoteLoginController extends Controller
         $phone = base64_decode($request->phone);
         $msg = base64_decode($request->message);
 
-
         $fac = Facility::where('mobile', $phone)->first();
 
-        if (!empty($fac)) {
-            $val = explode("*", $msg);
-
-            if (sizeof($val) < 18) {
-                return response()->json(['Kindly ensure all fields are included'], 500);
-            } else {
-                $sample_number = $val[0];
-                $client_name = $val[1];
-                $dob = $val[2];
-                $selected_sex = $val[3];
-                $telephone = $val[4];
-                $test_date = $val[5];
-                $selected_delivery_point = $val[6];
-                $selected_test_kit_1 = $val[7];
-                $lot_number_1 = $val[8];
-                $expiry_date_1 = $val[9];
-                $selectec_test_kit_2 = $val[10];
-                $lot_number_2 = $val[11];
-                $expiry_date_2 = $val[12];
-                $selected_final_result = $val[13];
-                $sample_tester_name = $val[14];
-                $dbs_date = $val[15];
-                $dbs_dispatch_date = $val[16];
-                $requesting_provider = $val[17];
-                $lab_id= $val[22];
-                $lab_name = $val[23];
-
-                $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
-                $test_date =  Carbon::parse(str_replace('/', '-', $test_date))->format('Y-m-d');
-                $expiry_date_1 =  Carbon::parse(str_replace('/', '-', $expiry_date_1))->format('Y-m-d');
-                $expiry_date_2 =  Carbon::parse(str_replace('/', '-', $expiry_date_2))->format('Y-m-d');
-                $dbs_date =  Carbon::parse(str_replace('/', '-', $dbs_date))->format('Y-m-d');
-                $dbs_dispatch_date =  Carbon::parse(str_replace('/', '-', $dbs_dispatch_date))->format('Y-m-d');
-
-                $r2 = new SRLHTS;
-
-                $r2->sample_number = $sample_number;
-                $r2->client_name = $client_name;
-                $r2->dob = $dob;
-                $r2->selected_sex = $selected_sex;
-                $r2->telephone = $telephone;
-                $r2->test_date =$test_date;
-                $r2->selected_delivery_point = $selected_delivery_point;
-                $r2->selected_test_kit1 = $selected_test_kit_1;
-                $r2->lot_number1 = $lot_number_1;
-                $r2->expiry_date1 = $expiry_date_1;
-                $r2->selected_test_kit2 = $selectec_test_kit_2;
-                $r2->lot_number2 = $lot_number_2;
-                $r2->expiry_date2 = $expiry_date_2;
-                $r2->selected_final_result = $selected_final_result;
-                $r2->sample_tester_name = $sample_tester_name;
-                $r2->dbs_date = $dbs_date;
-                $r2->dbs_dispatch_date = $dbs_dispatch_date;
-                $r2->requesting_provider = $requesting_provider;
-                $r2->facility = $fac->code;
-                $r2->lab_id = $lab_id;
-                $r2->lab_name = $lab_name;
-
-                $saved = $r2->save();
-
-                    if (!$saved) {
-                        return response()->json(['An error occured, kindly try again'], 500);
-                    } else {
-                        return response()->json(['Sample Remote Login Successful'], 201);
-                    }
-            }
-        } else {
+        if (empty($fac)) {
+            
             return response()->json(['Phone Number not Authorised to send remote samples'], 500);
+
+        } 
+
+        $validator = Validator::make($request->all(), [
+            'sample_number' => 'required',
+            'client_name' => 'required',
+            'dob' => 'required',
+            'test_date' => 'required',
+            'selected_delivery_point' => 'required',
+            'selected_sex' => 'required',
+            'sample_tester_name' => 'required',
+            'dbs_date' => 'required',
+            'lab_id' => 'required',
+            'lab_name' => 'required',
+            'dbs_dispatch_date' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
         }
-    }
+                
+        $dob = $request->get('dob');
+        $test_date = $request->get('test_date');
+        $expiry_date_1 = $request->get('expiry_date_1');
+        $expiry_date_2 = $request->get('expiry_date_2');
+        $dbs_date = $request->get('dbs_date');
+        $dbs_dispatch_date = $request->get('dbs_dispatch_date');
+
+        $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
+        $test_date =  Carbon::parse(str_replace('/', '-', $test_date))->format('Y-m-d');
+        $expiry_date_1 =  Carbon::parse(str_replace('/', '-', $expiry_date_1))->format('Y-m-d');
+        $expiry_date_2 =  Carbon::parse(str_replace('/', '-', $expiry_date_2))->format('Y-m-d');
+        $dbs_date =  Carbon::parse(str_replace('/', '-', $dbs_date))->format('Y-m-d');
+        $dbs_dispatch_date =  Carbon::parse(str_replace('/', '-', $dbs_dispatch_date))->format('Y-m-d');
+
+        $r3 = new SRLHTS;
+
+        $r3->sample_number = $request->get('sample_number');
+        $r3->client_name = $request->get('client_name');
+        $r3->dob = $dob;
+        $r3->selected_sex = $request->get('selected_sex');
+        $r3->telephone = $request->get('telephone');
+        $r3->test_date =$test_date;
+        $r3->selected_delivery_point = $request->get('selected_delivery_point');
+        $r3->selected_test_kit1 = $request->get('selected_test_kit_1');
+        $r3->lot_number1 = $request->get('lot_number_1');
+        $r3->expiry_date1 = $expiry_date_1;
+        $r3->selected_test_kit2 = $request->get('selectec_test_kit_2');
+        $r3->lot_number2 = $request->get('lot_number_2');
+        $r3->expiry_date2 = $expiry_date_2;
+        $r3->selected_final_result = $request->get('selected_final_result');
+        $r3->sample_tester_name = $request->get('sample_tester_name');
+        $r3->dbs_date = $dbs_date;
+        $r3->dbs_dispatch_date = $dbs_dispatch_date;
+        $r3->requesting_provider = $request->get('requesting_provider');
+        $r3->facility = $fac->code;
+        $r3->lab_id = $request->get('lab_id');
+        $r3->lab_name = $request->get('lab_name');
+
+        $saved = $r3->save();
+
+        if (!$saved) {
+            return response()->json(['An error occured, kindly try again'], 500);
+        } else {
+            return response()->json(['Sample Remote Login Successful'], 201);
+        }
+            
+    } 
 
     public function SendVLsLab()
     {
