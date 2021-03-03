@@ -20,8 +20,53 @@ class NewRemoteLoginController extends Controller
         $fac = Facility::where('mobile', $phone)->first();
       
         if (!empty($fac)) {
-            $val = explode("*", $msg);            
-            if ($val[0] == 'VL') {               
+            $val = explode("*", $msg); 
+            if ($val[0] == 'EID') {
+                
+                $selected_sex = $val[1];
+                $selected_regimen= $val[2];
+                $selected_alive = $val[3];
+                $hein_number = $val[4];
+                $patient_name = $val[5];
+                $dob = $val[6];
+                $entry_point = $val[7];
+                $date_collected = $val[8];
+                $prophylaxis_code = $val[9];
+                $infant_feeding = $val[10];
+                $pcr = $val[11];
+                $alive_dead = $val[12];
+                $mother_age = $val[13];
+                $haart_date = $val[14];
+
+                $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
+                $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
+                $haart_date =  Carbon::parse(str_replace('/', '-', $haart_date))->format('Y-m-d');
+
+                $rl = new SRLEIDs;
+
+                $rl->selected_sex = $selected_sex;
+                $rl->selected_regimen = $selected_regimen;
+                $rl->dob = $dob;
+                $rl->selected_alive = $selected_alive;
+                $rl->hein_number =$hein_number;
+                $rl->patient_name = $patient_name;
+                $rl->entry_point = $entry_point;
+                $rl->date_collected = $date_collected;
+                $rl->prophylaxis_code = $prophylaxis_code;
+                $rl->infant_feeding = $infant_feeding;
+                $rl->pcr = $pcr;
+                $rl->alive_dead = $alive_dead;
+                $rl->mother_age = $mother_age;
+                $rl->haart_date = $haart_date;
+                $rl->facility = $fac->code;
+
+
+                if ($rl->save()) {
+                    return response()->json(["Sample remote login succesfull."], 201);
+                } else {
+                    return response()->json(["An error occured try again later."], 503);
+                } 
+            } else if ($val[0] == 'VL') {               
                     $ccc = $val[1];
                     $patient_name = $val[2];
                     $dob = $val[3];
@@ -59,55 +104,9 @@ class NewRemoteLoginController extends Controller
                         return response()->json(["Sample remote login succesful."], 201);
                     } else {
                         return response()->json(["An error occured, please try again."], 500);
-                    }
-               
-            } else if ($val[0] == 'EID') {
-                
-                    $selected_sex = $val[1];
-                    $selected_regimen= $val[2];
-                    $selected_alive = $val[3];
-                    $hein_number = $val[4];
-                    $patient_name = $val[5];
-                    $dob = $val[6];
-                    $entry_point = $val[7];
-                    $date_collected = $val[8];
-                    $prophylaxis_code = $val[9];
-                    $infant_feeding = $val[10];
-                    $pcr = $val[11];
-                    $alive_dead = $val[12];
-                    $mother_age = $val[13];
-                    $haart_date = $val[14];
-
-                    $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
-                    $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
-                    $haart_date =  Carbon::parse(str_replace('/', '-', $haart_date))->format('Y-m-d');
-
-                    $rl = new SRLEIDs;
-
-                    $rl->selected_sex = $selected_sex;
-                    $rl->selected_regimen = $selected_regimen;
-                    $rl->dob = $dob;
-                    $rl->selected_alive = $selected_alive;
-                    $rl->hein_number =$hein_number;
-                    $rl->patient_name = $patient_name;
-                    $rl->entry_point = $entry_point;
-                    $rl->date_collected = $date_collected;
-                    $rl->prophylaxis_code = $prophylaxis_code;
-                    $rl->infant_feeding = $infant_feeding;
-                    $rl->pcr = $pcr;
-                    $rl->alive_dead = $alive_dead;
-                    $rl->mother_age = $mother_age;
-                    $rl->haart_date = $haart_date;
-                    $rl->facility = $fac->code;
-
-
-                    if ($rl->save()) {
-                        return response()->json(["Sample remote login succesfull."], 201);
-                    } else {
-                        return response()->json(["An error occured try again later."], 500);
-                    }
-                
-            }
+                    }               
+            }                 
+            
         } else {
             return response()->json(["Phone number not authorized to do sample remote login"], 401);
         }
