@@ -20,14 +20,8 @@ class NewRemoteLoginController extends Controller
         $fac = Facility::where('mobile', $phone)->first();
       
         if (!empty($fac)) {
-            $val = explode("*", $msg);
-
-            
-
-            if ($val[0] == 'VL') {
-                if (sizeof($val) < 12) {
-                    return response()->json(["Kindly ensure all fields are included"], 500);
-                } else {
+            $val = explode("*", $msg);            
+            if ($val[0] == 'VL') {               
                     $ccc = $val[1];
                     $patient_name = $val[2];
                     $dob = $val[3];
@@ -62,15 +56,13 @@ class NewRemoteLoginController extends Controller
 
 
                     if ($rl->save()) {
-                        return response()->json(["Kindly ensure all fields are included"], 201);
+                        return response()->json(["Sample remote login succesful."], 201);
                     } else {
                         return response()->json(["An error occured, please try again."], 500);
                     }
-                }
-            } elseif ($val[0] == 'EID') {
-                if (sizeof($val) < 15) {
-                    return response()->json(["Kindly ensure all fields are included"], 500);
-                } else {
+               
+            } else if ($val[0] == 'EID') {
+                
                     $selected_sex = $val[1];
                     $selected_regimen= $val[2];
                     $selected_alive = $val[3];
@@ -114,10 +106,10 @@ class NewRemoteLoginController extends Controller
                     } else {
                         return response()->json(["An error occured try again later."], 500);
                     }
-                }
+                
             }
         } else {
-            return response()->json(["Kindly ensure all fields are included"], 500);
+            return response()->json(["Phone number not authorized to do sample remote login"], 401);
         }
     }
 
