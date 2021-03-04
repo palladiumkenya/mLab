@@ -167,9 +167,31 @@ class DataController extends Controller
         return view('data.vl_srl_filter')->with($data);
     }
 
-    public function vl_srl_results()
+    public function vl_srl_results(Request $request)
     {
-        $results = SRLVLData::orderBy('id', 'DESC');
+        $results = SRLVLData::select('*');
+        if (!empty($request->partner_id)) {
+            $partner = Partner::find($request->partner_id);
+            $results->where('partner', $partner->name);
+        }
+        if (!empty($request->county_id)) {
+            $partner = County::find($request->county_id);
+            $results->where('county', $county->name);
+        }
+        if (!empty($request->sub_county_id)) {
+            $partner = SubCounty::find($request->sub_county_id);
+            $results->where('partner', $sub_county->name);
+        }
+        if (!empty($request->code)) {
+            $facility = Facility::where('code', $request->code)->first();
+            $results->where('facility', $facility->name);
+        }
+        if (!empty($request->from)) {
+            $results->where('dbs_dispatch_date', '>=', date($request->from));
+        }
+        if (!empty($request->to)) {
+            $results->where('dbs_dispatch_date', '<=', date($request->to));
+        }
 
         if (Auth::user()->user_level == 2) {
             $results->where('partner', Auth::user()->partner->name);
@@ -196,9 +218,32 @@ class DataController extends Controller
     }
 
 
-    public function eid_srl_results()
+    public function eid_srl_results(Request $request)
     {
-        $results = SRLEIData::orderBy('id', 'DESC');
+
+        $results = SRLEIData::select('*');
+        if (!empty($request->partner_id)) {
+            $partner = Partner::find($request->partner_id);
+            $results->where('partner', $partner->name);
+        }
+        if (!empty($request->county_id)) {
+            $partner = County::find($request->county_id);
+            $results->where('county', $county->name);
+        }
+        if (!empty($request->sub_county_id)) {
+            $partner = SubCounty::find($request->sub_county_id);
+            $results->where('partner', $sub_county->name);
+        }
+        if (!empty($request->code)) {
+            $facility = Facility::where('code', $request->code)->first();
+            $results->where('facility', $facility->name);
+        }
+        if (!empty($request->from)) {
+            $results->where('date_collected', '>=', date($request->from));
+        }
+        if (!empty($request->to)) {
+            $results->where('date_collected', '<=', date($request->to));
+        }
 
         if (Auth::user()->user_level == 2) {
             $results->where('partner', Auth::user()->partner->name);
@@ -209,6 +254,8 @@ class DataController extends Controller
         if (Auth::user()->user_level == 3 || Auth::user()->user_level == 4) {
             $results->where('facility', Auth::user()->facility->code);
         }
+
+        $results->orderBy('id', 'DESC')->paginate(1000);
 
         return view('data.eid_srl_results')->with('results', $results->paginate(100));
     }
@@ -226,9 +273,31 @@ class DataController extends Controller
     }
 
 
-    public function hts_srl_results()
+    public function hts_srl_results(Request $request)
     {
-        $results = SRLHTSData::orderBy('id', 'DESC');
+        $results = SRLHTSData::select('*');
+        if (!empty($request->partner_id)) {
+            $partner = Partner::find($request->partner_id);
+            $results->where('partner', $partner->name);
+        }
+        if (!empty($request->county_id)) {
+            $partner = County::find($request->county_id);
+            $results->where('county', $county->name);
+        }
+        if (!empty($request->sub_county_id)) {
+            $partner = SubCounty::find($request->sub_county_id);
+            $results->where('partner', $sub_county->name);
+        }
+        if (!empty($request->code)) {
+            $facility = Facility::where('code', $request->code)->first();
+            $results->where('facility', $facility->name);
+        }
+        if (!empty($request->from)) {
+            $results->where('dbs_dispatch_date', '>=', date($request->from));
+        }
+        if (!empty($request->to)) {
+            $results->where('dbs_dispatch_date', '<=', date($request->to));
+        }
 
         if (Auth::user()->user_level == 2) {
             $results->where('partner', Auth::user()->partner->name);
@@ -239,6 +308,8 @@ class DataController extends Controller
         if (Auth::user()->user_level == 3 || Auth::user()->user_level == 4) {
             $results->where('facility', Auth::user()->facility->code);
         }
+
+        $results->orderBy('id', 'DESC')->paginate(1000);
 
         return view('data.hts_srl_results')->with('results', $results->paginate(100));
     }

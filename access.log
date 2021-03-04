@@ -336,3 +336,15 @@
 ::1 - - [04/Mar/2021:17:42:16 +0300] "GET /raw/hts/srl/data HTTP/1.1" 500 668050
 ::1 - - [04/Mar/2021:17:44:05 +0300] "GET /hts/allresults HTTP/1.1" 200 29885
 ::1 - - [04/Mar/2021:17:44:08 +0300] "GET /hts/results?_token=fXR9MmUlyem4O0HXbk8UgWEdXroxpCPiATD1vAWJ&partner_id=&county_id=&sub_county_id=&code=&from=&to= HTTP/1.1" 200 166770
+::1 - - [04/Mar/2021:17:44:20 +0300] "GET /raw/hts/srl/data HTTP/1.1" 500 668040
+::1 - - [04/Mar/2021:17:46:11 +0300] "GET /hts/allresults HTTP/1.1" 200 29885
+::1 - - [04/Mar/2021:17:46:12 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [04/Mar/2021:17:46:15 +0300] "GET /raw/hts/srl/data HTTP/1.1" 200 29901
+::1 - - [04/Mar/2021:17:46:18 +0300] "GET /hts/results?_token=fXR9MmUlyem4O0HXbk8UgWEdXroxpCPiATD1vAWJ&partner_id=&county_id=&sub_county_id=&code=&from=&to= HTTP/1.1" 200 166770
+::1 - - [04/Mar/2021:17:49:29 +0300] "GET /raw/hts/srl/data HTTP/1.1" 200 29914
+::1 - - [04/Mar/2021:17:49:29 +0300] "GET /favicon.ico HTTP/1.1" 200 11404
+::1 - - [04/Mar/2021:17:49:31 +0300] "GET /remote-login/hts/results?_token=fXR9MmUlyem4O0HXbk8UgWEdXroxpCPiATD1vAWJ&partner_id=&county_id=&sub_county_id=&code=&from=&to= HTTP/1.1" 200 22134
+::1 - - [04/Mar/2021:17:49:39 +0300] "GET /raw/eid/srl/data HTTP/1.1" 200 29914
+::1 - - [04/Mar/2021:17:49:41 +0300] "GET /remote-login/eid/results?_token=fXR9MmUlyem4O0HXbk8UgWEdXroxpCPiATD1vAWJ&partner_id=&county_id=&sub_county_id=&code=&from=&to= HTTP/1.1" 200 56154
+::1 - - [04/Mar/2021:17:50:11 +0300] "GET /raw/vl/srl/data HTTP/1.1" 200 29921
+::1 - - [04/Mar/2021:17:50:14 +0300] "GET /remote-login/vl/results?_token=fXR9MmUlyem4O0HXbk8UgWEdXroxpCPiATD1vAWJ&partner_id=&county_id=&sub_county_id=&code=&from=&to= HTTP/1.1" 200 140856
