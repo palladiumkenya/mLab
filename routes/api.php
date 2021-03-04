@@ -26,7 +26,7 @@ Route::post('/hts_results', 'SendResultsController@sendHTS');
 Route::post('/tb_results', 'SendResultsController@sendTB');
 Route::post('/remote/login/vl', 'NewRemoteLoginController@results');
 Route::post('/remote/login/eid', 'RemoteLoginController@eid_results');
-Route::post('/remote/login/hts', 'RemoteLoginController@hts_results');
+Route::post('/remote/login/hts', 'RemoteLoginController@hts');
 Route::post('/get/il/viral_loads', 'SendResultsController@sendILInternet');
 Route::post('/ushauri/get/results', 'UshauriController@getResults');
 Route::get('/notify/clients', 'UshauriController@notifyClients');

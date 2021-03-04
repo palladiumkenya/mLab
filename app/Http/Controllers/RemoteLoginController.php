@@ -144,10 +144,7 @@ class RemoteLoginController extends Controller
 
         if (!empty($fac)) {
             $val = explode("*", $msg);
-
-            if (sizeof($val) < 18) {
-                return response()->json(['Kindly ensure all fields are included'], 500);
-            } else {
+           
                 $sample_number = $val[0];
                 $client_name = $val[1];
                 $dob = $val[2];
@@ -157,8 +154,8 @@ class RemoteLoginController extends Controller
                 $selected_delivery_point = $val[6];
                 $selected_test_kit_1 = $val[7];
                 $lot_number_1 = $val[8];
-                $expiry_date_1 = $val[9];
-                $selectec_test_kit_2 = $val[10];
+                $expiry_date_1 = $val[9];                
+                $selected_test_kit_2 = $val[10];
                 $lot_number_2 = $val[11];
                 $expiry_date_2 = $val[12];
                 $selected_final_result = $val[13];
@@ -166,8 +163,8 @@ class RemoteLoginController extends Controller
                 $dbs_date = $val[15];
                 $dbs_dispatch_date = $val[16];
                 $requesting_provider = $val[17];
-                $lab_id= $val[22];
-                $lab_name = $val[23];
+                $lab_id= $val[18];
+                $lab_name = $val[19];
 
                 $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
                 $test_date =  Carbon::parse(str_replace('/', '-', $test_date))->format('Y-m-d');
@@ -203,13 +200,13 @@ class RemoteLoginController extends Controller
                 $saved = $r1->save();
 
                     if (!$saved) {
-                        return response()->json(['An error occured, kindly try again'], 500);
+                        return response()->json(['An error occured, kindly try again'], 503);
                     } else {
                         return response()->json(['Sample Remote Login Successful'], 201);
                     }
-            }
+           
         } else {
-            return response()->json(['Phone Number not Authorised to send remote samples'], 500);
+            return response()->json(['Phone Number not Authorised to send remote samples'], 403);
         }
     }
 
