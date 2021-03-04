@@ -10,6 +10,6 @@ class SRLEIDs extends Model
     public $timestamps = false;
     
     protected $fillable = [
-        'alive_dead', 'entry_point','patient_name','dob','date_collected','pcr','infant_feeding','prophylaxis_code','hein_number','selected_alive','selected_regimen','selected_sex','updated_at','processed','mother_age', 'haart_date'
+        'alive_dead', 'entry_point','patient_name','dob','date_collected','pcr','infant_feeding','prophylaxis_code','hein_number','selected_alive','selected_regimen','selected_sex','updated_at','processed','mother_age', 'haart_date', 'lab_id', 'lab_name'
     ];
 }
