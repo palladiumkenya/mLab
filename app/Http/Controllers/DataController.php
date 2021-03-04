@@ -156,6 +156,17 @@ class DataController extends Controller
         return view('data.raw')->with('results', $results);
     }
 
+    public function vl_srl_form()
+    {
+        $partners = Partner::all();
+        
+
+        $data = array(
+            'partners' => $partners,
+        );
+        return view('data.vl_srl_filter')->with($data);
+    }
+
     public function vl_srl_results()
     {
         $results = SRLVLData::orderBy('id', 'DESC');
@@ -173,7 +184,49 @@ class DataController extends Controller
         return view('data.vl_srl_results')->with('results', $results->paginate(100));
     }
 
+    public function eid_srl_form()
+    {
+        $partners = Partner::all();
+        
+
+        $data = array(
+            'partners' => $partners,
+        );
+        return view('data.eid_srl_filter')->with($data);
+    }
+
+
     public function eid_srl_results()
+    {
+        $results = SRLEIData::orderBy('id', 'DESC');
+
+        if (Auth::user()->user_level == 2) {
+            $results->where('partner', Auth::user()->partner->name);
+        }
+        if (Auth::user()->user_level == 5) {
+            $results->where('county', Auth::user()->county->name);
+        }
+        if (Auth::user()->user_level == 3 || Auth::user()->user_level == 4) {
+            $results->where('facility', Auth::user()->facility->code);
+        }
+
+        return view('data.eid_srl_results')->with('results', $results->paginate(100));
+    }
+
+    
+    public function hts_srl_form()
+    {
+        $partners = Partner::all();
+        
+
+        $data = array(
+            'partners' => $partners,
+        );
+        return view('data.hts_srl_filter')->with($data);
+    }
+
+
+    public function hts_srl_results()
     {
         $results = SRLEIData::orderBy('id', 'DESC');
 

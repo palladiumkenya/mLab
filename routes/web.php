@@ -72,8 +72,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/hts/results', 'DataController@hts_results')->name('hts_results');
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
     Route::get('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');
-    Route::get('/remote-login/eid/results', 'DataController@eid_srl_results')->name('eid_srl_results');
+    Route::get('/raw/vl/srl/data', 'DataController@vl_srl_form')->name('vl_srl_raw_data');
     Route::get('/remote-login/vl/results', 'DataController@vl_srl_results')->name('vl_srl_results');
+    Route::get('/raw/eid/srl/data', 'DataController@eid_srl_form')->name('eid_srl_raw_data');
+    Route::get('/remote-login/eid/results', 'DataController@eid_srl_results')->name('eid_srl_results');
+    Route::get('/raw/hts/srl/data', 'DataController@hts_srl_form')->name('hts_srl_raw_data');
+    Route::get('/remote-login/hts/results', 'DataController@hts_srl_results')->name('hts_srl_results');
 
 
 
