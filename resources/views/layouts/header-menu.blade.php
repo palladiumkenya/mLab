@@ -28,7 +28,7 @@
                                 <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
                             </div>
                     </div>
-                    <div class="col-md-6 p-4">
+                    <div class="col-md-6 p-5">
                         <p class="text-primary text--cap border-bottom-primary d-inline-block">Reports</p>
                         <div class="menu-icon-grid w-auto p-0">
                             <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
@@ -38,6 +38,7 @@
                             <a href="{{route('eid_srl_raw_data')}}"><i class="i-Virus-2"></i> EID Remote Login</a>
                             <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a>
                             <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
+
                         </div>
                     </div>
                     @endif
