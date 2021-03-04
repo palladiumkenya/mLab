@@ -9,16 +9,23 @@ use App\SRLVLs;
 use App\SRLEIDs;
 use App\SRLHTS;
 
+//controller that accepts sample remote login for both VL and EID
 class NewRemoteLoginController extends Controller
 {
     public function results(Request $request)
     {
+        //the mLab app sends the phone and message, which are then decrytped
         $phone = base64_decode($request->phone);
         $msg = base64_decode($request->message);
 
-
+        //we search if the number exixsts for any facility, if so we save the code of that facility in the variable $fac
         $fac = Facility::where('mobile', $phone)->first();
       
+        /*
+        if facility exists, we then use the php inbuilt explode function to transform the string into array and get
+        individual values, for EID  the first value is EID and for VL the first value is VL
+        Here we do not do any validations as all that is done on the app.
+        */
         if (!empty($fac)) {
             $val = explode("*", $msg); 
             if ($val[0] == 'EID') {
@@ -37,6 +44,8 @@ class NewRemoteLoginController extends Controller
                 $alive_dead = $val[12];
                 $mother_age = $val[13];
                 $haart_date = $val[14];
+                $lab_name = $val[15];
+                $lab_id = $val[16];
 
                 $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
                 $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
@@ -58,13 +67,15 @@ class NewRemoteLoginController extends Controller
                 $rl->alive_dead = $alive_dead;
                 $rl->mother_age = $mother_age;
                 $rl->haart_date = $haart_date;
+                $rl->lab_name = $lab_name;
+                $rl->lab_id = $lab_id;
                 $rl->facility = $fac->code;
 
 
                 if ($rl->save()) {
-                    return response()->json(["Sample remote login succesfull."], 201);
+                    return response()->json(["Sample remote login for EID successfull."], 201);
                 } else {
-                    return response()->json(["An error occured try again later."], 503);
+                    return response()->json(["Server Error, details recieved but unable to save, please try again."], 503);
                 } 
             } else if ($val[0] == 'VL') {               
                     $ccc = $val[1];
@@ -78,6 +89,8 @@ class NewRemoteLoginController extends Controller
                     $just_code = $val[9];
                     $selected_type = $val[10];
                     $selected_sex = $val[11];
+                    $lab_name = $val[12];
+                    $lab_id = $val[13];
 
                     $dob =  Carbon::parse(str_replace('/', '-', $dob))->format('Y-m-d');
                     $date_collected =  Carbon::parse(str_replace('/', '-', $date_collected))->format('Y-m-d');
@@ -97,13 +110,15 @@ class NewRemoteLoginController extends Controller
                     $rl->justification_code = $just_code;
                     $rl->selected_type = $selected_type;
                     $rl->selected_sex = $selected_sex;
+                    $rl->lab_name = $lab_name;
+                    $rl->lab_id = $lab_id;
                     $rl->facility = $fac->code;
 
 
                     if ($rl->save()) {
-                        return response()->json(["Sample remote login succesful."], 201);
+                        return response()->json(["Sample remote login for VL successful."], 201);
                     } else {
-                        return response()->json(["An error occured, please try again."], 500);
+                        return response()->json(["Server Error, details recieved but unable to save, please try again."], 503);
                     }               
             }                 
             
