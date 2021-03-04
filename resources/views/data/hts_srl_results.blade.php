@@ -10,7 +10,7 @@
                     <div class="card text-left">
 
                         <div class="card-body">
-                            <h4 class="card-title mb-3">Showing {{count($results)}}, use the links below to pull results per page.</h4>
+                            <h4 class="card-title mb-3">Showing {{count($results)}}, use the links below to pull hts sample remote login results per page.</h4>
                             <div class="col-md-12" style="margin-top:10px; ">
                                 {{ $results->onEachSide(5)->links() }}
                             </div>
@@ -19,16 +19,15 @@
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Patient ID</th>
-                                                <th>Age</th>
+                                                <th>Sample Number</th>
+                                                <th>Client Name</th>
                                                 <th>Gender</th>
-                                                <th>Test</th>
-                                                <th>Result</th>
-                                                <th>Submitted</th>
-                                                <th>Released</th>
-                                                <th>Sent</th>
-                                                <th>Delivered</th>
-                                                <th>Read</th>
+                                                <th>Delivery Point</th>
+                                                <th>Test Kit 1</th>
+                                                <th>Test Kit 2</th>
+                                                <th>Final Result</th>
+                                                <th>Dispatch date</th>
+                                                <th>Lab Name</th>
                                                 <th>Facility</th>
                                                 <th>Sub-County</th>
                                                 <th>County</th>
@@ -40,16 +39,15 @@
                                                 @foreach($results as $result)
                                                     <tr> 
                                                         <td> {{ $loop->iteration }}</td>
-                                                        <td> @if(!empty($result->patient_id)) {{$result->patient_id}} @else Not Provided @endif</td>
-                                                        <td>  {{$result->age}}</td>
+                                                        <td> @if(!empty($result->sample_number)) {{$result->sample_number}} @else Not Provided @endif</td>
+                                                        <td> {{$result->client_name}}</td>
                                                         <td>  {{$result->gender}}</td>
-                                                        <td>  {{$result->test}} </td>
-                                                        <td>  {{$result->result_value}}</td>
-                                                        <td>  {{$result->submit_date}}</td>
-                                                        <td>  {{$result->date_released}}</td>
-                                                        <td>  {{$result->date_sent}}</td>
-                                                        <td>  {{$result->date_delivered}}</td>    
-                                                        <td> @if(!empty($result->date_read)) {{$result->date_read}}  @else Unread @endif</td>                                                            
+                                                        <td>  {{$result->selected_delivery_point}} </td>
+                                                        <td>  {{$result->selected_test_kit1}}</td>
+                                                        <td>  {{$result->selected_test_kit2}}</td>
+                                                        <td>  {{$result->selected_final_result}}</td>
+                                                        <td>  {{$result->dbs_dispatch_date}}</td>
+                                                        <td>  {{$result->lab_name}}</td>
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>

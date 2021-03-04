@@ -12,7 +12,7 @@
                             <div class="card-title mb-3">EID Sample Remote Login Data</div>
 
                             <h4>Select any of the filters below, and click Fetch when complete. None is a required field.</h4>
-                            <form role="form" method="get"action="{{route('hts_results')}}">
+                            <form role="form" method="get"action="{{route('eid_srl_results')}}">
                             {{ csrf_field() }}
                                 <div class="row">
                                 @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)

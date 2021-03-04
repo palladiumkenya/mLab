@@ -228,7 +228,7 @@ class DataController extends Controller
 
     public function hts_srl_results()
     {
-        $results = SRLEIData::orderBy('id', 'DESC');
+        $results = SRLHTSData::orderBy('id', 'DESC');
 
         if (Auth::user()->user_level == 2) {
             $results->where('partner', Auth::user()->partner->name);
@@ -240,6 +240,6 @@ class DataController extends Controller
             $results->where('facility', Auth::user()->facility->code);
         }
 
-        return view('data.eid_srl_results')->with('results', $results->paginate(100));
+        return view('data.hts_srl_results')->with('results', $results->paginate(100));
     }
 }
