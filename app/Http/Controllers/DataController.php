@@ -186,11 +186,17 @@ class DataController extends Controller
             $facility = Facility::where('code', $request->code)->first();
             $results->where('facility', $facility->name);
         }
+        if (!empty($request->lab_name)) {
+            $results->where('lab_name', $request->lab_name);
+        }
+        if (!empty($request->selected_type)) {
+            $results->where('selected_type', $request->selected_type);
+        }
         if (!empty($request->from)) {
-            $results->where('dbs_dispatch_date', '>=', date($request->from));
+            $results->where('created_at', '>=', date($request->from));
         }
         if (!empty($request->to)) {
-            $results->where('dbs_dispatch_date', '<=', date($request->to));
+            $results->where('created_at', '<=', date($request->to));
         }
 
         if (Auth::user()->user_level == 2) {
