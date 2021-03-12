@@ -244,6 +244,12 @@ class DataController extends Controller
             $facility = Facility::where('code', $request->code)->first();
             $results->where('facility', $facility->name);
         }
+        if (!empty($request->lab_name)) {
+            $results->where('lab_name', $request->lab_name);
+        }
+        if (!empty($request->entry_point)) {
+            $results->where('entry_point', $request->entry_point);
+        }
         if (!empty($request->from)) {
             $results->where('date_collected', '>=', date($request->from));
         }
