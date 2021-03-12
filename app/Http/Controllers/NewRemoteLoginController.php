@@ -216,29 +216,383 @@ class NewRemoteLoginController extends Controller
             $data = 'mflCode='.$remote_vl->facility.'&patient_identifier='.$remote_vl->ccc_num.'&dob='.$remote_vl->dob.
                 '&datecollected='.$remote_vl->date_collected.'&sex='.$sex.'&sampletype=1&justification='.$remote_vl->justification_code.
                 '&pmtct=3&prophylaxis=AF2A';
-            $curl = curl_init();
 
-            curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://lab.test.nascop.org/api/vl",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $data,
-            CURLOPT_HTTPHEADER => array(
-                "Content-Type: application/x-www-form-urlencoded",
-                "apikey: ZXmknmaI9MfE642",
-                "Content-Type: application/x-www-form-urlencoded"
-            ),
-            ));
+            if($remote_vl->lab_name === 'Kemri Nairobi') {
 
-            $response = curl_exec($curl);
+                $curl = curl_init();
 
-            curl_close($curl);
-            echo $response;
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kemrinairobi.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+
+            }  else if($remote_vl->lab_name === 'KEMRI Kisumu') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kemrikisumu.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+
+            }  else if($remote_vl->lab_name === 'KEMRI Alupe') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kemrialupe.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab_name === 'Walter Reed') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://wrpkericho.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab_name === 'Ampath MTRH') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://ampath.nascop.org/api/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab_name === 'Coast lab') {
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://lab.test.nascop.org/api/vl",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+                
+            }  else if($remote_vl->lab_name === 'KNH') {
+                
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://knh.nascop.org/api",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+            }  else if($remote_vl->lab_name === 'KU Teaching and Referring Hospital') {
+                
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://kutrrh.nascop.org/api",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "apikey" => Config::get('services.srl.key'),
+                ),
+                ));
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                $phpArray = json_decode($response,true);
+                $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                if(!empty($response->batch_id)) {
+                    $remote_vl->processed = 1;
+                    $remote_vl->save();
+                }
+
+                if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                    $to = DB::table('health_facilities')
+                    ->where('code', '=', $remote_vl->facility )
+                    ->pluck('mobile')->first(); 
+
+                    $sender = new SenderController;
+                    $sender->send($to, $msg);
+
+                }
+
+                echo $response;
+            }  
+            
         }
     }
 
@@ -261,7 +615,404 @@ class NewRemoteLoginController extends Controller
 
             $data = 'mflCode='.$remote_eid->facility.'&patient_identifier='.$remote_eid->hein_number.'&dob='.$remote_eid->dob.
                 '&datecollected='.$remote_eid->date_collected.'&sex='.$sex.'&feeding='.$remote_eid->infant_feeding.'&pcrtype=1'.
-                '&regimen=16&entry_point='.$remote_eid->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_eid->mother_age.'&lab=3';
+                '&regimen=16&entry_point='.$remote_eid->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_eid->mother_age.'&lab='.$remote_eid->lab_id. '' ; 
+
+                if($remote_eid->lab_name === 'Kemri Nairobi') {
+
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kemrinairobi.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+
+                    $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+    
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+    
+                    if($batch_full === 1) {
+    
+                        $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
+    
+                    echo $response;
+    
+                }  else if($remote_eid->lab_name === 'KEMRI Kisumu') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kemrikisumu.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                                $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+
+                    if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
+    
+                    echo $response;
+    
+                }  else if($remote_eid->lab_name === 'KEMRI Alupe') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kemrialupe.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+    
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+    
+                    if($batch_full === 1) {
+    
+                        $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab_name === 'Walter Reed') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://wrpkericho.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+    
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+    
+                    if($batch_full === 1) {
+    
+                        $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab_name === 'Ampath MTRH') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://ampath.nascop.org/api/",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+    
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+    
+                    if($batch_full === 1) {
+    
+                        $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab_name === 'Coast lab') {
+    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "http://lab.test.nascop.org/api/vl",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+
+                    $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+    
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+    
+                    if($batch_full === 1) {
+    
+                        $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
+    
+                    echo $response;
+                    
+                }  else if($remote_eid->lab_name === 'KNH') {
+                    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://knh.nascop.org/api",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+
+                    $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+    
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+    
+                    if($batch_full === 1) {
+    
+                        $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+    
+                        $to = DB::table('health_facilities')
+                        ->where('code', '=', $remote_eid->facility )
+                        ->pluck('mobile')->first(); 
+    
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+    
+                    }
+    
+                    echo $response;
+
+                }  else if($remote_eid->lab_name === 'KU Teaching and Referring Hospital') {
+                    
+                    $curl = curl_init();
+    
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://kutrrh.nascop.org/api",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/x-www-form-urlencoded",
+                        "apikey" => Config::get('services.srl.key'),
+                    ),
+                    ));
+    
+                    $response = curl_exec($curl);
+    
+                    curl_close($curl);
+    
+                    $phpArray = json_decode($response,true);
+                    $batch_full = $phpArray['batch']['batch_full'] ; 
+
+                    if(!empty($response->batch_id)) {
+                        $remote_vl->processed = 1;
+                        $remote_vl->save();
+                    }
+
+                    if($batch_full === 1) {
+
+                    $msg = "Hello ".$remote_vl->facility.", We would like to inform you that the samples entered have been captured under batch no # ".$response->batch_id." ";
+
+                        $sender = new SenderController;
+                        $sender->send($to, $msg);
+
+                    }
+    
+                    echo $response;
+
+                }  
+        }
+    }
+
+    public function SendHTSLab()
+    {
+        $remote_htss = SRLHTS::where('processed', 0)->limit(10)->get();
+        foreach ($remote_htss as $remote_hts) {
+            if ($remote_hts->selected_sex == 'Female') {
+                $sex = 2;
+            } elseif ($remote_hts->selected_sex == 'Male') {
+                $sex = 1;
+            } else {
+                $sex = 3;
+            }
+
+            // entry point must be integer
+            // add lab in payload as integer
+            // add regimen as integer
+            // pcr type should be integer
+
+            $data = 'mflCode='.$remote_hts->facility.'&patient_identifier='.$remote_hts->hein_number.'&dob='.$remote_hts->dob.
+                '&datecollected='.$remote_hts->date_collected.'&sex='.$sex.'&feeding='.$remote_hts->infant_feeding.'&pcrtype=1'.
+                '&regimen=16&entry_point='.$remote_hts->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_hts->mother_age.'&lab=3';
 
             $curl = curl_init();
 
@@ -277,13 +1028,19 @@ class NewRemoteLoginController extends Controller
                 CURLOPT_POSTFIELDS => $data,
                 CURLOPT_HTTPHEADER => array(
                   'Content-Type: application/x-www-form-urlencoded',
-                  'apikey: ZXmknmaI9MfE642'
+                  'apikey' => Config::get('services.srl.key'),
                 ),
               ));
 
             $response = curl_exec($curl);
 
             curl_close($curl);
+
+            if($response->status_code === 201) {
+                $remote_hts->processed = 1;
+                $remote_hts->save();
+            }
+
             echo $response;
         }
     }
