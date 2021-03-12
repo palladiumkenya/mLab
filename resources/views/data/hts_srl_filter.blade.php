@@ -69,6 +69,38 @@
                                         </select>
                                     </div>
 
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="firstName1">Lab</label>
+                                        <select  class="form-control" data-width="100%" id="lab_name" name="lab_name">
+                                            @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)                                            
+                                            <option value="" disabled selected>Choose a lab</option>
+                                            <option value="Alupe">Alupe</option>
+                                            <option value="Ampath">Ampath</option>
+                                            <option value="Coast lab">Coast lab</option>
+                                            <option value="Kemri Nairobi">Kemri Nairobi</option>
+                                            <option value="Kisumu lab">Kisumu lab</option>
+                                            <option value="KNH">KNH</option>
+                                            <option value="KU Teaching and Referring Hospital">KU Teaching and Referring Hospital</option>
+                                            @endif
+                                                
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="firstName1">Delivery Point</label>
+                                        <select  class="form-control" data-width="100%" id="selected_delivery_point" name="selected_delivery_point">
+                                            @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)                                            
+                                            <option value="" disabled selected>Choose an delivery point</option>
+                                            <option value="1">OPD</option>
+                                            <option value="2">MCH</option>
+                                            <option value="3">IPD</option>
+                                            <option value="4">CCC</option>
+                                            <option value="5">Community</option>
+                                            @endif
+                                                
+                                        </select>
+                                    </div>
+
                                     <div class='col-sm-6'>
                                         <div class="form-group">
                                             <div class="input-group">

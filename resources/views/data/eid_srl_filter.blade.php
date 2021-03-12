@@ -90,7 +90,7 @@
                                         <label for="firstName1">Sample Type</label>
                                         <select  class="form-control" data-width="100%" id="entry_point" name="entry_point">
                                             @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)                                            
-                                            <option value="" disabled selected>Choose an entry_point</option>
+                                            <option value="" disabled selected>Choose an entry point</option>
                                             <option value="1">IPD</option>
                                             <option value="2">OPD</option>
                                             <option value="3">MATERNITY</option>
