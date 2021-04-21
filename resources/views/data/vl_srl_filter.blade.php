@@ -9,10 +9,10 @@
                 <div class="col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div class="card-title mb-3">HTS Raw Data</div>
+                            <div class="card-title mb-3">Viral Loads Sample Remote Login Data</div>
 
                             <h4>Select any of the filters below, and click Fetch when complete. None is a required field.</h4>
-                            <form role="form" method="get"action="{{route('hts_results')}}">
+                            <form role="form" method="get"action="{{route('vl_srl_results')}}">
                             {{ csrf_field() }}
                                 <div class="row">
                                 @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
@@ -69,6 +69,38 @@
                                         </select>
                                     </div>
 
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="firstName1">Lab</label>
+                                        <select  class="form-control" data-width="100%" id="lab_name" name="lab_name">
+                                            @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)                                            
+                                            <option value="" disabled selected>Choose a lab</option>
+                                            <option value="Alupe">Alupe</option>
+                                            <option value="Ampath">Ampath</option>
+                                            <option value="Coast lab">Coast lab</option>
+                                            <option value="Kemri Nairobi">Kemri Nairobi</option>
+                                            <option value="Kisumu lab">Kisumu lab</option>
+                                            <option value="KNH">KNH</option>
+                                            <option value="KU Teaching and Referring Hospital">KU Teaching and Referring Hospital</option>
+                                            @endif
+                                                
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="firstName1">Sample Type</label>
+                                        <select  class="form-control" data-width="100%" id="selected_type" name="selected_type">
+                                            @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)                                            
+                                            <option value="" disabled selected>Choose a sample type</option>
+                                            <option value="Frozen plasma">Frozen plasma</option>
+                                            <option value="Venous blood(EDTA)">Venous blood(EDTA)</option>
+                                            <option value="DBS capillary(infants only)">DBS capillary(infants only)</option>
+                                            <option value="DBS venous">DBS venous</option>
+                                            <option value="PPT">PPT</option>
+                                            @endif
+                                                
+                                        </select>
+                                    </div>
+
                                     <div class='col-sm-6'>
                                         <div class="form-group">
                                             <div class="input-group">
@@ -91,7 +123,7 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                             <div class="col-md-4">
-                                            <label for="firstName1">To</label>
+                                            <label for="firstName1">Dispatch Date To</label>
                                             </div>
                                             <div class="col-md-10">
 

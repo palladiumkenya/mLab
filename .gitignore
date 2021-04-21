@@ -4,6 +4,7 @@
 /storage/*.key
 /storage/framework
 /storage/logs
+/storage/framework/views
 /vendor
 .env
 access.log
