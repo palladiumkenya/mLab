@@ -108,6 +108,7 @@ Route::get('/send/vls/to/lab', 'RemoteLoginController@SendVLsLab')->name('SendVL
 Route::get('/send/eid/to/lab', 'RemoteLoginController@SendEIDLab')->name('SendEIDLab');
 Route::get('/send/hts/to/lab', 'RemoteLoginController@SendHTSLab')->name('SendHTSLab');
 Route::get('/client/notify', 'UshauriController@notifyClients')->name('notifyClients');
+Route::get('/terms', 'TermsController@index')->name('terms');
 
 
 // Auth::routes();
