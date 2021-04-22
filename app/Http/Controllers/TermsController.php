@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use App\Http\Controllers\SenderController;
 
-class UshauriController extends Controller
+class TermController extends Controller
 {
     public function index()
     {
