@@ -175,12 +175,12 @@ class DataController extends Controller
             $results->where('partner', $partner->name);
         }
         if (!empty($request->county_id)) {
-            $partner = County::find($request->county_id);
+            $county = County::find($request->county_id);
             $results->where('county', $county->name);
         }
         if (!empty($request->sub_county_id)) {
-            $partner = SubCounty::find($request->sub_county_id);
-            $results->where('partner', $sub_county->name);
+            $sub_county = SubCounty::find($request->sub_county_id);
+            $results->where('sub_county', $sub_county->name);
         }
         if (!empty($request->code)) {
             $facility = Facility::where('code', $request->code)->first();
@@ -233,12 +233,12 @@ class DataController extends Controller
             $results->where('partner', $partner->name);
         }
         if (!empty($request->county_id)) {
-            $partner = County::find($request->county_id);
+            $county = County::find($request->county_id);
             $results->where('county', $county->name);
         }
         if (!empty($request->sub_county_id)) {
-            $partner = SubCounty::find($request->sub_county_id);
-            $results->where('partner', $sub_county->name);
+            $sub_county = SubCounty::find($request->sub_county_id);
+            $results->where('sub_county', $sub_county->name);
         }
         if (!empty($request->code)) {
             $facility = Facility::where('code', $request->code)->first();
@@ -293,12 +293,12 @@ class DataController extends Controller
             $results->where('partner', $partner->name);
         }
         if (!empty($request->county_id)) {
-            $partner = County::find($request->county_id);
+            $county = County::find($request->county_id);
             $results->where('county', $county->name);
         }
         if (!empty($request->sub_county_id)) {
-            $partner = SubCounty::find($request->sub_county_id);
-            $results->where('partner', $sub_county->name);
+            $sub_county = SubCounty::find($request->sub_county_id);
+            $results->where('sub_county', $sub_county->name);
         }
         if (!empty($request->code)) {
             $facility = Facility::where('code', $request->code)->first();
