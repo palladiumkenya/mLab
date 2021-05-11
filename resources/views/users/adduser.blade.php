@@ -71,12 +71,12 @@
                                         <select id ="level" name="level" class="form-control">
                                             <option >Select</option>
                                         @if(Auth::user()->user_level < 2)    
-                                            <option value="1">National</option>
-                                            <option value="2">Partner</option>
-                                            <option value="5">County</option>
+                                            <option value="1">Super Admin</option>
+                                            <option value="2">Program Staff</option>
+                                            <option value="5">Unit Manager</option>
                                         @endif
                                         @if(Auth::user()->user_level == 2)
-                                            <option value="3">Facility Admin</option>
+                                            <option value="3">Healthcare Worker</option>
                                             <option value="4">Facility User</option>
                                         @endif 
                                         @if(Auth::user()->user_level == 3)

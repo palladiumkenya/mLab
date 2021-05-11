@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label for=" partners" class="col-form-label"><b>Select Partner(s)</b></label>
+                    <label for=" partners" class="col-form-label"><b>Select Program(s)</b></label>
                     <select class=" partners form-control selectpicker" id="partners" name="partners[]" multiple
                         data-live-search="true">
 

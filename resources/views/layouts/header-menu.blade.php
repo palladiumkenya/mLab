@@ -22,7 +22,7 @@
                             <div class="menu-icon-grid w-auto p-0">
                                 <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
                                 <a href="{{route('clients')}}"><i class="i-MaleFemale"></i>Clients</a>
-                                <a href="{{route('partners')}}"><i class="i-Network"></i>Partners</a>
+                                <a href="{{route('partners')}}"><i class="i-Network"></i>Programs</a>
                                 <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
                                 <a href="{{route('il_facilities')}}"><i class="i-Hospital1"></i>IL Facilities</a>
                                 <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
@@ -34,9 +34,9 @@
                             <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                             <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
                             <a href="{{route('hts_all_results')}}"><i class="i-Neutron"></i> HTS Results</a>
-                            <!-- <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
+                            <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
                             <a href="{{route('eid_srl_raw_data')}}"><i class="i-Virus-2"></i> EID Remote Login</a>
-                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a> -->
+                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a>
                             <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
 
                         </div>
@@ -55,9 +55,9 @@
                             <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                             <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
                             <a href="{{route('hts_all_results')}}"><i class="i-Neutron"></i> HTS Results</a>
-                            <!-- <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
+                            <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
                             <a href="{{route('eid_srl_raw_data')}}"><i class="i-Virus-2"></i> EID Remote Login</a>
-                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a> -->
+                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a>
                             <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
                         </div>
                     </div>
@@ -72,9 +72,9 @@
                             <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                             <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
                             <a href="{{route('hts_all_results')}}"><i class="i-Neutron"></i> HTS Results</a>
-                            <!-- <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
+                            <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
                             <a href="{{route('eid_srl_raw_data')}}"><i class="i-Virus-2"></i> EID Remote Login</a>
-                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a> -->
+                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a>
                             <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
                         </div>
                     </div>
@@ -87,9 +87,9 @@
                             <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                             <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
                             <a href="{{route('hts_all_results')}}"><i class="i-Neutron"></i> HTS Results</a>
-                            <!-- <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
+                            <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
                             <a href="{{route('eid_srl_raw_data')}}"><i class="i-Virus-2"></i> EID Remote Login</a>
-                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a> -->
+                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a>
                         </div>
                     </div>
                     @endif
@@ -102,9 +102,9 @@
                             <a href="{{route('vl_results')}}"><i class="i-Virus"></i>Viral Loads</a>
                             <a href="{{route('eid_results')}}"><i class="i-Virus-2"></i> EID Results</a>
                             <a href="{{route('hts_all_results')}}"><i class="i-Neutron"></i> HTS Results</a>                            <a href="{{route('eid_srl_results')}}"><i class="i-Neutron"></i> Remote Login</a>
-                            <!-- <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
+                            <a href="{{route('vl_srl_raw_data')}}"><i class="i-Big-Data"></i> VL Remote Login</a>
                             <a href="{{route('eid_srl_raw_data')}}"><i class="i-Virus-2"></i> EID Remote Login</a>
-                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a> -->
+                            <a href="{{route('hts_srl_raw_data')}}"><i class="i-Neutron"></i> HTS Remote Login</a>
                             <a href="{{route('raw_data_form')}}"><i class="i-Download-from-Cloud"></i> Raw Data</a>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                         {{Auth::user()->facility->code}})</b>
                     @elseif(Auth::user()->user_level == 4) {{Auth::user()->facility->name}} Dashboard <b>(MFL:
                         {{Auth::user()->facility->code}})</b>
-                    @elseif(Auth::user()->user_level == 5) {{Auth::user()->county->name}} County Dashboard
+                    @elseif(Auth::user()->user_level == 5) {{Auth::user()->county->name}} Unit Dashboard
                     @endif </h6>
         </div>
     </div>

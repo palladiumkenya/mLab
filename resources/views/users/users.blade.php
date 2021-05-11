@@ -45,10 +45,10 @@
                             <td> {{$user->email}}</td>
                             <td> @if($user->user_level == '0') National @endif
                                 @if($user->user_level == '1') National @endif
-                                @if($user->user_level == '2') Partner @endif
+                                @if($user->user_level == '2') Programs @endif
                                 @if($user->user_level == '3') Facility @endif
                                 @if($user->user_level == '4') Facility @endif
-                                @if($user->user_level == '5') County @endif
+                                @if($user->user_level == '5') Unit @endif
                             </td>
                             @if(Auth::user()->user_level < 2) <td> @if(!empty($user->partner))
                                 {{$user->partner->name}}@elseif(!empty($user->facility->sub_county->county))
@@ -169,13 +169,13 @@
                                         <select id="level" name="level" class="form-control">
                                             <option>Select</option>
                                             @if(Auth::user()->user_level < 2) <option value="1">National</option>
-                                                <option value="2">Partner</option>
-                                                <option value="5">County</option>
-                                                <option value="3">Facility Admin</option>
+                                                <option value="2">Program Staff</option>
+                                                <option value="5">Unit Manager</option>
+                                                <option value="3">Healthcare Worker</option>
                                                 <option value="4">Facility User</option>
                                                 @endif
                                                 @if(Auth::user()->user_level == 2)
-                                                <option value="3">Facility Admin</option>
+                                                <option value="3">Healthcare Worker</option>
                                                 <option value="4">Facility User</option>
                                                 @endif
                                                 @if(Auth::user()->user_level == 3)
@@ -200,7 +200,7 @@
                                         </select>
                                         <select hidden class="form-control" data-width="100%" id="partner"
                                             name="partner_id">
-                                            <option value="">Select Partner</option>
+                                            <option value="">Select Program</option>
                                             @if (count($partners) > 0)
                                             @foreach($partners as $partner)
                                             <option value="{{$partner->id }}">{{ ucwords($partner->name) }}</option>
