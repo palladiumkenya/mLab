@@ -30,7 +30,7 @@
                                                 <th>Facility</th>
                                                 <th>Sub-County</th>
                                                 <th>County</th>
-                                                <th>Partner</th>
+                                                <th>Program</th>
                                             </tr>
                                         </thead>
                                         <tbody>

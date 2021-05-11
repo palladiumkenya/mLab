@@ -16,6 +16,15 @@
             </div>
             <div class="col">
                 <div class="form-group">
+                    <label for=" partners" class="col-form-label"><b>Select Unit(s)</b></label>
+                    <select class=" partners form-control selectpicker" id="units" name="units[]" multiple
+                        data-live-search="true">
+
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
                     <label for=" counties" class="col-form-label"><b>Select County(s)</b></label>
                     <select class=" counties form-control selectpicker" id="counties" name="counties[]" multiple
                         data-live-search="true">

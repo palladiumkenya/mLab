@@ -18,9 +18,9 @@
                                 @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
                                     @if(Auth::user()->user_level < 3)
                                         <div class="col-md-6 form-group mb-3">
-                                            <label for="firstName1">Partner</label>
+                                            <label for="firstName1">Program</label>
                                             <select  class="form-control" data-width="100%" id="partner" name="partner_id">
-                                                <option value="">Select Partner</option>
+                                                <option value="">Select Program</option>
                                                 @if(Auth::user()->user_level < 2)
                                                     @if (count($partners) > 0)
                                                         @foreach($partners as $partner)

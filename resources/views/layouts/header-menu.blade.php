@@ -23,6 +23,7 @@
                                 <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
                                 <a href="{{route('clients')}}"><i class="i-MaleFemale"></i>Clients</a>
                                 <a href="{{route('partners')}}"><i class="i-Network"></i>Programs</a>
+                                <a href="{{route('units')}}"><i class="i-Network"></i>Units</a>
                                 <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
                                 <a href="{{route('il_facilities')}}"><i class="i-Hospital1"></i>IL Facilities</a>
                                 <a href="{{route('all_results')}}"><i class="i-Big-Data"></i> All Results</a>
@@ -48,6 +49,7 @@
                         </p>
                         <div class="menu-icon-grid w-auto p-0">
                             <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
+                            <a href="{{route('units')}}"><i class="i-Network"></i>Units</a>
                             <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
                             <a href="{{route('il_facilities')}}"><i class="i-Hospital1"></i>IL Facilities</a>
 

@@ -26,7 +26,7 @@
                                                 <th>MFL</th>
                                                 <th>Level</th>
                                                 @if(Auth::user()->user_level < 2)
-                                                <th>Partner</th>
+                                                <th>Program</th>
                                                 @endif
                                                 <th>Sub County</th>
                                                 <th>County</th>

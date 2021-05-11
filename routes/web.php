@@ -48,6 +48,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/edit/partner', 'PartnerController@editpartner')->name('editpartner');
     Route::post('/delete/partner', 'PartnerController@deletepartner')->name('deletepartner');
 
+    Route::get('/units', 'UnitController@index')->name('units');
+    Route::get('/add/unit/form', 'UnitController@addunitform')->name('addunitform');
+    Route::post('/add/unit', 'UnitController@addunit')->name('addunit');
+    Route::post('/edit/unit', 'UnitController@editunit')->name('editunit');
+    Route::post('/delete/unit', 'UnitController@deleteunit')->name('deleteunit');
 
     Route::get('/facilities', 'FacilityController@index')->name('facilities');
     Route::get('/add/facility/form', 'FacilityController@addfacilityform')->name('addfacilityform');
