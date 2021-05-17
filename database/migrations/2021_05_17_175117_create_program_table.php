@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApiUsersTable extends Migration
+class CreateNewProgramTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateApiUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('api_users', function (Blueprint $table) {
+        Schema::create('program', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
             $table->string('status');
-            $table->integer('user_level');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateApiUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('api_users');
+        Schema::dropIfExists('new_program');
     }
 }

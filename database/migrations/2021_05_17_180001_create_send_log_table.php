@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApiUsersTable extends Migration
+class CreateSendLogTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateApiUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('api_users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+        Schema::create('send_log', function (Blueprint $table) {
+            $table->increments('send_log_id');
+            $table->string('number');
+            $table->text('message');
             $table->string('status');
-            $table->integer('user_level');
+            $table->string('statusCode');
+            $table->string('messageId');
+            $table->string('cost');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateApiUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('api_users');
+        Schema::dropIfExists('send_log');
     }
 }
