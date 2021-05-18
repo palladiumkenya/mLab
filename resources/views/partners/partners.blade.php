@@ -10,10 +10,10 @@
                     <div class="card text-left">
 
                         <div class="card-body">
-                            <h4 class="card-title mb-3">{{count($partners)}} Partners</h4>
+                            <h4 class="card-title mb-3">{{count($partners)}} Program</h4>
                             
                             <div style="margin-bottom:10px; ">
-                                <a type="button" href="{{route('addpartnerform')}}" class="btn btn-primary btn-md pull-right">Add Partner</a>
+                                <a type="button" href="{{route('addpartnerform')}}" class="btn btn-primary btn-md pull-right">Add Program</a>
                             </div>
                                 <div class="table-responsive">                                    
                                     <table id="multicolumn_ordering_table" class="display table table-striped table-bordered" style="width:100%">

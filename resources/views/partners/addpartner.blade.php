@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div class="card-title mb-3">Add Partner</div>
+                            <div class="card-title mb-3">Add Program</div>
                             <form role="form" method="post"action="{{route('addpartner')}}">
                                 {{ csrf_field() }}
                                 <div class="row">

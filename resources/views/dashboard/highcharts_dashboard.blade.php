@@ -72,8 +72,8 @@
                 <div class="card-body text-center">
                     <i class="i-Mailbox-Full"></i>
                     <div class="content">
-                        <p class="text-muted mt-4 mb-0">All Results</p>
-                        <p id="all_records" class="text-primary text-24 line-height-1 mb-2"></p>
+                        <p class="text-muted mt-3 mb-0">All Results</p>
+                        <p id="all_records" class="text-primary text-18 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
