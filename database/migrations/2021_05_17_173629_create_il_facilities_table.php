@@ -16,8 +16,8 @@ class CreateIlFacilitiesTable extends Migration
         Schema::create('il_facilities', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('mfl_code');
-            $table->varchar('phone_no');
-            $table->varchar('internet');
+            $table->string('phone_no');
+            $table->string('internet');
             $table->timestamps();
         });
     }

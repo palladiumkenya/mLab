@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNewProgramTable extends Migration
+class CreateProgramTable extends Migration
 {
     /**
      * Run the migrations.
@@ -28,6 +28,6 @@ class CreateNewProgramTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('new_program');
+        Schema::dropIfExists('program');
     }
 }
