@@ -16,9 +16,25 @@
                                     <div class="col-md-12 form-group mb-3">
                                         <label for="firstName1">Name</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Unit name">
-                                    </div>                        
+                                    </div> 
+
+                                    <div class="col-md-12 form-group mb-3">
+                                        <label for="picker1">Affiliation</label>
+
+                                        <select class="form-control" class="col-md-12 form-group mb-3" id="program" name="program_id">
+                                            <option value="">Select program</option>
+                                                @if (count($programs) > 0)
+                                                    @foreach($programs as $program)
+                                                    <option value="{{$program->id }}">{{ ucwords($program->name) }}</option>
+                                                        @endforeach
+                                                @endif
+                                        </select>
+                                    </div> 
+
+                                    <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                      
                                 </div>
-                                <button type="submit" class="btn btn-block btn-primary">Submit</button>
+
                             </form>
 
                         </div>

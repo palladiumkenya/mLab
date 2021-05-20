@@ -50,8 +50,8 @@
                                 @if($user->user_level == '4') Facility @endif
                                 @if($user->user_level == '5') Unit @endif
                             </td>
-                            @if(Auth::user()->user_level < 2) <td> @if(!empty($user->partner))
-                                {{$user->partner->name}}@elseif(!empty($user->facility->sub_county->county))
+                            @if(Auth::user()->user_level < 2) <td> @if(!empty($user->program))
+                                {{$user->program->name}}@elseif(!empty($user->facility->sub_county->county))
                                 {{$user->facility->sub_county->county->name}} County @else None @endif
                                 @endif
                                 @if(Auth::user()->user_level == 2)
@@ -198,12 +198,12 @@
                                             @endforeach
                                             @endif
                                         </select>
-                                        <select hidden class="form-control" data-width="100%" id="partner"
-                                            name="partner_id">
+                                        <select hidden class="form-control" data-width="100%" id="program"
+                                            name="program_id">
                                             <option value="">Select Program</option>
-                                            @if (count($partners) > 0)
-                                            @foreach($partners as $partner)
-                                            <option value="{{$partner->id }}">{{ ucwords($partner->name) }}</option>
+                                            @if (count($programs) > 0)
+                                            @foreach($programs as $program)
+                                            <option value="{{$program->id }}">{{ ucwords($program->name) }}</option>
                                             @endforeach
                                             @endif
                                         </select>
@@ -290,17 +290,17 @@
         if (level == 1) {
             $('#affiliation').val("National");
             $('#affiliation').removeAttr('hidden');
-            $('#partner').attr("hidden", true);
+            $('#program').attr("hidden", true);
             $('#county').attr("hidden", true);
         }
         if (level == 2) {
-            $('#partner').removeAttr('hidden');
+            $('#program').removeAttr('hidden');
             $('#affiliation').attr("hidden", true);
             $('#county').attr("hidden", true);
         }
         if (level == 5) {
             $('#county').removeAttr('hidden');
-            $('#partner').attr("hidden", true);
+            $('#program').attr("hidden", true);
             $('#affiliation').attr("hidden", true);
         }
     });
@@ -313,22 +313,22 @@
                 $('#affiliation').val('National');
             }
             if (user.user_level == 2) {
-                $('#partner').removeAttr('hidden');
+                $('#program').removeAttr('hidden');
                 $('#affiliation').attr("hidden", true);
                 $('#county').attr("hidden", true);
-                $('#partner').val(user.partner.id);
+                $('#program').val(user.program.id);
             }
             if (user.user_level == 5) {
                 $('#county').removeAttr('hidden');
-                $('#partner').attr("hidden", true);
+                $('#program').attr("hidden", true);
                 $('#affiliation').attr("hidden", true);
                 $('#county').val(user.county.id);
             }
             if (user.user_level == 3 || user.user_level == 4) {
-                $('#partner').removeAttr('hidden');
+                $('#program').removeAttr('hidden');
                 $('#affiliation').attr("hidden", true);
                 $('#county').attr("hidden", true);
-                $('#partner').val(user.partner.id);
+                $('#program').val(user.program.id);
             }
         }
         $('#fname').val(user.f_name);
@@ -416,7 +416,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: "POST",
-            url: '/get_partner_facilities_mlab',
+            url: '/get_program_facilities_mlab',
             data: {
                 "sub_county_id": y
             },

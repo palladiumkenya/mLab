@@ -49,7 +49,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td> @if(!empty($result->partner)) {{$result->partner}} @else Not Provided @endif</td>
+                                                        <td> @if(!empty($result->program)) {{$result->program}} @else Not Provided @endif</td>
                                                     </tr>
                                                 @endforeach
                                             @endif

@@ -47,7 +47,7 @@ class VLResultsController extends Controller
     {
         $ilfs = ILFacility::all();
 
-        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
+        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('program_id')->get();
 
         $facilities = array();
 
@@ -226,7 +226,7 @@ class VLResultsController extends Controller
 
 
         $ilfs = ILFacility::all();
-        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
+        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('program_id')->get();
 
 
 

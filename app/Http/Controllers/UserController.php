@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use App\Partner;
+use App\Program;
 use App\SubCounty;
 use App\County;
 use App\Facility;
@@ -14,23 +14,23 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('partner')->with('facility.sub_county.county')->where('status', '!=', 'Deleted');
+        $users = User::with('program')->with('facility.sub_county.county')->where('status', '!=', 'Deleted');
         if (Auth::user()->user_level == 2) {
-            $users->where('user_level', '>', 2)->where('partner_id', Auth::user()->partner->id);
-            $facilities = Facility::where('partner_id', Auth::user()->partner->id)->get();
+            $users->where('user_level', '>', 2)->where('program_id', Auth::user()->program->id);
+            $facilities = Facility::where('program_id', Auth::user()->program->id)->get();
         }
         if (Auth::user()->user_level == 3) {
             $users->where('user_level', '=', 4)->where('facility_id', Auth::user()->facility->code);
             $facilities = [];
         }
-        $partners = Partner::all();
+        $programs = Program::all();
         if (Auth::user()->user_level < 2) {
             $counties = County::all();
             $facilities =[];
         } else {
             $cs= SubCounty::join("health_facilities", "health_facilities.Sub_County_ID", "=", "sub_county.id")
                 ->select('sub_county.county_id')
-                ->where('health_facilities.partner_id', Auth::user()->partner->id)
+                ->where('health_facilities.program_id', Auth::user()->program->id)
                 ->get();
 
 
@@ -51,7 +51,7 @@ class UserController extends Controller
         $data = array(
             'users' =>$users->get(),
             'counties' => $counties,
-            'partners' => $partners,
+            'programs' => $programs,
             'subcounties' => $subcounties,
             'facilities' => $facilities,
             
@@ -63,15 +63,15 @@ class UserController extends Controller
 
     public function adduserform()
     {
-        $partners = Partner::all();
+        $programs = program::all();
         $facilities =[];
         if (Auth::user()->user_level < 2) {
             $counties = County::all();
         } else {
-            $facilities = Facility::where('partner_id', Auth::user()->partner->id)->get();
+            $facilities = Facility::where('program_id', Auth::user()->program->id)->get();
             $cs= SubCounty::join("health_facilities", "health_facilities.Sub_County_ID", "=", "sub_county.id")
                 ->select('sub_county.county_id')
-                ->where('health_facilities.partner_id', Auth::user()->partner->id)
+                ->where('health_facilities.program_id', Auth::user()->program->id)
                 ->get();
 
 
@@ -91,7 +91,7 @@ class UserController extends Controller
         $data = array(
             'facilities' => $facilities,
             'counties' => $counties,
-            'partners' => $partners,
+            'programs' => $programs,
         );
         return view('users.adduser')->with($data);
     }
@@ -107,17 +107,17 @@ class UserController extends Controller
             $user->phone_no = $request->phone;
             $user->user_level = $request->level;
             if ($request->level =='2') {
-                $user->partner_id = $request->partner_id;
+                $user->program_id = $request->program_id;
             }
             if ($request->level =='5') {
                 $user->county_id = $request->county_id;
             }
             if ($request->level =='3') {
-                $user->partner_id = Auth::user()->partner->id;
+                $user->program_id = Auth::user()->program->id;
                 $user->facility_id = $request->code;
             }
             if ($request->level =='4') {
-                $user->partner_id = Auth::user()->partner->id;
+                $user->program_id = Auth::user()->program->id;
                 $user->facility_id = Auth::user()->facility->code;
             }
             $user->password = bcrypt($request->phone);
@@ -168,14 +168,14 @@ class UserController extends Controller
                 $user->user_level = $request->level;
             }
             if ($request->level =='2') {
-                $user->partner_id = $request->partner_id;
+                $user->program_id = $request->program_id;
             }
             if ($request->level =='5') {
                 $user->county_id = $request->county_id;
             }
             if ($request->level =='3') {
                 $user->facility_id = $request->code;
-                $user->partner_id = Auth::user()->partner->id;
+                $user->program_id = Auth::user()->program->id;
             }
             $user->status = $request->status;
             $user->updated_at = date('Y-m-d H:i:s');

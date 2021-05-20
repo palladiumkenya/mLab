@@ -12,10 +12,10 @@ class FacilityController extends Controller
 {
     public function index()
     {
-        $facilities = Facility::with('sub_county.county', 'partner')->whereNotNull('mobile')->whereNotNull('partner_id');
+        $facilities = Facility::with('sub_county.county', 'unit')->whereNotNull('mobile')->whereNotNull('unit_id');
         
         if (Auth::user()->user_level == 2) {
-            $facilities->where('partner_id', Auth::user()->partner_id);
+            $facilities->where('unit_id', Auth::user()->unit_id);
         }
         if (Auth::user()->user_level == 5) {
             $facilities->join('sub_county', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')->where('sub_county.county_id', Auth::user()->county_id);
@@ -39,7 +39,7 @@ class FacilityController extends Controller
         try {
             $facility = Facility::where('code', $request->code)->first();
             $facility->mobile = $request->phone;
-            $facility->partner_id = Auth::user()->partner->id;
+            $facility->unit_id = Auth::user()->unit->id;
             $facility->updated_at = date('Y-m-d H:i:s');
             $facility->modified = date('Y-m-d H:i:s');
             if ($facility->save()) {
@@ -89,7 +89,7 @@ class FacilityController extends Controller
             $facility = Facility::find($request->id);
 
             $facility->mobile = null;
-            $facility->partner_id = null;
+            $facility->unit_id = null;
             $facility->updated_at = date('Y-m-d H:i:s');
             
             if ($facility->save()) {

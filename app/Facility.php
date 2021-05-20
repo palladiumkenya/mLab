@@ -16,8 +16,8 @@ class Facility extends Model
     public function sub_county(){
         return $this->belongsTo('App\SubCounty','Sub_County_ID','id');
     }
-    public function partner(){
-        return $this->belongsTo('App\Partner','partner_id','id');
+    public function unit(){
+        return $this->belongsTo('App\Unit','unit_id','id');
     }
 
     public function il(){

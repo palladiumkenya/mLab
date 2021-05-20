@@ -4,18 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Unit;
+use App\Program;
 
 class UnitController extends Controller
 {
     public function index(){
         $units = Unit::where('status', '!=', 'Deleted')->get();
 
-        return view('units.units')->with('units', $units);
+         return view('units.units')->with('units', $units);
+
     }
 
     public function addunitform(){
 
-        return view('units.addunit');
+        $programs = Program::all();
+
+        $data = array(
+            'programs' => $programs,
+        );
+
+        return view('units.addunit')->with($data);
+
     }
 
     public function addunit(Request $request){
@@ -23,6 +32,7 @@ class UnitController extends Controller
             $unit = new Unit;
 
             $unit->name = $request->name;
+            $unit->program_id = $request->program_id;
             $unit->status = 'Active';
 
             if($unit->save()) {
@@ -51,6 +61,7 @@ class UnitController extends Controller
             $unit = Unit::find($request->uid);
 
             $unit->name = $request->name;
+            $unit->name = $request->program;
             $unit->status = $request->status; 
             $unit->updated_at = date('Y-m-d H:i:s');
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Data;
 use App\County;
-use App\Partner;
+use App\Program;
 use App\Facility;
 use App\SubCounty;
 use App\HTSData;
@@ -21,7 +21,7 @@ class DataController extends Controller
         $results = Data::orderBy('id', 'DESC');
 
         if (Auth::user()->user_level == 2) {
-            $results->where('partner', Auth::user()->partner->name);
+            $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);
@@ -38,7 +38,7 @@ class DataController extends Controller
         $results = Data::orderBy('id', 'DESC')->where('result_type', 'Viral Load');
 
         if (Auth::user()->user_level == 2) {
-            $results->where('partner', Auth::user()->partner->name);
+            $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);
@@ -55,7 +55,7 @@ class DataController extends Controller
         $results = Data::orderBy('id', 'DESC')->where('result_type', 'EID');
 
         if (Auth::user()->user_level == 2) {
-            $results->where('partner', Auth::user()->partner->name);
+            $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);
@@ -67,12 +67,12 @@ class DataController extends Controller
         return view('data.results')->with('results', $results->paginate(100));
     }
 
-    public function partnerform()
+    public function programform()
     {
-        $partners = Partner::all();
+        $programs = Program::all();
 
         $data = array(
-            'partners' => $partners,
+            'programs' => $programs,
         );
         return view('data.hts_filter')->with($data);
     }
@@ -80,9 +80,9 @@ class DataController extends Controller
     public function hts_results(Request $request)
     {
         $results = HTSData::select('*');
-        if (!empty($request->partner_id)) {
-            $partner = Partner::find($request->partner_id);
-            $results->where('partner', $partner->name);
+        if (!empty($request->program_id)) {
+            $program = Program::find($request->program_id);
+            $results->where('program', $program->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -104,7 +104,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('partner', Auth::user()->partner->name);
+            $results->where('program', Auth::user()->program->name);
         }
 
         return view('data.hts_results')->with('results', $results->paginate(100));
@@ -112,11 +112,11 @@ class DataController extends Controller
 
     public function rawdataform()
     {
-        $partners = Partner::all();
+        $programs = Program::all();
         
 
         $data = array(
-            'partners' => $partners,
+            'programs' => $programs,
         );
         return view('data.rawdata')->with($data);
     }
@@ -124,9 +124,9 @@ class DataController extends Controller
     public function fetchraw(Request $request)
     {
         $data = Data::select('*');
-        if (!empty($request->partner_id)) {
-            $partner = Partner::find($request->partner_id);
-            $data->where('partner', $partner->name);
+        if (!empty($request->program_id)) {
+            $program = Program::find($request->program_id);
+            $data->where('program', $program->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -147,7 +147,7 @@ class DataController extends Controller
             $data->where('date_sent', '<=', date($request->to));
         }
         if (Auth::user()->user_level == 2) {
-            $data->where('partner', Auth::user()->partner->name);
+            $data->where('program', Auth::user()->program->name);
         }
         
 
@@ -158,11 +158,11 @@ class DataController extends Controller
 
     public function vl_srl_form()
     {
-        $partners = Partner::all();
+        $programs = Program::all();
         
 
         $data = array(
-            'partners' => $partners,
+            'programs' => $programs,
         );
         return view('data.vl_srl_filter')->with($data);
     }
@@ -170,9 +170,9 @@ class DataController extends Controller
     public function vl_srl_results(Request $request)
     {
         $results = SRLVLData::select('*');
-        if (!empty($request->partner_id)) {
-            $partner = Partner::find($request->partner_id);
-            $results->where('partner', $partner->name);
+        if (!empty($request->program_id)) {
+            $program = Program::find($request->program_id);
+            $results->where('program', $program->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -200,7 +200,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('partner', Auth::user()->partner->name);
+            $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);
@@ -214,11 +214,11 @@ class DataController extends Controller
 
     public function eid_srl_form()
     {
-        $partners = Partner::all();
+        $programs = Program::all();
         
 
         $data = array(
-            'partners' => $partners,
+            'programs' => $programs,
         );
         return view('data.eid_srl_filter')->with($data);
     }
@@ -228,9 +228,9 @@ class DataController extends Controller
     {
 
         $results = SRLEIData::select('*');
-        if (!empty($request->partner_id)) {
-            $partner = Partner::find($request->partner_id);
-            $results->where('partner', $partner->name);
+        if (!empty($request->program_id)) {
+            $program = Program::find($request->program_id);
+            $results->where('program', $program->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -258,7 +258,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('partner', Auth::user()->partner->name);
+            $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);
@@ -275,11 +275,11 @@ class DataController extends Controller
     
     public function hts_srl_form()
     {
-        $partners = Partner::all();
+        $programs = Program::all();
         
 
         $data = array(
-            'partners' => $partners,
+            'programs' => $programs,
         );
         return view('data.hts_srl_filter')->with($data);
     }
@@ -288,9 +288,9 @@ class DataController extends Controller
     public function hts_srl_results(Request $request)
     {
         $results = SRLHTSData::select('*');
-        if (!empty($request->partner_id)) {
-            $partner = Partner::find($request->partner_id);
-            $results->where('partner', $partner->name);
+        if (!empty($request->program_id)) {
+            $program = Program::find($request->program_id);
+            $results->where('program', $program->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -318,7 +318,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('partner', Auth::user()->partner->name);
+            $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);

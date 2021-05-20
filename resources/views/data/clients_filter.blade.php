@@ -30,19 +30,19 @@
                         <div class="row">
                             @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
                             @if(Auth::user()->user_level < 3) <div class="col-md-6 form-group mb-3">
-                                <label for="firstName1">Partner</label>
-                                <select class="form-control" data-width="100%" id="partner" name="partner_id">
-                                    <option value="">Select Partner</option>
-                                    @if(Auth::user()->user_level < 2) @if (count($partners)> 0)
-                                        @foreach($partners as $partner)
-                                        <option value="{{$partner->id}}">{{ ucwords($partner->name) }}</option>
+                                <label for="firstName1">program</label>
+                                <select class="form-control" data-width="100%" id="program" name="program_id">
+                                    <option value="">Select program</option>
+                                    @if(Auth::user()->user_level < 2) @if (count($programs)> 0)
+                                        @foreach($programs as $program)
+                                        <option value="{{$program->id}}">{{ ucwords($program->name) }}</option>
                                         @endforeach
                                         @endif
                                         @endif
                                         @if(Auth::user()->user_level == 2)
 
-                                        <option value="{{Auth::user()->partner->id}}">
-                                            {{ ucwords(Auth::user()->partner->name) }}</option>
+                                        <option value="{{Auth::user()->program->id}}">
+                                            {{ ucwords(Auth::user()->program->name) }}</option>
                                         @endif
 
                                 </select>
@@ -101,7 +101,7 @@
 
 @section('bottom-js')
 <script type="text/javascript">
-    $('#partner').change(function() {
+    $('#program').change(function() {
         $('#county').empty();
         var z = $(this).val();
         $.ajax({
@@ -111,7 +111,7 @@
             type: "POST",
             url: '/get_counties',
             data: {
-                "partner_id": z
+                "program_id": z
             },
             dataType: "json",
             success: function(data) {

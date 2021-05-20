@@ -21,6 +21,7 @@
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Name</th>
+                                                <th>Program</th>
                                                 <th>Status</th>
                                                 <th>Date Added</th>
                                                 <th>Action</th>
@@ -32,6 +33,7 @@
                                                     <tr> 
                                                         <td> {{ $loop->iteration }}</td>
                                                         <td> {{ ucwords($unit->name)}}</td>
+                                                        <td>{{ !empty($unit->program->name) ? $unit->program->name:'None' }}</td>
                                                         <td>  {{$unit->status}}</td>
                                                         <td>  {{date('Y-m-d', strtotime($unit->created_at))}}</td>
                                                         <td>

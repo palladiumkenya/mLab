@@ -12,4 +12,8 @@ class Unit extends Model
     protected $fillable = [
         'name', 'status'
     ];
+
+    public function program(){
+        return $this->belongsTo('App\Program','program_id','id');
+    }
 }

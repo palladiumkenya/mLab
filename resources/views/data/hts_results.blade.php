@@ -53,7 +53,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td>  {{$result->partner}}</td>                                                  
+                                                        <td>  {{$result->program}}</td>                                                  
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -88,6 +88,8 @@
         }],
         "paging": true,
         "responsive":true,
+        "pageLength": 100,
+        "lengthMenu": [100, 2500, 5000, "All"],
         "ordering": true,
         "info": true,
         dom: 'Bfrtip',

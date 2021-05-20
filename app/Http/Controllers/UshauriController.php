@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Result;
-use App\Partner;
+use App\Program;
 use App\Facility;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -14,11 +14,11 @@ class UshauriController extends Controller
 {
     public function index()
     {
-        $partners = Partner::all();
+        $programs = Program::all();
         
 
         $data = array(
-            'partners' => $partners,
+            'programs' => $programs,
         );
         return view('data.clients_filter')->with($data);
     }

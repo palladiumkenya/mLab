@@ -51,7 +51,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td>  {{$result->partner}}</td>                                                  
+                                                        <td>  {{$result->program}}</td>                                                  
                                                     </tr>
                                                 @endforeach
                                             @endif

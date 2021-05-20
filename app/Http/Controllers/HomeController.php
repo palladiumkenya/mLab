@@ -12,15 +12,15 @@ class HomeController extends Controller
 {
     public function index()
     {
-        Auth::user()->load('partner', 'facility', 'county');
+        Auth::user()->load('program', 'facility', 'county');
         $username = 'viewer'; // Username  
         $server = 'https://tableau.mhealthkenya.co.ke/trusted';  // Tableau URL  
         if(Auth::user()->user_level < 2){
                 $view = "views/MLABDASH_0/MDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no"; 
         }
         if(Auth::user()->user_level == 2){
-                $aff = str_replace(' ', '%20', Auth::user()->partner->name);
-                $view = "views/MLABDASH_0/PartnerDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&partner=".$aff;
+                $aff = str_replace(' ', '%20', Auth::user()->program->name);
+                $view = "views/MLABDASH_0/programDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&program=".$aff;
         }
         if(Auth::user()->user_level == 3 || Auth::user()->user_level == 4){
                 $aff = str_replace(' ', '%20', Auth::user()->facility->name);
@@ -79,16 +79,16 @@ class HomeController extends Controller
             $sub_county_id = $request->sub_county_id;
 
             
-            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->whereNull('partner_id')->whereNull('mobile')->get();
+            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->whereNull('program_id')->whereNull('mobile')->get();
 
             return $facilities;
     }
-    public function get_partner_facilities_mlab(Request $request)
+    public function get_program_facilities_mlab(Request $request)
     {
             $sub_county_id = $request->sub_county_id;
 
             
-            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->where('partner_id', Auth::user()->partner->id)->get();
+            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->where('program_id', Auth::user()->program->id)->get();
 
             return $facilities;
     }
@@ -98,18 +98,18 @@ class HomeController extends Controller
             $sub_county_id = $request->sub_county_id;
 
             
-            $facilities = Facility::whereNotNull('partner_id')->whereNotNull('mobile')->where('Sub_County_ID', $sub_county_id)->doesnthave('il')->get();
+            $facilities = Facility::whereNotNull('program_id')->whereNotNull('mobile')->where('Sub_County_ID', $sub_county_id)->doesnthave('il')->get();
 
             return $facilities;
     }
     public function get_counties(Request $request)
     {
-            $partner_id = $request->partner_id;
+            $program_id = $request->program_id;
 
 
             $cs= SubCounty::join("health_facilities", "health_facilities.Sub_County_ID",  "=",  "sub_county.id")
                 ->select('sub_county.county_id')
-                ->where('health_facilities.partner_id', $partner_id)
+                ->where('health_facilities.program_id', $program_id)
                 ->get();
 
 

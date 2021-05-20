@@ -23,7 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);
     Route::post('/get_facilities_mlab', ['uses'=>'HomeController@get_facilities_mlab', 'as'=>'get_facilities_mlab']);
-    Route::post('/get_partner_facilities_mlab', ['uses'=>'HomeController@get_partner_facilities_mlab', 'as'=>'get_partner_facilities_mlab']);
+    Route::post('/get_program_facilities_mlab', ['uses'=>'HomeController@get_program_facilities_mlab', 'as'=>'get_program_facilities_mlab']);
     Route::post('/get_facilities_data', ['uses'=>'HomeController@get_facilities_data', 'as'=>'get_facilities_data']);
     Route::post('/get_counties', ['uses'=>'HomeController@get_counties', 'as'=>'get_counties']);
 
@@ -42,11 +42,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/get/client/results', 'UshauriController@getClientResults')->name('getResults');
 
 
-    Route::get('/partners', 'PartnerController@index')->name('partners');
-    Route::get('/add/partner/form', 'PartnerController@addpartnerform')->name('addpartnerform');
-    Route::post('/add/partner', 'PartnerController@addpartner')->name('addpartner');
-    Route::post('/edit/partner', 'PartnerController@editpartner')->name('editpartner');
-    Route::post('/delete/partner', 'PartnerController@deletepartner')->name('deletepartner');
+    Route::get('/programs', 'programController@index')->name('programs');
+    Route::get('/add/program/form', 'programController@addprogramform')->name('addprogramform');
+    Route::post('/add/program', 'programController@addprogram')->name('addprogram');
+    Route::post('/edit/program', 'programController@editprogram')->name('editprogram');
+    Route::post('/delete/program', 'programController@deleteprogram')->name('deleteprogram');
 
     Route::get('/units', 'UnitController@index')->name('units');
     Route::get('/add/unit/form', 'UnitController@addunitform')->name('addunitform');
@@ -73,7 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/all/results', 'DataController@all_results')->name('all_results');
     Route::get('/vl/results', 'DataController@vl_results')->name('vl_results');
     Route::get('/eid/results', 'DataController@eid_results')->name('eid_results');
-    Route::get('/hts/allresults', 'DataController@partnerform')->name('hts_all_results');
+    Route::get('/hts/allresults', 'DataController@programform')->name('hts_all_results');
     Route::get('/hts/results', 'DataController@hts_results')->name('hts_results');
     Route::get('/raw/data', 'DataController@rawdataform')->name('raw_data_form');
     Route::get('/get/raw/data', 'DataController@fetchraw')->name('fetchraw');

@@ -53,7 +53,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td>  {{$result->partner}}</td>                                                  
+                                                        <td>  {{$result->program}}</td>                                                  
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -87,6 +87,8 @@
             orderData: [4, 0]
         }],
         "paging": true,
+        "pageLength": 100,
+        "lengthMenu": [100, 2500, 5000, "All"],
         "responsive":true,
         "ordering": true,
         "info": true

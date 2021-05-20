@@ -11,7 +11,7 @@ class SRLEIData extends Model
     public $incrementing = false;
     
     protected $fillable = [
-        'entry_point', 'partner','county','sub_county','facility','prophylaxis_code','lab_name','created_at','updated_at',
+        'entry_point', 'program','county','sub_county','facility','prophylaxis_code','lab_name','created_at','updated_at',
     ];
 
 }

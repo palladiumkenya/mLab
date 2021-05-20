@@ -96,11 +96,11 @@
                                                             @endforeach
                                                     @endif
                                             </select>
-                                            <select hidden class="form-control" data-width="100%" id="partner" name="partner_id">
-                                                <option value="">Select Partner</option>
-                                                    @if (count($partners) > 0)
-                                                        @foreach($partners as $partner)
-                                                        <option value="{{$partner->id }}">{{ ucwords($partner->name) }}</option>
+                                            <select hidden class="form-control" data-width="100%" id="program" name="program_id">
+                                                <option value="">Select program</option>
+                                                    @if (count($programs) > 0)
+                                                        @foreach($programs as $program)
+                                                        <option value="{{$program->id }}">{{ ucwords($program->name) }}</option>
                                                             @endforeach
                                                     @endif
                                             </select>
@@ -133,17 +133,17 @@ $('#level').on('change', function() {
   if(level == 1){
     $('#affiliation').val("National");
     $('#affiliation').removeAttr('hidden');
-    $('#partner').attr("hidden",true);
+    $('#program').attr("hidden",true);
     $('#county').attr("hidden",true);
   }
   if(level == 2){
-    $('#partner').removeAttr('hidden');
+    $('#program').removeAttr('hidden');
     $('#affiliation').attr("hidden",true);
     $('#county').attr("hidden",true);
   }
   if(level == 5){
     $('#county').removeAttr('hidden');
-    $('#partner').attr("hidden",true);
+    $('#program').attr("hidden",true);
     $('#affiliation').attr("hidden",true);
   }
 });
@@ -188,7 +188,7 @@ $.ajax({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
     type: "POST",
-    url: '/get_partner_facilities_mlab',
+    url: '/get_program_facilities_mlab',
     data: {
         "sub_county_id": y
     },

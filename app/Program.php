@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Partner extends Model
+class Program extends Model
 {
-    public $table = 'partner';
+    public $table = 'program';
     public $timestamps = false;
     
     protected $fillable = [

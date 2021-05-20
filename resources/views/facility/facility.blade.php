@@ -26,7 +26,7 @@
                                                 <th>MFL</th>
                                                 <th>Level</th>
                                                 @if(Auth::user()->user_level < 2)
-                                                <th>Program</th>
+                                                <th>Unit</th>
                                                 @endif
                                                 <th>Sub County</th>
                                                 <th>County</th>
@@ -46,7 +46,7 @@
                                                         <td>  {{$facility->code}}</td>
                                                         <td>  {{$facility->keph_level}}</td>
                                                         @if(Auth::user()->user_level < 2)
-                                                        <td>  {{ucwords($facility->partner->name)}}</td>
+                                                        <td>{{ !empty($facility->unit->name) ? $facility->unit->name:'None' }}</td>
                                                         @endif
                                                         <td>  {{ucwords($facility->sub_county->name)}}</td>
                                                         <td>  {{ucwords($facility->sub_county->county->name)}}</td>

@@ -7,8 +7,8 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label for=" partners" class="col-form-label"><b>Select Program(s)</b></label>
-                    <select class=" partners form-control selectpicker" id="partners" name="partners[]" multiple
+                    <label for=" programs" class="col-form-label"><b>Select Program(s)</b></label>
+                    <select class=" programs form-control selectpicker" id="programs" name="programs[]" multiple
                         data-live-search="true">
 
                     </select>
@@ -16,8 +16,8 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label for=" partners" class="col-form-label"><b>Select Unit(s)</b></label>
-                    <select class=" partners form-control selectpicker" id="units" name="units[]" multiple
+                    <label for=" programs" class="col-form-label"><b>Select Unit(s)</b></label>
+                    <select class=" programs form-control selectpicker" id="units" name="units[]" multiple
                         data-live-search="true">
 
                     </select>
@@ -108,8 +108,8 @@
                 <div class="card-body text-center">
                     <i class="i-People-on-Cloud"></i>
                     <div class="content">
-                        <p class="text-muted mt-4 mb-0">Partners </p>
-                        <p id="partner_numbers" class="text-primary text-24 line-height-1 mb-2"></p>
+                        <p class="text-muted mt-4 mb-0">programs </p>
+                        <p id="program_numbers" class="text-primary text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -285,36 +285,36 @@
                 tats(data.vl_tat, data.eid_tat);
                 maps(data.county_numbers);
                 pullCheck(data.pulled_data);
-                $('#partners').empty();
+                $('#programs').empty();
                 $('#counties').empty();
-                $.each(data.all_partners, function(number, partner) {
-                    $("#partners").append($('<option>').text(partner.name).attr('value',
-                        partner.id));
+                $.each(data.all_programs, function(number, program) {
+                    $("#programs").append($('<option>').text(program.name).attr('value',
+                        program.id));
                 });
                 $.each(data.all_counties, function(number, county) {
                     $("#counties").append($('<option>').text(county.name).attr('value',
                         county.id));
                 });
-                $("#partners").selectpicker('refresh');
+                $("#programs").selectpicker('refresh');
                 $("#counties").selectpicker('refresh');
                 $("#all_records").html(data.all_records);
                 $("#all_facilities").html(data.facilities);
                 $("#county_numbers").html(data.counties);
-                $("#partner_numbers").html(data.partners);
+                $("#program_numbers").html(data.programs);
                 $("#suppressed_negative").html(arr[0]);
                 $("#unsuppressed_positive").html(arr[1]);
                 let userlevel = '{!!Auth::user()->user_level!!}';
                 if (userlevel == 2) {
-                    let partnerId = '{!!Auth::user()->partner_id!!}';
-                    $('#partners').attr("disabled", true);
-                    $('#partners').selectpicker('val', partnerId);
-                    $("#partners").selectpicker('refresh');
+                    let programId = '{!!Auth::user()->program_id!!}';
+                    $('#programs').attr("disabled", true);
+                    $('#programs').selectpicker('val', programId);
+                    $("#programs").selectpicker('refresh');
                 }
                 if (userlevel == 3) {
-                    let partnerId = '{!!Auth::user()->partner_id!!}';
-                    $('#partners').attr("disabled", true);
-                    $('#partners').selectpicker('val', partnerId);
-                    $("#partners").selectpicker('refresh');
+                    let programId = '{!!Auth::user()->program_id!!}';
+                    $('#programs').attr("disabled", true);
+                    $('#programs').selectpicker('val', programId);
+                    $("#programs").selectpicker('refresh');
                     let countyId = data.all_counties[0].id;
                     $('#counties').attr("disabled", true);
                     $('#counties').selectpicker('val', countyId);
@@ -328,7 +328,7 @@
         $('#dataFilter').on('submit', function(e) {
             e.preventDefault();
             $("#dashboard_overlay").show();
-            let partners = $('#partners').val();
+            let programs = $('#programs').val();
             let counties = $('#counties').val();
             let subcounties = $('#subcounties').val();
             let facilities = $('#facilities').val();
@@ -341,7 +341,7 @@
             $.ajax({
                 type: 'POST',
                 data: {
-                    "partners": partners,
+                    "programs": programs,
                     "counties": counties,
                     "subcounties": subcounties,
                     "facilities": facilities,
@@ -356,23 +356,23 @@
                     tats(data.vl_tat, data.eid_tat);
                     maps(data.county_numbers);
                     pullCheck(data.pulled_data);
-                    $('#partners').empty();
+                    $('#programs').empty();
                     $('#counties').empty();
-                    $.each(data.all_partners, function(number, partner) {
-                        $("#partners").append($('<option>').text(partner.name).attr(
+                    $.each(data.all_programs, function(number, program) {
+                        $("#programs").append($('<option>').text(program.name).attr(
                             'value',
-                            partner.id));
+                            program.id));
                     });
                     $.each(data.all_counties, function(number, county) {
                         $("#counties").append($('<option>').text(county.name).attr('value',
                             county.id));
                     });
-                    $("#partners").selectpicker('refresh');
+                    $("#programs").selectpicker('refresh');
                     $("#counties").selectpicker('refresh');
                     $("#all_records").html(data.all_records);
                     $("#all_facilities").html(data.facilities);
                     $("#county_numbers").html(data.counties);
-                    $("#partner_numbers").html(data.partners);
+                    $("#program_numbers").html(data.programs);
                     $("#suppressed_negative").html(arr[0]);
                     $("#unsuppressed_positive").html(arr[1]);
                     $("#dashboard_overlay").hide();
@@ -393,9 +393,9 @@
             }
         });
         $(document).ready(function() {
-            $('.partners').selectpicker({});
-            $("#partners").change(function() {
-                let partners = $('#partners').val();
+            $('.programs').selectpicker({});
+            $("#programs").change(function() {
+                let programs = $('#programs').val();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -404,7 +404,7 @@
                 $.ajax({
                     type: 'POST',
                     data: {
-                        "partners": partners
+                        "programs": programs
                     },
                     url: "{{ route('get_dashboard_counties') }}",
                     success: function(data) {
@@ -449,7 +449,7 @@
             });
             $("#subcounties").change(function() {
                 let sub_counties = $('#subcounties').val();
-                let partners = $('#partners').val();
+                let programs = $('#programs').val();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -459,7 +459,7 @@
                     type: 'POST',
                     data: {
                         "sub_counties": sub_counties,
-                        "partners": partners
+                        "programs": programs
                     },
                     url: "{{ route('get_dashboard_facilities') }}",
                     success: function(data) {
