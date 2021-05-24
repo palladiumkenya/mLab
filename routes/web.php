@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get_data', ['uses' => 'DashboardController@get_data', 'as' => 'get_data']);
     Route::get('/get_printers_data', ['uses' => 'DashboardController@get_printers_data', 'as' => 'get_printers_data']);
     Route::post('/get_dashboard_counties', ['uses' => 'DashboardController@get_dashboard_counties', 'as' => 'get_dashboard_counties']);
+    Route::post('/get_dashboard_units', ['uses' => 'DashboardController@get_dashboard_units', 'as' => 'get_dashboard_units']);
     Route::post('/get_dashboard_sub_counties', ['uses' => 'DashboardController@get_dashboard_sub_counties', 'as' => 'get_dashboard_sub_counties']);
     Route::post('/get_dashboard_facilities', ['uses' => 'DashboardController@get_dashboard_facilities', 'as' => 'get_dashboard_facilities']);
     Route::post('/filter/dashboard', ['uses' => 'DashboardController@get_filtered_data', 'as' => 'filterDashboard']);

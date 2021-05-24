@@ -91,13 +91,25 @@
             </div>
         </div>
 
-        <div class="col-lg-2 col-md-6 col-sm-6">
+        <!-- <div class="col-lg-2 col-md-6 col-sm-6">
             <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                 <div class="card-body text-center">
                     <i class="i-Globe"></i>
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">Counties </p>
                         <p id="county_numbers" class="text-primary text-24 line-height-1 mb-2"></p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="col-lg-2 col-md-6 col-sm-6">
+            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                <div class="card-body text-center">
+                    <i class="i-Globe"></i>
+                    <div class="content">
+                        <p class="text-muted mt-4 mb-0">Units </p>
+                        <p id="unit_numbers" class="text-primary text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -108,7 +120,7 @@
                 <div class="card-body text-center">
                     <i class="i-People-on-Cloud"></i>
                     <div class="content">
-                        <p class="text-muted mt-4 mb-0">programs </p>
+                        <p class="text-muted mt-4 mb-0">Programs </p>
                         <p id="program_numbers" class="text-primary text-24 line-height-1 mb-2"></p>
                     </div>
                 </div>
@@ -286,16 +298,22 @@
                 maps(data.county_numbers);
                 pullCheck(data.pulled_data);
                 $('#programs').empty();
+                $('#units').empty();
                 $('#counties').empty();
                 $.each(data.all_programs, function(number, program) {
                     $("#programs").append($('<option>').text(program.name).attr('value',
                         program.id));
+                });
+                $.each(data.all_units, function(number, unit) {
+                    $("#units").append($('<option>').text(unit.name).attr('value',
+                        unit.id));
                 });
                 $.each(data.all_counties, function(number, county) {
                     $("#counties").append($('<option>').text(county.name).attr('value',
                         county.id));
                 });
                 $("#programs").selectpicker('refresh');
+                $("#units").selectpicker('refresh');
                 $("#counties").selectpicker('refresh');
                 $("#all_records").html(data.all_records);
                 $("#all_facilities").html(data.facilities);
@@ -315,6 +333,10 @@
                     $('#programs').attr("disabled", true);
                     $('#programs').selectpicker('val', programId);
                     $("#programs").selectpicker('refresh');
+                    let unitId = data.all_units[0].id;
+                    $('#units').attr("disabled", true);
+                    $('#units').selectpicker('val', unitId);
+                    $("#units").selectpicker('refresh');
                     let countyId = data.all_counties[0].id;
                     $('#counties').attr("disabled", true);
                     $('#counties').selectpicker('val', countyId);
@@ -329,6 +351,7 @@
             e.preventDefault();
             $("#dashboard_overlay").show();
             let programs = $('#programs').val();
+            let units = $('#units').val();
             let counties = $('#counties').val();
             let subcounties = $('#subcounties').val();
             let facilities = $('#facilities').val();
@@ -342,6 +365,7 @@
                 type: 'POST',
                 data: {
                     "programs": programs,
+                    "units": units,
                     "counties": counties,
                     "subcounties": subcounties,
                     "facilities": facilities,
@@ -357,21 +381,28 @@
                     maps(data.county_numbers);
                     pullCheck(data.pulled_data);
                     $('#programs').empty();
+                    $('#units').empty();
                     $('#counties').empty();
                     $.each(data.all_programs, function(number, program) {
                         $("#programs").append($('<option>').text(program.name).attr(
                             'value',
                             program.id));
                     });
+                    $.each(data.all_unitss, function(number, units) {
+                        $("#units").append($('<option>').text(unit.name).attr('value',
+                            unit.id));
+                    });
                     $.each(data.all_counties, function(number, county) {
                         $("#counties").append($('<option>').text(county.name).attr('value',
                             county.id));
                     });
                     $("#programs").selectpicker('refresh');
+                    $("#units").selectpicker("refresh");
                     $("#counties").selectpicker('refresh');
                     $("#all_records").html(data.all_records);
                     $("#all_facilities").html(data.facilities);
                     $("#county_numbers").html(data.counties);
+                    $("#unit_numbers").html(data.units);
                     $("#program_numbers").html(data.programs);
                     $("#suppressed_negative").html(arr[0]);
                     $("#unsuppressed_positive").html(arr[1]);
@@ -394,88 +425,147 @@
         });
         $(document).ready(function() {
             $('.programs').selectpicker({});
-            $("#programs").change(function() {
-                let programs = $('#programs').val();
-                $.ajaxSetup({
+            $('#program').change(function () {
+
+                $('#unit').empty();
+
+                var z = $(this).val();
+                $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        "programs": programs
                     },
-                    url: "{{ route('get_dashboard_counties') }}",
-                    success: function(data) {
-                        $('#counties').empty();
-                        $.each(data, function(number, county) {
-                            $("#counties").append($('<option>').text(
-                                    county.name)
-                                .attr(
-                                    'value',
-                                    county.id));
-                        });
-                        $("#counties").selectpicker('refresh');
+                    type: "POST",
+                    url: '/get_units',
+                    data: {
+                        "program_id": z
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        var select = document.getElementById("unit"),
+                            opt = document.createElement("option");
+
+                            opt.value = "";
+                            opt.textContent = "Select Unit";
+                            select.appendChild(opt);
+                        for (var i = 0; i < data.length; i++) {
+                            
+                        var select = document.getElementById("unit"),
+                            opt = document.createElement("option");
+
+                            opt.value = data[i].id;
+                            opt.textContent = data[i].name;
+                            select.appendChild(opt);
+                        }
                     }
-                });
+                })
             });
-            $("#counties").change(function() {
-                let counties = $('#counties').val();
-                $.ajaxSetup({
+
+            $('#unit').change(function () {
+
+                $('#county').empty();
+
+                var z = $(this).val();
+                $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        "counties": counties
                     },
-                    url: "{{ route('get_dashboard_sub_counties') }}",
-                    success: function(data) {
-                        $('#subcounties').empty();
-                        $.each(data, function(number, subcounty) {
-                            $("#subcounties").append($('<option>').text(
-                                    subcounty
-                                    .name)
-                                .attr(
-                                    'value',
-                                    subcounty.id));
-                        });
-                        $("#subcounties").selectpicker('refresh');
+                    type: "POST",
+                    url: '/get_counties',
+                    data: {
+                        "unit_id": z
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        var select = document.getElementById("county"),
+                            opt = document.createElement("option");
+
+                            opt.value = "";
+                            opt.textContent = "Select County";
+                            select.appendChild(opt);
+                        for (var i = 0; i < data.length; i++) {
+                            
+                        var select = document.getElementById("county"),
+                            opt = document.createElement("option");
+
+                            opt.value = data[i].id;
+                            opt.textContent = data[i].name;
+                            select.appendChild(opt);
+                        }
                     }
-                });
+                })
             });
-            $("#subcounties").change(function() {
-                let sub_counties = $('#subcounties').val();
-                let programs = $('#programs').val();
-                $.ajaxSetup({
+
+            $('#county').change(function () {
+                $('#sub_county').empty();
+
+                var x = $(this).val();
+                $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        "sub_counties": sub_counties,
-                        "programs": programs
                     },
-                    url: "{{ route('get_dashboard_facilities') }}",
-                    success: function(data) {
-                        $('#facilities').empty();
-                        $.each(data, function(number, facility) {
-                            $("#facilities").append($('<option>').text(
-                                    facility
-                                    .name)
-                                .attr(
-                                    'value',
-                                    facility.code));
-                        });
-                        $("#facilities").selectpicker('refresh');
+                    type: "POST",
+                    url: '/get_subcounties',
+                    data: {
+                        "county_id": x
+                    },
+                    dataType: "json",
+                    success: function (data) {
+
+                        var select = document.getElementById("sub_county"),
+                                opt = document.createElement("option");
+
+                            opt.value = "";
+                            opt.textContent = "Select Sub-County";
+                            select.appendChild(opt);
+
+                        for (var i = 0; i < data.length; i++) {
+                            var select = document.getElementById("sub_county"),
+                                opt = document.createElement("option");
+
+                            opt.value = data[i].id;
+                            opt.textContent = data[i].name;
+                            select.appendChild(opt);
+                        }
                     }
-                });
+                })
             });
+
+            $('#sub_county').change(function () {
+
+                $('#facility').empty();
+
+                var y = $(this).val();
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: '/get_facilities_data',
+                    data: {
+                        "sub_county_id": y
+                    },
+                    dataType: "json",
+                    success: function (data) {
+
+                        var select = document.getElementById("facility"),
+                                opt = document.createElement("option");
+
+                            opt.value = "";
+                            opt.textContent = "Select Facility";
+                            select.appendChild(opt);
+
+                        for (var i = 0; i < data.length; i++) {
+                            var select = document.getElementById("facility"),
+                                opt = document.createElement("option");
+
+                            opt.value = data[i].code;
+                            opt.textContent = data[i].name;
+                            select.appendChild(opt);
+                        }
+                    }
+                })
+            });
+
         });
     </script>
 
