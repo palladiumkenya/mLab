@@ -20,6 +20,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', ['uses' => 'DashboardController@index', 'as' => 'home']);
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+    Route::post('/get_units', ['uses'=>'HomeController@get_units', 'as'=>'get_units']);
     Route::post('/get_subcounties', ['uses'=>'HomeController@get_subcounties', 'as'=>'get_subcounties']);
     Route::post('/get_facilities', ['uses'=>'HomeController@get_facilities', 'as'=>'get_facilities']);
     Route::post('/get_facilities_mlab', ['uses'=>'HomeController@get_facilities_mlab', 'as'=>'get_facilities_mlab']);

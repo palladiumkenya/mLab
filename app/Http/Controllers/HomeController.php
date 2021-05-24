@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\SubCounty;
 use App\County;
 use App\Facility;
+use App\Unit;
 use Auth; 
 
 class HomeController extends Controller
@@ -54,6 +55,14 @@ class HomeController extends Controller
        
     }
 
+    public function get_units(Request $request)
+    {
+        $program_id = $request->program_id;
+
+        $units = Unit::where('program_id', $program_id)->get();
+
+        return $units;
+    }
 
     public function get_subcounties(Request $request)
     {
@@ -88,7 +97,7 @@ class HomeController extends Controller
             $sub_county_id = $request->sub_county_id;
 
             
-            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->where('program_id', Auth::user()->program->id)->get();
+            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->where('unit_id', Auth::user()->unit->id)->get();
 
             return $facilities;
     }
@@ -98,18 +107,18 @@ class HomeController extends Controller
             $sub_county_id = $request->sub_county_id;
 
             
-            $facilities = Facility::whereNotNull('program_id')->whereNotNull('mobile')->where('Sub_County_ID', $sub_county_id)->doesnthave('il')->get();
+            $facilities = Facility::whereNotNull('unit_id')->whereNotNull('mobile')->where('Sub_County_ID', $sub_county_id)->doesnthave('il')->get();
 
             return $facilities;
     }
     public function get_counties(Request $request)
     {
-            $program_id = $request->program_id;
+            $unit_id = $request->unit_id;
 
 
             $cs= SubCounty::join("health_facilities", "health_facilities.Sub_County_ID",  "=",  "sub_county.id")
                 ->select('sub_county.county_id')
-                ->where('health_facilities.program_id', $program_id)
+                ->where('health_facilities.unit_id', $unit_id)
                 ->get();
 
 

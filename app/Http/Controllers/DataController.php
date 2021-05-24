@@ -12,6 +12,7 @@ use App\HTSData;
 use App\SRLEIData;
 use App\SRLHTSData;
 use App\SRLVLData;
+use App\Unit;
 use Auth;
 
 class DataController extends Controller
@@ -24,7 +25,7 @@ class DataController extends Controller
             $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
-            $results->where('county', Auth::user()->county->name);
+            $results->where('unit', Auth::user()->unit->name);
         }
         if (Auth::user()->user_level == 3 || Auth::user()->user_level == 4) {
             $results->where('facility', Auth::user()->facility->name);
@@ -41,7 +42,7 @@ class DataController extends Controller
             $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
-            $results->where('county', Auth::user()->county->name);
+            $results->where('unit', Auth::user()->unit->name);
         }
         if (Auth::user()->user_level == 3 || Auth::user()->user_level == 4) {
             $results->where('facility', Auth::user()->facility->name);
@@ -58,7 +59,7 @@ class DataController extends Controller
             $results->where('program', Auth::user()->program->name);
         }
         if (Auth::user()->user_level == 5) {
-            $results->where('county', Auth::user()->county->name);
+            $results->where('unit', Auth::user()->unit->name);
         }
         if (Auth::user()->user_level == 3 || Auth::user()->user_level == 4) {
             $results->where('facility', Auth::user()->facility->name);
@@ -83,6 +84,10 @@ class DataController extends Controller
         if (!empty($request->program_id)) {
             $program = Program::find($request->program_id);
             $results->where('program', $program->name);
+        }
+        if (!empty($request->unit_id)) {
+            $unit = Unit::find($request->unit_id);
+            $data->where('unit', $unit->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -127,6 +132,10 @@ class DataController extends Controller
         if (!empty($request->program_id)) {
             $program = Program::find($request->program_id);
             $data->where('program', $program->name);
+        }
+        if (!empty($request->unit_id)) {
+            $unit = Unit::find($request->unit_id);
+            $data->where('unit', $unit->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -173,6 +182,10 @@ class DataController extends Controller
         if (!empty($request->program_id)) {
             $program = Program::find($request->program_id);
             $results->where('program', $program->name);
+        }
+        if (!empty($request->unit_id)) {
+            $unit = Unit::find($request->unit_id);
+            $results->where('unit', $unit->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -231,6 +244,10 @@ class DataController extends Controller
         if (!empty($request->program_id)) {
             $program = Program::find($request->program_id);
             $results->where('program', $program->name);
+        }
+        if (!empty($request->unit_id)) {
+            $unit = Unit::find($request->unit_id);
+            $results->where('unit', $unit->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);
@@ -291,6 +308,10 @@ class DataController extends Controller
         if (!empty($request->program_id)) {
             $program = Program::find($request->program_id);
             $results->where('program', $program->name);
+        }
+        if (!empty($request->unit_id)) {
+            $unit = Unit::find($request->unit_id);
+            $results->where('unit', $unit->name);
         }
         if (!empty($request->county_id)) {
             $county = County::find($request->county_id);

@@ -37,13 +37,20 @@
                                         </div>
                                     @endif
                                     <div class="col-md-6 form-group mb-3">
+                                        <label for="firstName1">Unit</label>
+                                        <select  class="form-control" data-width="100%" id="unit" name="unit_id">
+                                            <option value="">Select Unit</option>
+                                            @if(Auth::user()->user_level == 5)
+
+                                            <option value="{{Auth::user()->unit->id}}">{{ ucwords(Auth::user()->unit->name) }}</option>
+                                            @endif
+                                               
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 form-group mb-3">
                                         <label for="firstName1">County</label>
                                         <select  class="form-control" data-width="100%" id="county" name="county_id">
                                             <option value="">Select County</option>
-                                            @if(Auth::user()->user_level == 5)
-
-                                            <option value="{{Auth::user()->county->id}}">{{ ucwords(Auth::user()->county->name) }}</option>
-                                            @endif
                                                
                                         </select>
                                     </div>
@@ -157,6 +164,41 @@
 
 $('#program').change(function () {
 
+    $('#unit').empty();
+
+    var z = $(this).val();
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        url: '/get_units',
+        data: {
+            "program_id": z
+        },
+        dataType: "json",
+        success: function (data) {
+            var select = document.getElementById("unit"),
+                opt = document.createElement("option");
+
+                opt.value = "";
+                opt.textContent = "Select Unit";
+                select.appendChild(opt);
+            for (var i = 0; i < data.length; i++) {
+                
+            var select = document.getElementById("unit"),
+                opt = document.createElement("option");
+
+                opt.value = data[i].id;
+                opt.textContent = data[i].name;
+                select.appendChild(opt);
+            }
+        }
+    })
+});
+
+$('#unit').change(function () {
+
     $('#county').empty();
 
     var z = $(this).val();
@@ -167,7 +209,7 @@ $('#program').change(function () {
         type: "POST",
         url: '/get_counties',
         data: {
-            "program_id": z
+            "unit_id": z
         },
         dataType: "json",
         success: function (data) {
