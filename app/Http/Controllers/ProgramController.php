@@ -19,7 +19,7 @@ class ProgramController extends Controller
     }
     public function addprogram(Request $request){
         try{
-            $program = new program;
+            $program = new Program;
 
             $program->name = $request->name;
             $program->status = 'Active';
