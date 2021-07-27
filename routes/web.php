@@ -43,11 +43,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/get/client/results', 'UshauriController@getClientResults')->name('getResults');
 
 
-    Route::get('/programs', 'programController@index')->name('programs');
-    Route::get('/add/program/form', 'programController@addprogramform')->name('addprogramform');
-    Route::post('/add/program', 'programController@addprogram')->name('addprogram');
-    Route::post('/edit/program', 'programController@editprogram')->name('editprogram');
-    Route::post('/delete/program', 'programController@deleteprogram')->name('deleteprogram');
+    Route::get('/programs', 'ProgramController@index')->name('programs');
+    Route::get('/add/program/form', 'ProgramController@addprogramform')->name('addprogramform');
+    Route::post('/add/program', 'ProgramController@addprogram')->name('addprogram');
+    Route::post('/edit/program', 'ProgramController@editprogram')->name('editprogram');
+    Route::post('/delete/program', 'ProgramController@deleteprogram')->name('deleteprogram');
 
     Route::get('/units', 'UnitController@index')->name('units');
     Route::get('/add/unit/form', 'UnitController@addunitform')->name('addunitform');
