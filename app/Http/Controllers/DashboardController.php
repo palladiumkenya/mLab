@@ -615,7 +615,6 @@ class DashboardController extends Controller
         return $data;
     }
 
-
     public function get_dashboard_units(Request $request)
     {
         $service_ids = array();
@@ -635,7 +634,7 @@ class DashboardController extends Controller
                 ->select('unit.id as id', 'unit.name as name')
                 ->distinct('unit.id')
                 ->whereIn('unit.service_id', $service_ids)
-                ->whereIn('county.id', $units_with_data)
+                ->whereIn('unit.id', $units_with_data)
                 ->groupBy('unit.id', 'unit.name')
                 ->get('unit.id');
         } else {
@@ -645,7 +644,7 @@ class DashboardController extends Controller
                 ->join('county', 'county.id', '=', 'sub_county.county_id')
                 ->select('unit.id as id', 'unit.name as name')
                 ->distinct('unit.id')
-                ->whereIn('county.id', $units_with_data)
+                ->whereIn('unit.id', $units_with_data)
                 ->groupBy('unit.id', 'unit.name')
                 ->get('unit.id');
         }
@@ -668,7 +667,7 @@ class DashboardController extends Controller
                 ->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
                 ->select('county.id as id', 'county.name as name')
                 ->distinct('county.id')
-                ->whereIn('health_facili1   ties.unit_id', $unit_ids)
+                ->whereIn('health_facilities.unit_id', $unit_ids)
                 ->whereIn('county.id', $counties_with_data)
                 ->groupBy('county.id', 'county.name')
                 ->get('county.id');
@@ -706,7 +705,7 @@ class DashboardController extends Controller
     {
         $sub_county_ids = array();
         $strings_array = $request->sub_counties;
-        $unit_ids = $request->services;
+        $service_ids = $request->services;
         if (!empty($strings_array)) {
             foreach ($strings_array as $each_id) {
                 $sub_county_ids[] = (int) $each_id;
@@ -715,7 +714,15 @@ class DashboardController extends Controller
 
         $withResults = Dashboard::select('mfl_code')->groupBy('mfl_code')->get();
      
-        $all_facilities = Facility::select('code', 'name')->distinct('code')->wherein('Sub_County_ID', $sub_county_ids)->wherein('service_id', $service_ids)->wherein('code', $withResults)->groupBy('code', 'name')->get();
+        $all_facilities = Facility::select('health_facilities.code', 'health_facilities.name')
+                        ->join('unit', 'unit_id', 'health_facilities.unit_id')
+                        ->join('service', 'service.id', 'unit.id')
+                        ->distinct('code')
+                        ->wherein('health_facilities.Sub_County_ID', $sub_county_ids)
+                        ->wherein('unit.service_id', $service_ids)
+                        ->wherein('health_facilities.code', $withResults)
+                        ->groupBy('health_facilities.code', 'health_facilities.name')
+                        ->get();
         
         return $all_facilities;
     }
