@@ -18,19 +18,19 @@
                                 @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
                                     @if(Auth::user()->user_level < 3)
                                         <div class="col-md-6 form-group mb-3">
-                                            <label for="firstName1">Program</label>
-                                            <select  class="form-control" data-width="100%" id="program" name="program_id">
-                                                <option value="">Select Program</option>
+                                            <label for="firstName1">service</label>
+                                            <select  class="form-control" data-width="100%" id="service" name="service_id">
+                                                <option value="">Select service</option>
                                                 @if(Auth::user()->user_level < 2)
-                                                    @if (count($programs) > 0)
-                                                        @foreach($programs as $program)
-                                                        <option value="{{$program->id}}">{{ ucwords($program->name) }}</option>
+                                                    @if (count($services) > 0)
+                                                        @foreach($services as $service)
+                                                        <option value="{{$service->id}}">{{ ucwords($service->name) }}</option>
                                                             @endforeach
                                                     @endif
                                                 @endif
                                                 @if(Auth::user()->user_level == 2)
 
-                                                <option value="{{Auth::user()->program->id}}">{{ ucwords(Auth::user()->program->name) }}</option>
+                                                <option value="{{Auth::user()->service->id}}">{{ ucwords(Auth::user()->service->name) }}</option>
                                                 @endif
 
                                             </select>
@@ -123,7 +123,7 @@
 @section('bottom-js')
 <script type="text/javascript">
 
-$('#program').change(function () {
+$('#service').change(function () {
 
     $('#county').empty();
 
@@ -135,7 +135,7 @@ $('#program').change(function () {
         type: "POST",
         url: '/get_counties',
         data: {
-            "program_id": z
+            "service_id": z
         },
         dataType: "json",
         success: function (data) {

@@ -32,7 +32,7 @@ class SendResultsController extends Controller
                 $res = (object)[];
                 $id = $result->id;
                 $type = $result->result_type;
-                $client_id = $result->client_id;
+                $kdod_number = $result->kdod_number;
                 $age = $result->age;
                 $gender = $result->gender;
                 $content = $result->result_content;
@@ -56,7 +56,7 @@ class SendResultsController extends Controller
                 $facility = Facility::where('code', $mfl)->first();
 
                 $dest = $facility->mobile;
-                $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                $msgmlb = "$ftype PID:$kdod_number A:$age S:$gender DC:$date_collected R: :$content $units";
             
                 $encr =  base64_encode($msgmlb);
                 $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
@@ -113,7 +113,7 @@ class SendResultsController extends Controller
                     $res = (object)[];
                     $id = $result->id;
                     $type = $result->result_type;
-                    $client_id = $result->client_id;
+                    $kdod_number = $result->kdod_number;
                     $age = $result->age;
                     $gender = $result->gender;
                     $content = $result->result_content;
@@ -134,7 +134,7 @@ class SendResultsController extends Controller
                         $rtype = "FFEID Results";
                     }
         
-                    $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                    $msgmlb = "$ftype PID:$kdod_number A:$age S:$gender DC:$date_collected R: :$content $units";
         
                     $encr =  base64_encode($msgmlb);
                     $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
@@ -159,7 +159,7 @@ class SendResultsController extends Controller
                     foreach ($results as $result) {
                         $id = $result->id;
                         $type = $result->result_type;
-                        $client_id = $result->client_id;
+                        $kdod_number = $result->kdod_number;
                         $age = $result->age;
                         $gender = $result->gender;
                         $content = $result->result_content;
@@ -180,7 +180,7 @@ class SendResultsController extends Controller
                             $rtype = "FFEID Results";
                         }
             
-                        $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                        $msgmlb = "$ftype PID:$kdod_number A:$age S:$gender DC:$date_collected R: :$content $units";
                     
                         $encr =  base64_encode($msgmlb);
                         $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
@@ -214,7 +214,7 @@ class SendResultsController extends Controller
         foreach ($results as $result) {
             $id = $result->id;
             $type = $result->result_type;
-            $client_id = $result->client_id;
+            $kdod_number = $result->kdod_number;
             $lab = $result->lab_id;
             $age = $result->age;
             $gender = $result->gender;
@@ -237,7 +237,7 @@ class SendResultsController extends Controller
 
             if ($type = 1) {
                 $rtype = "VL";
-                $msg = "ID: $id, PID:$client_id, Age:$age, Sex:$gender, DC:$date_collected, LOD: $date_ordered, CSR: $csr, CST: $cst, CJ: $cj, Result: :$content $units, MFL: $mfl, Lab: $lab";
+                $msg = "ID: $id, PID:$kdod_number, Age:$age, Sex:$gender, DC:$date_collected, LOD: $date_ordered, CSR: $csr, CST: $cst, CJ: $cj, Result: :$content $units, MFL: $mfl, Lab: $lab";
 
                 $ted =  base64_encode($msg);
                 
@@ -279,7 +279,7 @@ class SendResultsController extends Controller
 
             foreach ($results as $result) {
                 $res = (object)[];
-                $pid = $result->patient_id;
+                $pid = $result->kdod_number;
                 $age = $result->age;
                 $gender = $result->gender;
                 $test = $result->test;
@@ -335,7 +335,7 @@ class SendResultsController extends Controller
                 $res = [];
 
                 foreach ($results as $result) {
-                    $pid = $result->patient_id;
+                    $pid = $result->kdod_number;
                     $age = $result->age;
                     $gender = $result->gender;
                     $res1 = $result->result_value1;
@@ -417,14 +417,14 @@ class SendResultsController extends Controller
 
             $internalIdentifiers = [
                 (object)[
-                    "ID" => $res->client_id,
-                    "IDENTIFIER_TYPE" => "CCC_NUMBER",
+                    "ID" => $res->kdod_number,
+                    "IDENTIFIER_TYPE" => "kdod_number",
                     "ASSIGNING_AUTHORITY" => "CCC"
                 ]
             ];
 
             $patientIdentifier = (object)[
-                "INTERNAL_PATIENT_ID" => $internalIdentifiers
+                "INTERNAL_kdod_number" => $internalIdentifiers
             ];
 
 
@@ -445,7 +445,7 @@ class SendResultsController extends Controller
 
             $full = (object)[
                 "MESSAGE_HEADER" => $header,
-                "PATIENT_IDENTIFICATION" => $patientIdentifier,
+                "kdod_numberENTIFICATION" => $patientIdentifier,
                 "VIRAL_LOAD_RESULT" => $result
             ];
             
@@ -525,7 +525,7 @@ class SendResultsController extends Controller
                 foreach ($results as $result) {
                     $id = $result->id;
                     $type = $result->result_type;
-                    $client_id = $result->client_id;
+                    $kdod_number = $result->kdod_number;
                     $lab = $result->lab_id;
                     $age = $result->age;
                     $gender = $result->gender;
@@ -548,7 +548,7 @@ class SendResultsController extends Controller
 
                     if ($type = 1) {
                         $rtype = "VL";
-                        $msg = "ID: $id, PID:$client_id, Age:$age, Sex:$gender, DC:$date_collected, LOD: $date_ordered, CSR: $csr, CST: $cst, CJ: $cj, Result: :$content $units, MFL: $mfl, Lab: $lab";
+                        $msg = "ID: $id, PID:$kdod_number, Age:$age, Sex:$gender, DC:$date_collected, LOD: $date_ordered, CSR: $csr, CST: $cst, CJ: $cj, Result: :$content $units, MFL: $mfl, Lab: $lab";
 
                         $ted =  base64_encode($msg);
                         

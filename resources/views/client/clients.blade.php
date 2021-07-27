@@ -19,7 +19,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>CCC Number</th>
+                            <th>KDOD Number</th>
                             <th>First Name</th>
                             <th>Middle Name</th>
                             <th>Last Name</th>
@@ -32,7 +32,7 @@
                         <tr>
                             <td> {{ $loop->iteration }}</td>
                             <td> <a class="btn btn-secondary"
-                                    onclick="getResults({{ $client->clinic_number }});">{{ $client->clinic_number }}</a>
+                                    onclick="getResults({{ $client->kdod_number }});">{{ $client->kdod_number }}</a>
                             </td>
                             <td> {{ $client->f_name }}</td>
                             <td> {{ $client->m_name }}</td>
@@ -64,7 +64,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>CCC Number</th>
+                            <th>KDOD Number</th>
                             <th>MFL Code</th>
                             <th>Date Collected</th>
                             <th>Result</th>
@@ -94,7 +94,7 @@
             type: "POST",
             url: '/get/client/results',
             data: {
-                "ccc_number": ccc,
+                "kdod_number": ccc,
                 "_token": "{{ csrf_token()}}"
             },
             dataType: "json",
@@ -107,7 +107,7 @@
                     $('#resultTable').append(
                         '<tr>' +
                         '<td> ' + num + '</td>' +
-                        '<td>' + data[i].client_id + '</td>' +
+                        '<td>' + data[i].kdod_number + '</td>' +
                         '<td>' + data[i].mfl_code + '</td>' +
                         '<td>' + data[i].date_collected + '</td>' +
                         '<td>' + data[i].result_content + '</td>' +
@@ -115,7 +115,7 @@
                         '<td>' + data[i].created_at.substr(0, 10) + '</td>' +
                         '</tr>');
                 }
-                $('.res').html(`Client ${data[0].client_id} Results`)
+                $('.res').html(`Client ${data[0].kdod_number} Results`)
                 $('#ClientResults').modal('show');
             }
         })

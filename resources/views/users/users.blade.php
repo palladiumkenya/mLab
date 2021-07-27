@@ -45,13 +45,13 @@
                             <td> {{$user->email}}</td>
                             <td> @if($user->user_level == '0') National @endif
                                 @if($user->user_level == '1') National @endif
-                                @if($user->user_level == '2') Programs @endif
+                                @if($user->user_level == '2') Services @endif
                                 @if($user->user_level == '3') Facility @endif
                                 @if($user->user_level == '4') Facility @endif
                                 @if($user->user_level == '5') Unit @endif
                             </td>
-                            @if(Auth::user()->user_level < 2) <td> @if(!empty($user->program))
-                                {{$user->program->name}}@elseif(!empty($user->facility->sub_county->county))
+                            @if(Auth::user()->user_level < 2) <td> @if(!empty($user->service))
+                                {{$user->service->name}}@elseif(!empty($user->facility->sub_county->county))
                                 {{$user->facility->sub_county->county->name}} County @else None @endif
                                 @endif
                                 @if(Auth::user()->user_level == 2)
@@ -169,7 +169,7 @@
                                         <select id="level" name="level" class="form-control">
                                             <option>Select</option>
                                             @if(Auth::user()->user_level < 2) <option value="1">National</option>
-                                                <option value="2">Program Staff</option>
+                                                <option value="2">service Staff</option>
                                                 <option value="5">Unit Manager</option>
                                                 <option value="3">Healthcare Worker</option>
                                                 <option value="4">Facility User</option>
@@ -198,12 +198,12 @@
                                             @endforeach
                                             @endif
                                         </select>
-                                        <select hidden class="form-control" data-width="100%" id="program"
-                                            name="program_id">
-                                            <option value="">Select Program</option>
-                                            @if (count($programs) > 0)
-                                            @foreach($programs as $program)
-                                            <option value="{{$program->id }}">{{ ucwords($program->name) }}</option>
+                                        <select hidden class="form-control" data-width="100%" id="service"
+                                            name="service_id">
+                                            <option value="">Select service</option>
+                                            @if (count($services) > 0)
+                                            @foreach($services as $service)
+                                            <option value="{{$service->id }}">{{ ucwords($service->name) }}</option>
                                             @endforeach
                                             @endif
                                         </select>
@@ -290,17 +290,17 @@
         if (level == 1) {
             $('#affiliation').val("National");
             $('#affiliation').removeAttr('hidden');
-            $('#program').attr("hidden", true);
+            $('#service').attr("hidden", true);
             $('#county').attr("hidden", true);
         }
         if (level == 2) {
-            $('#program').removeAttr('hidden');
+            $('#service').removeAttr('hidden');
             $('#affiliation').attr("hidden", true);
             $('#county').attr("hidden", true);
         }
         if (level == 5) {
             $('#county').removeAttr('hidden');
-            $('#program').attr("hidden", true);
+            $('#service').attr("hidden", true);
             $('#affiliation').attr("hidden", true);
         }
     });
@@ -313,22 +313,22 @@
                 $('#affiliation').val('National');
             }
             if (user.user_level == 2) {
-                $('#program').removeAttr('hidden');
+                $('#service').removeAttr('hidden');
                 $('#affiliation').attr("hidden", true);
                 $('#county').attr("hidden", true);
-                $('#program').val(user.program.id);
+                $('#service').val(user.service.id);
             }
             if (user.user_level == 5) {
                 $('#county').removeAttr('hidden');
-                $('#program').attr("hidden", true);
+                $('#service').attr("hidden", true);
                 $('#affiliation').attr("hidden", true);
                 $('#county').val(user.county.id);
             }
             if (user.user_level == 3 || user.user_level == 4) {
-                $('#program').removeAttr('hidden');
+                $('#service').removeAttr('hidden');
                 $('#affiliation').attr("hidden", true);
                 $('#county').attr("hidden", true);
-                $('#program').val(user.program.id);
+                $('#service').val(user.service.id);
             }
         }
         $('#fname').val(user.f_name);
@@ -416,7 +416,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: "POST",
-            url: '/get_program_facilities_mlab',
+            url: '/get_service_facilities_mlab',
             data: {
                 "sub_county_id": y
             },

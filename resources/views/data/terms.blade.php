@@ -83,7 +83,7 @@
     <li> Account details such as user name, unique user ID, password, etc.</li>
     <li>Information about other individuals such as your family members, friends, etc.</li></ul>
 
-Some of the information we collect is directly from you via the Services. However, we may also collect Personal Information about you from other sources such as public databases and our joint marketing programs. You can choose not to provide us with your Personal Information, but then you may not be able to take advantage of some of the features on the Services. Users who are uncertain about what information is mandatory are welcome to contact us. <p></p>
+Some of the information we collect is directly from you via the Services. However, we may also collect Personal Information about you from other sources such as public databases and our joint marketing services. You can choose not to provide us with your Personal Information, but then you may not be able to take advantage of some of the features on the Services. Users who are uncertain about what information is mandatory are welcome to contact us. <p></p>
 
 <strong>Use and processing of collected information</strong>
 
@@ -106,7 +106,7 @@ Note that under some legislations we may be allowed to process information until
 
 <strong>Managing information</strong>
 
-<p>You are able to delete certain Personal Information we have about you. The Personal Information you can delete may change as the Services change. When you delete Personal Information, however, we may maintain a copy of the unrevised Personal Information in our records for the duration necessary to comply with our obligations to our affiliates and programs, and for the purposes described below. If you would like to delete your Personal Information or permanently delete your account, you can do so on the settings page of your account on the Services or simply by contacting us.</p>
+<p>You are able to delete certain Personal Information we have about you. The Personal Information you can delete may change as the Services change. When you delete Personal Information, however, we may maintain a copy of the unrevised Personal Information in our records for the duration necessary to comply with our obligations to our affiliates and services, and for the purposes described below. If you would like to delete your Personal Information or permanently delete your account, you can do so on the settings page of your account on the Services or simply by contacting us.</p>
 
 <strong>Disclosure of information</strong>
 

@@ -20,7 +20,7 @@
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Type</th>
-                                                <th>Patient ID</th>
+                                                <th>KDOD Number</th>
                                                 <th>Age</th>
                                                 <th>Gender</th>
                                                 <th>Content</th>
@@ -32,7 +32,7 @@
                                                 <th>Facility</th>
                                                 <th>Sub-County</th>
                                                 <th>County</th>
-                                                <th>Program</th>
+                                                <th>service</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -41,7 +41,7 @@
                                                     <tr> 
                                                         <td> {{ $loop->iteration }}</td>
                                                         <td>  {{$result->result_type}}</td>
-                                                        <td> @if(!empty($result->client_id)) {{$result->client_id}} @else Not Provided @endif</td>
+                                                        <td> @if(!empty($result->kdod_number)) {{$result->kdod_number}} @else Not Provided @endif</td>
                                                         <td>  {{$result->age}}</td>
                                                         <td>  {{$result->gender}}</td>
                                                         <td>  {{$result->result_content}} {{$result->units}}</td>
@@ -53,7 +53,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td>  {{$result->program}}</td>                                                  
+                                                        <td>  {{$result->service}}</td>                                                  
                                                     </tr>
                                                 @endforeach
                                             @endif

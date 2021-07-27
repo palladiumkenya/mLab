@@ -19,7 +19,7 @@ class CreateResultsTable extends Migration
             $table->string('result_id');
             $table->string('result_type');
             $table->string('request_id');
-            $table->string('client_id');
+            $table->string('kdod_number');
             $table->string('age');
             $table->string('gender');
             $table->string('result_content');

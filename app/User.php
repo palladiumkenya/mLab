@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'f_name', 'l_name', 'email', 'phone_no','status', 'county_id', 'program_id', 'user_level', 'facility_id', 'notified', 'first_login', 'created_at', 'updated_at',
+        'f_name', 'l_name', 'email', 'phone_no','status', 'county_id', 'service_id', 'user_level', 'facility_id', 'notified', 'first_login', 'created_at', 'updated_at',
     ];
 
     /**
@@ -27,8 +27,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function program(){
-        return $this->belongsTo('App\Program','program_id','id');
+    public function service(){
+        return $this->belongsTo('App\Service','service_id','id');
     }
 
     public function facility(){

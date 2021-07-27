@@ -32,7 +32,7 @@
                                                 <th>Facility</th>
                                                 <th>Sub-County</th>
                                                 <th>County</th>
-                                                <th>Program</th>
+                                                <th>service</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -40,7 +40,7 @@
                                                 @foreach($results as $result)
                                                     <tr> 
                                                         <td> {{ $loop->iteration }}</td>
-                                                        <td> @if(!empty($result->patient_id)) {{$result->patient_id}} @else Not Provided @endif</td>
+                                                        <td> @if(!empty($result->kdod_number)) {{$result->kdod_number}} @else Not Provided @endif</td>
                                                         <td>  {{$result->age}}</td>
                                                         <td>  {{$result->gender}}</td>
                                                         <td>  {{$result->test}} </td>
@@ -53,7 +53,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td>  {{$result->program}}</td>                                                  
+                                                        <td>  {{$result->service}}</td>                                                  
                                                     </tr>
                                                 @endforeach
                                             @endif

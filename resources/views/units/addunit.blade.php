@@ -21,11 +21,11 @@
                                     <div class="col-md-12 form-group mb-3">
                                         <label for="picker1">Affiliation</label>
 
-                                        <select class="form-control" class="col-md-12 form-group mb-3" id="program" name="program_id">
-                                            <option value="">Select program</option>
-                                                @if (count($programs) > 0)
-                                                    @foreach($programs as $program)
-                                                    <option value="{{$program->id }}">{{ ucwords($program->name) }}</option>
+                                        <select class="form-control" class="col-md-12 form-group mb-3" id="service" name="service_id">
+                                            <option value="">Select service</option>
+                                                @if (count($services) > 0)
+                                                    @foreach($services as $service)
+                                                    <option value="{{$service->id }}">{{ ucwords($service->name) }}</option>
                                                         @endforeach
                                                 @endif
                                         </select>

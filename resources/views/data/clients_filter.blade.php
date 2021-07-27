@@ -10,13 +10,13 @@
             <div class="card-body">
                 <div class="card-title mb-3">Raw Data</div>
 
-                <h4>Enter the client's CCC Number....</h4>
+                <h4>Enter the client's KDOD Number....</h4>
                 <div class="border-bottom my-3">
                     <form role="form" method="post" action="{{route('fetchOneClient')}}">
                         {{ csrf_field() }}
                         <div class="col-md-6 form-group mb-3">
-                            <label for="firstName1">CCC Number</label>
-                            <input class="form-control" name="ccc_number" name='ccc_number' type="text" />
+                            <label for="firstName1">KDOD Number</label>
+                            <input class="form-control" name="kdod_number" name='kdod_number' type="text" />
                         </div>
                         <button type="submit" class="btn btn-info">Submit</button>
                     </form>
@@ -30,19 +30,19 @@
                         <div class="row">
                             @if (Auth::user()->user_level != 3 && Auth::user()->user_level != 4)
                             @if(Auth::user()->user_level < 3) <div class="col-md-6 form-group mb-3">
-                                <label for="firstName1">program</label>
-                                <select class="form-control" data-width="100%" id="program" name="program_id">
-                                    <option value="">Select program</option>
-                                    @if(Auth::user()->user_level < 2) @if (count($programs)> 0)
-                                        @foreach($programs as $program)
-                                        <option value="{{$program->id}}">{{ ucwords($program->name) }}</option>
+                                <label for="firstName1">Service</label>
+                                <select class="form-control" data-width="100%" id="service" name="service_id">
+                                    <option value="">Select Service</option>
+                                    @if(Auth::user()->user_level < 2) @if (count($services)> 0)
+                                        @foreach($services as $service)
+                                        <option value="{{$service->id}}">{{ ucwords($service->name) }}</option>
                                         @endforeach
                                         @endif
                                         @endif
                                         @if(Auth::user()->user_level == 2)
 
-                                        <option value="{{Auth::user()->program->id}}">
-                                            {{ ucwords(Auth::user()->program->name) }}</option>
+                                        <option value="{{Auth::user()->service->id}}">
+                                            {{ ucwords(Auth::user()->service->name) }}</option>
                                         @endif
 
                                 </select>
@@ -101,7 +101,7 @@
 
 @section('bottom-js')
 <script type="text/javascript">
-    $('#program').change(function() {
+    $('#service').change(function() {
         $('#county').empty();
         var z = $(this).val();
         $.ajax({
@@ -111,7 +111,7 @@
             type: "POST",
             url: '/get_counties',
             data: {
-                "program_id": z
+                "service_id": z
             },
             dataType: "json",
             success: function(data) {

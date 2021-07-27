@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Data;
 use App\County;
-use App\Program;
+use App\Service;
 use App\Facility;
 use App\SubCounty;
 use App\HTSData;
@@ -22,7 +22,7 @@ class DataController extends Controller
         $results = Data::orderBy('id', 'DESC');
 
         if (Auth::user()->user_level == 2) {
-            $results->where('program', Auth::user()->program->name);
+            $results->where('service', Auth::user()->service->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('unit', Auth::user()->unit->name);
@@ -39,7 +39,7 @@ class DataController extends Controller
         $results = Data::orderBy('id', 'DESC')->where('result_type', 'Viral Load');
 
         if (Auth::user()->user_level == 2) {
-            $results->where('program', Auth::user()->program->name);
+            $results->where('service', Auth::user()->service->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('unit', Auth::user()->unit->name);
@@ -56,7 +56,7 @@ class DataController extends Controller
         $results = Data::orderBy('id', 'DESC')->where('result_type', 'EID');
 
         if (Auth::user()->user_level == 2) {
-            $results->where('program', Auth::user()->program->name);
+            $results->where('service', Auth::user()->service->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('unit', Auth::user()->unit->name);
@@ -68,12 +68,12 @@ class DataController extends Controller
         return view('data.results')->with('results', $results->paginate(100));
     }
 
-    public function programform()
+    public function serviceform()
     {
-        $programs = Program::all();
+        $services = service::all();
 
         $data = array(
-            'programs' => $programs,
+            'services' => $services,
         );
         return view('data.hts_filter')->with($data);
     }
@@ -81,9 +81,9 @@ class DataController extends Controller
     public function hts_results(Request $request)
     {
         $results = HTSData::select('*');
-        if (!empty($request->program_id)) {
-            $program = Program::find($request->program_id);
-            $results->where('program', $program->name);
+        if (!empty($request->service_id)) {
+            $service = service::find($request->service_id);
+            $results->where('service', $service->name);
         }
         if (!empty($request->unit_id)) {
             $unit = Unit::find($request->unit_id);
@@ -109,7 +109,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('program', Auth::user()->program->name);
+            $results->where('service', Auth::user()->service->name);
         }
 
         return view('data.hts_results')->with('results', $results->paginate(100));
@@ -117,11 +117,11 @@ class DataController extends Controller
 
     public function rawdataform()
     {
-        $programs = Program::all();
+        $services = service::all();
         
 
         $data = array(
-            'programs' => $programs,
+            'services' => $services,
         );
         return view('data.rawdata')->with($data);
     }
@@ -129,9 +129,9 @@ class DataController extends Controller
     public function fetchraw(Request $request)
     {
         $data = Data::select('*');
-        if (!empty($request->program_id)) {
-            $program = Program::find($request->program_id);
-            $data->where('program', $program->name);
+        if (!empty($request->service_id)) {
+            $service = service::find($request->service_id);
+            $data->where('service', $service->name);
         }
         if (!empty($request->unit_id)) {
             $unit = Unit::find($request->unit_id);
@@ -156,7 +156,7 @@ class DataController extends Controller
             $data->where('date_sent', '<=', date($request->to));
         }
         if (Auth::user()->user_level == 2) {
-            $data->where('program', Auth::user()->program->name);
+            $data->where('service', Auth::user()->service->name);
         }
         
 
@@ -167,11 +167,11 @@ class DataController extends Controller
 
     public function vl_srl_form()
     {
-        $programs = Program::all();
+        $services = service::all();
         
 
         $data = array(
-            'programs' => $programs,
+            'services' => $services,
         );
         return view('data.vl_srl_filter')->with($data);
     }
@@ -179,9 +179,9 @@ class DataController extends Controller
     public function vl_srl_results(Request $request)
     {
         $results = SRLVLData::select('*');
-        if (!empty($request->program_id)) {
-            $program = Program::find($request->program_id);
-            $results->where('program', $program->name);
+        if (!empty($request->service_id)) {
+            $service = service::find($request->service_id);
+            $results->where('service', $service->name);
         }
         if (!empty($request->unit_id)) {
             $unit = Unit::find($request->unit_id);
@@ -213,7 +213,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('program', Auth::user()->program->name);
+            $results->where('service', Auth::user()->service->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);
@@ -227,11 +227,11 @@ class DataController extends Controller
 
     public function eid_srl_form()
     {
-        $programs = Program::all();
+        $services = service::all();
         
 
         $data = array(
-            'programs' => $programs,
+            'services' => $services,
         );
         return view('data.eid_srl_filter')->with($data);
     }
@@ -241,9 +241,9 @@ class DataController extends Controller
     {
 
         $results = SRLEIData::select('*');
-        if (!empty($request->program_id)) {
-            $program = Program::find($request->program_id);
-            $results->where('program', $program->name);
+        if (!empty($request->service_id)) {
+            $service = service::find($request->service_id);
+            $results->where('service', $service->name);
         }
         if (!empty($request->unit_id)) {
             $unit = Unit::find($request->unit_id);
@@ -275,7 +275,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('program', Auth::user()->program->name);
+            $results->where('service', Auth::user()->service->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);
@@ -292,11 +292,11 @@ class DataController extends Controller
     
     public function hts_srl_form()
     {
-        $programs = Program::all();
+        $services = service::all();
         
 
         $data = array(
-            'programs' => $programs,
+            'services' => $services,
         );
         return view('data.hts_srl_filter')->with($data);
     }
@@ -305,9 +305,9 @@ class DataController extends Controller
     public function hts_srl_results(Request $request)
     {
         $results = SRLHTSData::select('*');
-        if (!empty($request->program_id)) {
-            $program = Program::find($request->program_id);
-            $results->where('program', $program->name);
+        if (!empty($request->service_id)) {
+            $service = service::find($request->service_id);
+            $results->where('service', $service->name);
         }
         if (!empty($request->unit_id)) {
             $unit = Unit::find($request->unit_id);
@@ -339,7 +339,7 @@ class DataController extends Controller
         }
 
         if (Auth::user()->user_level == 2) {
-            $results->where('program', Auth::user()->program->name);
+            $results->where('service', Auth::user()->service->name);
         }
         if (Auth::user()->user_level == 5) {
             $results->where('county', Auth::user()->county->name);

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Dashboard;
 use DB;
 use App\Printer;
-use App\Program;
+use App\Service;
 use App\County;
 use App\SubCounty;
 use App\Facility;
@@ -18,7 +18,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        Auth::user()->load('program', 'facility', 'county');
+        Auth::user()->load('service', 'facility', 'county');
 
         return view('dashboard.highcharts_dashboard');
     }
@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
       
         if (Auth::user()->user_level == 2) {
-            $selected_programs = [Auth::user()->program_id];
+            $selected_services = [Auth::user()->service_id];
         }
         if (Auth::user()->user_level == 3) {
             $selected_facilities = [Auth::user()->facility_id];
@@ -46,13 +46,13 @@ class DashboardController extends Controller
             $selected_units = [Auth::user()->unit_id];
         }
 
-        $programs_with_data = Dashboard::select('program_id')->groupBy('program_id');
+        $services_with_data = Dashboard::select('service_id')->groupBy('service_id');
         
         $counties_with_data = Dashboard::select('county_id')->groupBy('county_id');
 
         $units_with_data = Dashboard::select('unit_id')->groupBy('unit_id');
         
-        $all_programs = Program::select('id', 'name')->whereIn('id', $programs_with_data);
+        $all_services = service::select('id', 'name')->whereIn('id', $services_with_data);
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
         $all_units = Unit::select('id', 'name')->distinct('id')->whereIn('id', $units_with_data);
 
@@ -66,7 +66,7 @@ class DashboardController extends Controller
         $counties            = Dashboard::distinct('county_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $units               = Dashboard::distinct('unit_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $facilities          = Dashboard::distinct('mfl_code');
-        $programs            = Dashboard::distinct('program_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
+        $services            = Dashboard::distinct('service_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $vl_records          = Dashboard::where('result_type', 1)->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $eid_records         = Dashboard::where('result_type', 2)->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $vl_classifications  = Dashboard::where('result_type', 1)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
@@ -80,25 +80,25 @@ class DashboardController extends Controller
         $average_eid_collect_sent_diff = DB::table('mlab_data_materialized')->selectRaw('AVG( created_at::DATE - date_collected::DATE)')->where('result_type', '2')
                             ->whereRaw('(created_at::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
     
-        if (!empty($selected_programs)) {
-            $all_programs = Program::select('id', 'name')->whereIn('id', $selected_programs);
-            $all_units = $all_units->join('mlab_data_materialized', 'unit.id', '=', 'mlab_data_materialized.unit_id')->whereIn('program_id', $selected_programs);
+        if (!empty($selected_services)) {
+            $all_services = service::select('id', 'name')->whereIn('id', $selected_services);
+            $all_units = $all_units->join('mlab_data_materialized', 'unit.id', '=', 'mlab_data_materialized.unit_id')->whereIn('service_id', $selected_services);
             $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('unit_id', $selected_units);
-            $all_records = $all_records->whereIn('program_id', $selected_programs);
-            $sent_records = $sent_records->whereIn('program_id', $selected_programs);
-            $units = $units->whereIn('program_id', $selected_programs);
-            $counties = $counties->whereIn('program_id', $selected_programs);
-            $facilities = $facilities->whereIn('program_id', $selected_programs);
-            $programs = $programs->whereIn('program_id', $selected_programs);
-            $vl_records = $vl_records->whereIn('program_id', $selected_programs);
-            $eid_records = $eid_records->whereIn('program_id', $selected_programs);
-            $vl_classifications = $vl_classifications->whereIn('program_id', $selected_programs);
-            $eid_classifications = $eid_classifications->whereIn('program_id', $selected_programs);
-            $county_numbers = $county_numbers->whereIn('program_id', $selected_programs);
-            $unit_numbers = $unit_numbers->whereIn('program_id', $selected_programs);
-            $pulled_data = $pulled_data->whereIn('program_id', $selected_programs);
-            $average_vl_collect_sent_diff = $average_vl_collect_sent_diff->whereIn('program_id', $selected_programs);
-            $average_eid_collect_sent_diff = $average_eid_collect_sent_diff->whereIn('program_id', $selected_programs);
+            $all_records = $all_records->whereIn('service_id', $selected_services);
+            $sent_records = $sent_records->whereIn('service_id', $selected_services);
+            $units = $units->whereIn('service_id', $selected_services);
+            $counties = $counties->whereIn('service_id', $selected_services);
+            $facilities = $facilities->whereIn('service_id', $selected_services);
+            $services = $services->whereIn('service_id', $selected_services);
+            $vl_records = $vl_records->whereIn('service_id', $selected_services);
+            $eid_records = $eid_records->whereIn('service_id', $selected_services);
+            $vl_classifications = $vl_classifications->whereIn('service_id', $selected_services);
+            $eid_classifications = $eid_classifications->whereIn('service_id', $selected_services);
+            $county_numbers = $county_numbers->whereIn('service_id', $selected_services);
+            $unit_numbers = $unit_numbers->whereIn('service_id', $selected_services);
+            $pulled_data = $pulled_data->whereIn('service_id', $selected_services);
+            $average_vl_collect_sent_diff = $average_vl_collect_sent_diff->whereIn('service_id', $selected_services);
+            $average_eid_collect_sent_diff = $average_eid_collect_sent_diff->whereIn('service_id', $selected_services);
         }
 
         if (!empty($selected_units)) {
@@ -107,7 +107,7 @@ class DashboardController extends Controller
             $sent_records = $sent_records->whereIn('unit_id', $selected_units);
             $units = $units->whereIn('unit_id', $selected_units);
             $facilities = $facilities->whereIn('unit_id', $selected_units);
-            $programs = $programs->whereIn('unit_id', $selected_units);
+            $services = $services->whereIn('unit_id', $selected_units);
             $vl_records = $vl_records->whereIn('unit_id', $selected_units);
             $eid_records = $eid_records->whereIn('unit_id', $selected_units);
             $vl_classifications = $vl_classifications->whereIn('unit_id', $selected_units);
@@ -124,7 +124,7 @@ class DashboardController extends Controller
             $sent_records = $sent_records->whereIn('county_id', $selected_counties);
             $counties = $counties->whereIn('county_id', $selected_counties);
             $facilities = $facilities->whereIn('county_id', $selected_counties);
-            $programs = $programs->whereIn('county_id', $selected_counties);
+            $services = $services->whereIn('county_id', $selected_counties);
             $vl_records = $vl_records->whereIn('county_id', $selected_counties);
             $eid_records = $eid_records->whereIn('county_id', $selected_counties);
             $vl_classifications = $vl_classifications->whereIn('county_id', $selected_counties);
@@ -137,13 +137,13 @@ class DashboardController extends Controller
 
 
         if (!empty($selected_facilities)) {
-            $all_programs = Program::select('id', 'name')->where('id', Auth::user()->program_id);
+            $all_services = service::select('id', 'name')->where('id', Auth::user()->service_id);
             $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('mfl_code', $selected_facilities);
             $all_records = $all_records->whereIn('mfl_code', $selected_facilities);
             $sent_records = $sent_records->whereIn('mfl_code', $selected_facilities);
             $counties = $counties->whereIn('mfl_code', $selected_facilities);
             $facilities = $facilities->whereIn('mfl_code', $selected_facilities);
-            $programs = $programs->whereIn('mfl_code', $selected_facilities);
+            $services = $services->whereIn('mfl_code', $selected_facilities);
             $vl_records = $vl_records->whereIn('mfl_code', $selected_facilities);
             $eid_records = $eid_records->whereIn('mfl_code', $selected_facilities);
             $vl_classifications = $vl_classifications->whereIn('mfl_code', $selected_facilities);
@@ -156,13 +156,13 @@ class DashboardController extends Controller
 
 
         $data["all_counties"]        = $all_counties->get();
-        $data["all_programs"]        = $all_programs->get();
+        $data["all_services"]        = $all_services->get();
         $data["all_units"]           = $all_units->get();
         $data["all_records"]         = $all_records->count();
         $data["sent_records"]        = $sent_records->count();
         $data["counties"]            = $counties->count('county_id');
         $data["facilities"]          = $facilities->count('mfl_code');
-        $data["programs"]            = $programs->count('program_id');
+        $data["services"]            = $services->count('service_id');
         $data["vl_records"]          = $vl_records->count();
         $data["eid_records"]         = $eid_records->count();
         $data["vl_classifications"]  = $vl_classifications->get();
@@ -178,7 +178,7 @@ class DashboardController extends Controller
     {
         $data                = [];
         
-        $selected_programs = $request->programs;
+        $selected_services = $request->services;
         $selected_units = $request->units;
         $selected_counties = $request->counties;
         $selected_subcounties = $request->subcounties;
@@ -194,7 +194,7 @@ class DashboardController extends Controller
         $enddate = Carbon::createFromFormat('m/d/Y', $unformatted_enddate)->format('Y-m-d');
 
         if (Auth::user()->user_level == 2) {
-            $selected_programs = [Auth::user()->program_id];
+            $selected_services = [Auth::user()->service_id];
         }
         if (Auth::user()->user_level == 3) {
             $selected_facilities = [Auth::user()->facility_id];
@@ -202,10 +202,10 @@ class DashboardController extends Controller
         if (Auth::user()->user_level == 5) {
             $selected_units = [Auth::user()->unit_id];
         }
-        if (empty($selected_programs)) {
-            $programs_with_data = Dashboard::select('program_id')->groupBy('program_id');
+        if (empty($selected_services)) {
+            $services_with_data = Dashboard::select('service_id')->groupBy('service_id');
         } else {
-            $programs_with_data = $selected_programs;
+            $services_with_data = $selected_services;
         }
         
         if (empty($selected_units)) {
@@ -220,7 +220,7 @@ class DashboardController extends Controller
             $counties_with_data = $selected_counties;
         }
         
-        $all_programs = Program::select('id', 'name')->whereIn('id', $programs_with_data);
+        $all_services = service::select('id', 'name')->whereIn('id', $services_with_data);
         $all_units = Unit::select('id', 'name')->distinct('id')->whereIn('id', $units_with_data);
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
 
@@ -229,7 +229,7 @@ class DashboardController extends Controller
         $units               = Dashboard::distinct('unit_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $counties            = Dashboard::distinct('county_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $facilities          = Dashboard::distinct('mfl_code')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-        $programs            = Dashboard::distinct('program_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
+        $services            = Dashboard::distinct('service_id')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $vl_records          = Dashboard::where('result_type', 1)->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $eid_records         = Dashboard::where('result_type', 2)->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $vl_classifications  = Dashboard::where('result_type', 1)->selectRaw('data_key, count("result_type") AS number')->groupBy('result_type', 'data_key')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
@@ -244,23 +244,23 @@ class DashboardController extends Controller
         $average_eid_collect_sent_diff = DB::table('mlab_data_materialized')->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '2')
                             ->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
     
-        if (!empty($selected_programs)) {
-            $all_units = $all_units->join('mlab_data_materialized', 'unit.id', '=', 'mlab_data_materialized.unit_id')->whereIn('program_id', $selected_programs);
-            $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('unit_id', $selected_programs);
-            $all_records = $all_records->whereIn('program_id', $selected_programs);
-            $sent_records = $sent_records->whereIn('program_id', $selected_programs);
-            $counties = $counties->whereIn('program_id', $selected_programs);
-            $facilities = $facilities->whereIn('program_id', $selected_programs);
-            $programs = $programs->whereIn('program_id', $selected_programs);
-            $units = $units->whereIn('program_id', $selected_programs);
-            $vl_records = $vl_records->whereIn('program_id', $selected_programs);
-            $eid_records = $eid_records->whereIn('program_id', $selected_programs);
-            $vl_classifications = $vl_classifications->whereIn('program_id', $selected_programs);
-            $eid_classifications = $eid_classifications->whereIn('program_id', $selected_programs);
-            $county_numbers = $county_numbers->whereIn('program_id', $selected_programs);
-            $pulled_data = $pulled_data->whereIn('program_id', $selected_programs);
-            $average_vl_collect_sent_diff = $average_vl_collect_sent_diff->whereIn('program_id', $selected_programs);
-            $average_eid_collect_sent_diff = $average_eid_collect_sent_diff->whereIn('program_id', $selected_programs);
+        if (!empty($selected_services)) {
+            $all_units = $all_units->join('mlab_data_materialized', 'unit.id', '=', 'mlab_data_materialized.unit_id')->whereIn('service_id', $selected_services);
+            $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('unit_id', $selected_services);
+            $all_records = $all_records->whereIn('service_id', $selected_services);
+            $sent_records = $sent_records->whereIn('service_id', $selected_services);
+            $counties = $counties->whereIn('service_id', $selected_services);
+            $facilities = $facilities->whereIn('service_id', $selected_services);
+            $services = $services->whereIn('service_id', $selected_services);
+            $units = $units->whereIn('service_id', $selected_services);
+            $vl_records = $vl_records->whereIn('service_id', $selected_services);
+            $eid_records = $eid_records->whereIn('service_id', $selected_services);
+            $vl_classifications = $vl_classifications->whereIn('service_id', $selected_services);
+            $eid_classifications = $eid_classifications->whereIn('service_id', $selected_services);
+            $county_numbers = $county_numbers->whereIn('service_id', $selected_services);
+            $pulled_data = $pulled_data->whereIn('service_id', $selected_services);
+            $average_vl_collect_sent_diff = $average_vl_collect_sent_diff->whereIn('service_id', $selected_services);
+            $average_eid_collect_sent_diff = $average_eid_collect_sent_diff->whereIn('service_id', $selected_services);
         }
 
         if (!empty($selected_units)) {
@@ -269,7 +269,7 @@ class DashboardController extends Controller
             $sent_records = $sent_records->whereIn('county_id', $selected_units);
             $counties = $counties->whereIn('county_id', $selected_units);
             $facilities = $facilities->whereIn('county_id', $selected_units);
-            $programs = $programs->whereIn('county_id', $selected_units);
+            $services = $services->whereIn('county_id', $selected_units);
             $units = $units->whereIn('county_id', $selected_units);
             $vl_records = $vl_records->whereIn('county_id', $selected_units);
             $eid_records = $eid_records->whereIn('county_id', $selected_units);
@@ -287,7 +287,7 @@ class DashboardController extends Controller
             $sent_records = $sent_records->whereIn('county_id', $selected_counties);
             $counties = $counties->whereIn('county_id', $selected_counties);
             $facilities = $facilities->whereIn('county_id', $selected_counties);
-            $programs = $programs->whereIn('county_id', $selected_counties);
+            $services = $services->whereIn('county_id', $selected_counties);
             $units = $units->whereIn('county_id', $selected_counties);
             $vl_records = $vl_records->whereIn('county_id', $selected_counties);
             $eid_records = $eid_records->whereIn('county_id', $selected_counties);
@@ -305,7 +305,7 @@ class DashboardController extends Controller
             $sent_records = $sent_records->whereIn('Sub_County_ID', $selected_subcounties);
             $counties = $counties->whereIn('Sub_County_ID', $selected_subcounties);
             $facilities = $facilities->whereIn('Sub_County_ID', $selected_subcounties);
-            $programs = $programs->whereIn('Sub_County_ID', $selected_subcounties);
+            $services = $services->whereIn('Sub_County_ID', $selected_subcounties);
             $units = $units->whereIn('Sub_County_ID', $selected_subcounties);
             $vl_records = $vl_records->whereIn('Sub_County_ID', $selected_subcounties);
             $eid_records = $eid_records->whereIn('Sub_County_ID', $selected_subcounties);
@@ -318,13 +318,13 @@ class DashboardController extends Controller
         }
 
         if (!empty($selected_facilities)) {
-            $all_programs = Program::select('id', 'name')->where('id', Auth::user()->program_id);
+            $all_services = service::select('id', 'name')->where('id', Auth::user()->service_id);
             $all_counties = $all_counties->whereIn('mfl_code', $selected_facilities);
             $all_records = $all_records->whereIn('mfl_code', $selected_facilities);
             $sent_records = $sent_records->whereIn('mfl_code', $selected_facilities);
             $counties = $counties->whereIn('mfl_code', $selected_facilities);
             $facilities = $facilities->whereIn('mfl_code', $selected_facilities);
-            $programs = $programs->whereIn('mfl_code', $selected_facilities);
+            $services = $services->whereIn('mfl_code', $selected_facilities);
             $units = $units->whereIn('mfl_code', $selected_facilites);
             $vl_records = $vl_records->whereIn('mfl_code', $selected_facilities);
             $eid_records = $eid_records->whereIn('mfl_code', $selected_facilities);
@@ -339,12 +339,12 @@ class DashboardController extends Controller
 
         $data["all_counties"]        = $all_counties->get();
         $data["all_units"]           = $all_units->get();
-        $data["all_programs"]        = $all_programs->get();
+        $data["all_services"]        = $all_services->get();
         $data["all_records"]         = $all_records->count();
         $data["sent_records"]        = $sent_records->count();
         $data["counties"]            = $counties->count('county_id');
         $data["facilities"]          = $facilities->count('mfl_code');
-        $data["programs"]            = $programs->count('program_id');
+        $data["services"]            = $services->count('service_id');
         $data["units"]               = $units->count('unit_id');
         $data["vl_records"]          = $vl_records->count();
         $data["eid_records"]         = $eid_records->count();
@@ -618,22 +618,22 @@ class DashboardController extends Controller
 
     public function get_dashboard_units(Request $request)
     {
-        $program_ids = array();
-        $strings_array = $request->programs;
+        $service_ids = array();
+        $strings_array = $request->services;
         if (!empty($strings_array)) {
             foreach ($strings_array as $each_id) {
-                $program_ids[] = (int) $each_id;
+                $service_ids[] = (int) $each_id;
             }
         }
         $units_with_data = Dashboard::select('unit_id')->distinct('unit_id')->groupBy('unit_id')->get();
 
-        if (!empty($program_ids)) {
-            $all_units = Unit::join('program','program.id', '=', 'unit.program_id')
+        if (!empty($service_ids)) {
+            $all_units = Unit::join('service','service.id', '=', 'unit.service_id')
                 ->join('sub_county', 'county.id', '=', 'sub_county.county_id')
                 ->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
                 ->select('county.id as id', 'county.name as name')
                 ->distinct('county.id')
-                ->whereIn('health_facilities.program_id', $program_ids)
+                ->whereIn('health_facilities.service_id', $service_ids)
                 ->whereIn('county.id', $counties_with_data)
                 ->groupBy('county.id', 'county.name')
                 ->get('county.id');
@@ -703,7 +703,7 @@ class DashboardController extends Controller
     {
         $sub_county_ids = array();
         $strings_array = $request->sub_counties;
-        $unit_ids = $request->programs;
+        $unit_ids = $request->services;
         if (!empty($strings_array)) {
             foreach ($strings_array as $each_id) {
                 $sub_county_ids[] = (int) $each_id;
@@ -712,7 +712,7 @@ class DashboardController extends Controller
 
         $withResults = Dashboard::select('mfl_code')->groupBy('mfl_code')->get();
      
-        $all_facilities = Facility::select('code', 'name')->distinct('code')->wherein('Sub_County_ID', $sub_county_ids)->wherein('program_id', $program_ids)->wherein('code', $withResults)->groupBy('code', 'name')->get();
+        $all_facilities = Facility::select('code', 'name')->distinct('code')->wherein('Sub_County_ID', $sub_county_ids)->wherein('service_id', $service_ids)->wherein('code', $withResults)->groupBy('code', 'name')->get();
         
         return $all_facilities;
     }

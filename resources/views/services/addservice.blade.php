@@ -9,13 +9,13 @@
                 <div class="col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div class="card-title mb-3">Add Program</div>
-                            <form role="form" method="post"action="{{route('addprogram')}}">
+                            <div class="card-title mb-3">Add service</div>
+                            <form role="form" method="post"action="{{route('addservice')}}">
                                 {{ csrf_field() }}
                                 <div class="row">
                                     <div class="col-md-12 form-group mb-3">
                                         <label for="firstName1">Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="program name">
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="service name">
                                     </div>                        
                                 </div>
                                 <button type="submit" class="btn btn-block btn-primary">Submit</button>

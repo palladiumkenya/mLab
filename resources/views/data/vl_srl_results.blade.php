@@ -19,7 +19,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>CCC Number</th>
+                                                <th>KDOD Number</th>
                                                 <th>Patient Name</th>
                                                 <th>Gender</th>
                                                 <th>Current Regimen</th>
@@ -30,7 +30,7 @@
                                                 <th>Facility</th>
                                                 <th>Sub-County</th>
                                                 <th>County</th>
-                                                <th>Program</th>
+                                                <th>service</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -49,7 +49,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td> @if(!empty($result->program)) {{$result->program}} @else Not Provided @endif</td>
+                                                        <td> @if(!empty($result->service)) {{$result->service}} @else Not Provided @endif</td>
                                                     </tr>
                                                 @endforeach
                                             @endif

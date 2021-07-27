@@ -13,7 +13,7 @@ class Unit extends Model
         'name', 'status'
     ];
 
-    public function program(){
-        return $this->belongsTo('App\Program','program_id','id');
+    public function service(){
+        return $this->belongsTo('App\Service','service_id','id');
     }
 }

@@ -11,7 +11,7 @@ class TBResultsController extends Controller
         try{
             $r = new TBResult;
             $r->sample_id = $request->sample_id;
-            $r->patient_id = $request->patient_id;
+            $r->kdod_number = $request->kdod_number;
             $r->age = $request->age;
             $r->gender = $request->gender;
             $r->test1 = $request->test1;

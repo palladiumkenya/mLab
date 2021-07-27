@@ -31,7 +31,7 @@
                                                 <th>Facility</th>
                                                 <th>Sub-County</th>
                                                 <th>County</th>
-                                                <th>Program</th>
+                                                <th>service</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -51,7 +51,7 @@
                                                         <td>  {{$result->facility}}</td>
                                                         <td>  {{$result->sub_county}}</td>
                                                         <td>  {{$result->county}}</td>
-                                                        <td>  {{$result->program}}</td>                                                  
+                                                        <td>  {{$result->service}}</td>                                                  
                                                     </tr>
                                                 @endforeach
                                             @endif

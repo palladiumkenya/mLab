@@ -37,7 +37,7 @@ class TasksController extends Controller
                     
                                 $id = $result->id;
                                 $type = $result->result_type;
-                                $client_id = $result->client_id;
+                                $kdod_number = $result->kdod_number;
                                 $age = $result->age;
                                 $gender = $result->gender;
                                 $content = $result->result_content;
@@ -60,7 +60,7 @@ class TasksController extends Controller
                                 }
                     
                                 $dest = $facility->mobile;
-                                $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                                $msgmlb = "$ftype PID:$kdod_number A:$age S:$gender DC:$date_collected R: :$content $units";
                             
                                 $encr =  base64_encode($msgmlb);
                                 $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
@@ -153,7 +153,7 @@ class TasksController extends Controller
 
                                     $id = $result->id;
                                     $type = $result->result_type;
-                                    $client_id = $result->client_id;
+                                    $kdod_number = $result->kdod_number;
                                     $age = $result->age;
                                     $gender = $result->gender;
                                     $content = $result->result_content;
@@ -175,7 +175,7 @@ class TasksController extends Controller
                                         $rtype = "FFEID Results";
                                     }
                         
-                                    $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                                    $msgmlb = "$ftype PID:$kdod_number A:$age S:$gender DC:$date_collected R: :$content $units";
                                  
                                     $encr =  base64_encode($msgmlb);
                                     $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
@@ -205,7 +205,7 @@ class TasksController extends Controller
 
                                         $id = $result->id;
                                         $type = $result->result_type;
-                                        $client_id = $result->client_id;
+                                        $kdod_number = $result->kdod_number;
                                         $age = $result->age;
                                         $gender = $result->gender;
                                         $content = $result->result_content;
@@ -227,7 +227,7 @@ class TasksController extends Controller
                                             $rtype = "FFEID Results";
                                         }
                             
-                                        $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
+                                        $msgmlb = "$ftype PID:$kdod_number A:$age S:$gender DC:$date_collected R: :$content $units";
                                     
                                         $encr =  base64_encode($msgmlb);
                                         $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";

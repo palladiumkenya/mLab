@@ -19,7 +19,7 @@ class VLResultsController extends Controller
             $r->source = $request->source;
             $r->result_id = $request->result_id;
             $r->result_type = $request->result_type;
-            $r->client_id = $request->client_id;
+            $r->kdod_number = $request->kdod_number;
             $r->age = $request->age;
             $r->request_id = $request->request_id;
             $r->result_content = $request->result_content;
@@ -47,7 +47,7 @@ class VLResultsController extends Controller
     {
         $ilfs = ILFacility::all();
 
-        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('program_id')->get();
+        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('service_id')->get();
 
         $facilities = array();
 
@@ -119,7 +119,7 @@ class VLResultsController extends Controller
                     $r->source = $dat->source;
                     $r->result_id = $dat->result_id;
                     $r->result_type = $dat->result_type;
-                    $r->client_id = $dat->client_id;
+                    $r->kdod_number = $dat->kdod_number;
                     $r->age = $dat->age;
                     $r->request_id = $dat->request_id;
                     $r->result_content = $dat->result_content;
@@ -192,7 +192,7 @@ class VLResultsController extends Controller
                             $r->source = $dat->source;
                             $r->result_id = $dat->result_id;
                             $r->result_type = $dat->result_type;
-                            $r->client_id = $dat->client_id;
+                            $r->kdod_number = $dat->kdod_number;
                             $r->age = $dat->age;
                             $r->request_id = $dat->request_id;
                             $r->result_content = $dat->result_content;
@@ -226,7 +226,7 @@ class VLResultsController extends Controller
 
 
         $ilfs = ILFacility::all();
-        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('program_id')->get();
+        $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('service_id')->get();
 
 
 
@@ -304,7 +304,7 @@ class VLResultsController extends Controller
                     $r->source = $dat->source;
                     $r->result_id = $dat->result_id;
                     $r->result_type = $dat->result_type;
-                    $r->client_id = $dat->client_id;
+                    $r->kdod_number = $dat->kdod_number;
                     $r->age = $dat->age;
                     $r->request_id = $dat->request_id;
                     $r->result_content = $cnt;
@@ -385,7 +385,7 @@ class VLResultsController extends Controller
                             $r->source = $dat->source;
                             $r->result_id = $dat->result_id;
                             $r->result_type = $dat->result_type;
-                            $r->client_id = $dat->client_id;
+                            $r->kdod_number = $dat->kdod_number;
                             $r->age = $dat->age;
                             $r->request_id = $dat->request_id;
                             $r->result_content = $cnt;

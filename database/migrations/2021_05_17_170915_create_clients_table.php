@@ -17,7 +17,7 @@ class CreateClientsTable extends Migration
             $table->increments('id');
             $table->string('f_name');
             $table->string('l_name');
-            $table->string('ccc_number');
+            $table->string('kdod_number');
             $table->string('phone');
             $table->integer('facility_id');
             $table->integer('notification');

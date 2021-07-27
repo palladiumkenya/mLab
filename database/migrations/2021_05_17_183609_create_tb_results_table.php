@@ -16,7 +16,7 @@ class CreateTbResultsTable extends Migration
         Schema::create('tb_results', function (Blueprint $table) {
             $table->increments('tb_result_id');
             $table->string('sample_id');
-            $table->string('patient_id');
+            $table->string('kdod_number');
             $table->string('age');
             $table->string('gender');
             $table->string('test1');

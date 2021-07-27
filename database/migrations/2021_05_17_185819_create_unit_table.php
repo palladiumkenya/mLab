@@ -17,7 +17,7 @@ class CreateUnitTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('status');
-            $table->integer('program_id');
+            $table->integer('service_id');
             $table->timestamps();
         });
     }

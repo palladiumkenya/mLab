@@ -11,6 +11,6 @@ class SRLVLData extends Model
     public $incrementing = false;
     
     protected $fillable = [
-        'justification_code','current_regimen','date_art_regimen','selected_type','program','county','sub_county','facility','lab_name','created_at','updated_at',
+        'justification_code','current_regimen','date_art_regimen','selected_type','service','county','sub_county','facility','lab_name','created_at','updated_at',
     ];
 }

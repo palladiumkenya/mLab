@@ -12,7 +12,7 @@ class HTSResultsController extends Controller
         try{
             $r = new HTSResult;
             $r->nhrl_lab_id = $request->nhrl_lab_id;
-            $r->patient_id = $request->patient_id;
+            $r->kdod_number = $request->kdod_number;
             $r->sample_id = $request->sample_id;
             $r->age = $request->age;
             $r->gender = $request->gender;

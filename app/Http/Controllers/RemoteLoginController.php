@@ -242,7 +242,7 @@ class RemoteLoginController extends Controller
                 $sex = 3;
             }
 
-            $data = 'mflCode='.$remote_vl->facility.'&patient_identifier='.$remote_vl->ccc_num.'&dob='.$remote_vl->dob.
+            $data = 'mflCode='.$remote_vl->facility.'&kdod_numberentifier='.$remote_vl->ccc_num.'&dob='.$remote_vl->dob.
                 '&datecollected='.$remote_vl->date_collected.'&sex='.$sex.'&sampletype=1&justification='.$remote_vl->justification_code.
                 '&pmtct=3&prophylaxis=AF2A';
 
@@ -642,7 +642,7 @@ class RemoteLoginController extends Controller
             // add regimen as integer
             // pcr type should be integer
 
-            $data = 'mflCode='.$remote_eid->facility.'&patient_identifier='.$remote_eid->hein_number.'&dob='.$remote_eid->dob.
+            $data = 'mflCode='.$remote_eid->facility.'&kdod_numberentifier='.$remote_eid->hein_number.'&dob='.$remote_eid->dob.
                 '&datecollected='.$remote_eid->date_collected.'&sex='.$sex.'&feeding='.$remote_eid->infant_feeding.'&pcrtype=1'.
                 '&regimen=16&entry_point='.$remote_eid->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_eid->mother_age.'&lab='.$remote_eid->lab_id. '' ; 
 
@@ -1039,7 +1039,7 @@ class RemoteLoginController extends Controller
             // add regimen as integer
             // pcr type should be integer
 
-            $data = 'mflCode='.$remote_hts->facility.'&patient_identifier='.$remote_hts->hein_number.'&dob='.$remote_hts->dob.
+            $data = 'mflCode='.$remote_hts->facility.'&kdod_numberentifier='.$remote_hts->hein_number.'&dob='.$remote_hts->dob.
                 '&datecollected='.$remote_hts->date_collected.'&sex='.$sex.'&feeding='.$remote_hts->infant_feeding.'&pcrtype=1'.
                 '&regimen=16&entry_point='.$remote_hts->entry_point.'&mother_prophylaxis=21&mother_age='.$remote_hts->mother_age.'&lab=3';
 

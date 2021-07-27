@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_no');
             $table->string('status');
             $table->string('county_id');
-            $table->integer('program_id');
+            $table->integer('service_id');
             $table->integer('facility_id');
             $table->integer('user_level');
             $table->text('first_login');

@@ -16,7 +16,7 @@ class CreateHtsResultsTable extends Migration
         Schema::create('hts_results', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nhrl_lab_id');
-            $table->string('patient_id');
+            $table->string('kdod_number');
             $table->string('age');
             $table->string('gender');
             $table->string('test');

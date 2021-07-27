@@ -11,7 +11,7 @@ class SRLHTSData extends Model
     public $incrementing = false;
     
     protected $fillable = [
-        'sample_number', 'program','county','sub_county','facility','client_name','gender','','lab_name','selected_delivery_point','selected_final_result','selected_test_kit1','selected_test_kit2','dbs_dispatch_date','created_at','updated_at',
+        'sample_number', 'service','county','sub_county','facility','client_name','gender','','lab_name','selected_delivery_point','selected_final_result','selected_test_kit1','selected_test_kit2','dbs_dispatch_date','created_at','updated_at',
     ];
     
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Unit;
-use App\Program;
+use App\Service;
 
 class UnitController extends Controller
 {
@@ -17,10 +17,10 @@ class UnitController extends Controller
 
     public function addunitform(){
 
-        $programs = Program::all();
+        $services = service::all();
 
         $data = array(
-            'programs' => $programs,
+            'services' => $services,
         );
 
         return view('units.addunit')->with($data);
@@ -32,7 +32,7 @@ class UnitController extends Controller
             $unit = new Unit;
 
             $unit->name = $request->name;
-            $unit->program_id = $request->program_id;
+            $unit->service_id = $request->service_id;
             $unit->status = 'Active';
 
             if($unit->save()) {
@@ -61,7 +61,7 @@ class UnitController extends Controller
             $unit = Unit::find($request->uid);
 
             $unit->name = $request->name;
-            $unit->name = $request->program;
+            $unit->name = $request->service;
             $unit->status = $request->status; 
             $unit->updated_at = date('Y-m-d H:i:s');
 

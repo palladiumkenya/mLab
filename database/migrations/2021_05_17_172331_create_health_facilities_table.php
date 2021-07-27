@@ -19,7 +19,7 @@ class CreateHealthFacilitiesTable extends Migration
             $table->text('name');
             $table->string('keph_level');
             $table->string('facility_type');
-            $table->string('Sub_County_ID');
+            $table->string('subcounty_id');
             $table->string('unit_id');
             $table->string('mobile');
             $table->timestamp('modified');

@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Program extends Model
+class service extends Model
 {
-    public $table = 'program';
+    public $table = 'service';
     public $timestamps = false;
     
     protected $fillable = [

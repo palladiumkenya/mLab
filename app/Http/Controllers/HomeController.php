@@ -13,15 +13,15 @@ class HomeController extends Controller
 {
     public function index()
     {
-        Auth::user()->load('program', 'facility', 'county');
+        Auth::user()->load('service', 'facility', 'county');
         $username = 'viewer'; // Username  
         $server = 'https://tableau.mhealthkenya.co.ke/trusted';  // Tableau URL  
         if(Auth::user()->user_level < 2){
                 $view = "views/MLABDASH_0/MDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no"; 
         }
         if(Auth::user()->user_level == 2){
-                $aff = str_replace(' ', '%20', Auth::user()->program->name);
-                $view = "views/MLABDASH_0/programDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&program=".$aff;
+                $aff = str_replace(' ', '%20', Auth::user()->service->name);
+                $view = "views/MLABDASH_0/serviceDSBD?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no&service=".$aff;
         }
         if(Auth::user()->user_level == 3 || Auth::user()->user_level == 4){
                 $aff = str_replace(' ', '%20', Auth::user()->facility->name);
@@ -57,9 +57,9 @@ class HomeController extends Controller
 
     public function get_units(Request $request)
     {
-        $program_id = $request->program_id;
+        $service_id = $request->service_id;
 
-        $units = Unit::where('program_id', $program_id)->get();
+        $units = Unit::where('service_id', $service_id)->get();
 
         return $units;
     }
@@ -88,11 +88,11 @@ class HomeController extends Controller
             $sub_county_id = $request->sub_county_id;
 
             
-            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->whereNull('program_id')->whereNull('mobile')->get();
+            $facilities = Facility::where('Sub_County_ID', $sub_county_id)->whereNull('service_id')->whereNull('mobile')->get();
 
             return $facilities;
     }
-    public function get_program_facilities_mlab(Request $request)
+    public function get_service_facilities_mlab(Request $request)
     {
             $sub_county_id = $request->sub_county_id;
 

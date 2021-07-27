@@ -22,7 +22,7 @@
                             <div class="menu-icon-grid w-auto p-0">
                                 <a href="{{route('users')}}"><i class="i-Add-User"></i>Users</a>
                                 <a href="{{route('clients')}}"><i class="i-MaleFemale"></i>Clients</a>
-                                <a href="{{route('programs')}}"><i class="i-Network"></i>Programs</a>
+                                <a href="{{route('services')}}"><i class="i-Network"></i>Services</a>
                                 <a href="{{route('units')}}"><i class="i-Network"></i>Units</a>
                                 <a href="{{route('facilities')}}"><i class="i-Hospital"></i>Facilities</a>
                                 <a href="{{route('il_facilities')}}"><i class="i-Hospital1"></i>IL Facilities</a>
@@ -120,7 +120,7 @@
             <p></p>
             <h6> Welcome, <b>{{ ucwords(Auth::user()->f_name)}} {{ ucwords(Auth::user()->l_name)}}</b>:
                 @if(Auth::user()->user_level < 2) National Dashboard @elseif(Auth::user()->user_level == 2)
-                    {{Auth::user()->program->name}} Dashboard
+                    {{Auth::user()->service->name}} Dashboard
                     @elseif(Auth::user()->user_level == 3) {{Auth::user()->facility->name}} Dashboard <b>(MFL:
                         {{Auth::user()->facility->code}})</b>
                     @elseif(Auth::user()->user_level == 4) {{Auth::user()->facility->name}} Dashboard <b>(MFL:
@@ -148,7 +148,7 @@
                             {{ ucwords(Auth::user()->l_name)}}</b>
                     </div>
                     <a class="dropdown-item">@if(Auth::user()->user_level < 2) National @elseif(Auth::user()->user_level
-                            == 2) {{Auth::user()->program->name}}
+                            == 2) {{Auth::user()->service->name}}
                             @elseif(Auth::user()->user_level == 3) {{Auth::user()->facility->name}}
                             @elseif(Auth::user()->user_level == 4) {{Auth::user()->facility->name}}
                             @elseif(Auth::user()->user_level == 5) {{Auth::user()->county->name}} County

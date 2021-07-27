@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Result;
-use App\Program;
+use App\Service;
 use App\Facility;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -14,11 +14,11 @@ class UshauriController extends Controller
 {
     public function index()
     {
-        $programs = Program::all();
+        $services = service::all();
         
 
         $data = array(
-            'programs' => $programs,
+            'services' => $services,
         );
         return view('data.clients_filter')->with($data);
     }
@@ -26,14 +26,14 @@ class UshauriController extends Controller
     public function getResults(Request $request)
     {
         $mfl = $request->mfl_code;
-        $ccc = $request->ccc_number;
+        $ccc = $request->kdod_number;
 
         if (!empty($ccc)) {
-            $results = Result::where('client_id', $ccc)->get();
+            $results = Result::where('kdod_number', $ccc)->get();
             if (!$results->isEmpty()) {
                 return response()->json(['message' => 'success', 'results' => $results], 200);
             } else {
-                return response()->json(['message' => 'No results for the given CCC Number were found'], 200);
+                return response()->json(['message' => 'No results for the given KDOD Number were found'], 200);
             }
         } elseif (!empty($mfl)) {
             $results = Result::where('mfl_code', $mfl)->get();
@@ -43,7 +43,7 @@ class UshauriController extends Controller
                 return response()->json(['message' => 'No results for the given MFL code were found'], 200);
             }
         } else {
-            return response()->json(['message' => 'You did not specify any search parameters. Please include either CCC_NUMBER or MFL CODE in the request'], 400);
+            return response()->json(['message' => 'You did not specify any search parameters. Please include either kdod_number or MFL CODE in the request'], 400);
         }
     }
 
@@ -63,7 +63,7 @@ class UshauriController extends Controller
             $res = $client->request('POST', 'http://ushaurinode.localhost/api/mlab/check/consent', [
                             'json' => [
                                 'mfl_code' => $result->mfl_code,
-                                'ccc_number' => $result->client_id
+                                'kdod_number' => $result->kdod_number
                             ]
                             
                     ]);
@@ -109,13 +109,13 @@ class UshauriController extends Controller
 
     public function getOneClient(Request $request)
     {
-        $ccc_number = $request->ccc_number;
+        $kdod_number = $request->kdod_number;
         
         $client = new Client();
 
         $res = $client->request('POST', 'http://ushaurinode.localhost/api/mlab/get/one/client', [
                     'form_params' => [
-                        'ccc_number' => $ccc_number
+                        'kdod_number' => $kdod_number
                     ]
                 ]);
 
@@ -123,7 +123,7 @@ class UshauriController extends Controller
             $data = json_decode($res->getBody()->getContents());
            
             if (count($data->clients) === 0) {
-                toastr()->error('Client with the given CCC number not found');
+                toastr()->error('Client with the given KDOD Number not found');
                 return redirect()->back();
             }
             $data->mfl_code = $data->clients[0]->mfl_code;
@@ -136,8 +136,8 @@ class UshauriController extends Controller
 
     public function getClientResults(Request $request)
     {
-        $ccc_number = $request->ccc_number;
-        $results = Result::where('client_id', $ccc_number)->get();
+        $kdod_number = $request->kdod_number;
+        $results = Result::where('kdod_number', $kdod_number)->get();
 
         return $results;
     }
