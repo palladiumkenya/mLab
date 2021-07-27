@@ -72,7 +72,7 @@
                                             <option >Select</option>
                                         @if(Auth::user()->user_level < 2)    
                                             <option value="1">Super Admin</option>
-                                            <option value="2">service Staff</option>
+                                            <option value="2">Service Staff</option>
                                             <option value="5">Unit Manager</option>
                                         @endif
                                         @if(Auth::user()->user_level == 2)

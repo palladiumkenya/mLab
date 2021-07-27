@@ -48,6 +48,19 @@
                                 </select>
                         </div>
                         @endif
+
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName1">Unit</label>
+                            <select  class="form-control" data-width="100%" id="unit" name="unit_id">
+                                <option value="">Select Unit</option>
+                                @if(Auth::user()->user_level == 5)
+
+                                <option value="{{Auth::user()->unit->id}}">{{ ucwords(Auth::user()->unit->name) }}</option>
+                                @endif
+                                    
+                            </select>
+                        </div>
+
                         <div class="col-md-6 form-group mb-3">
                             <label for="firstName1">County</label>
                             <select class="form-control" data-width="100%" id="county" name="county_id">
@@ -101,8 +114,46 @@
 
 @section('bottom-js')
 <script type="text/javascript">
-    $('#service').change(function() {
+
+    $('#service').change(function () {
+
+        $('#unit').empty();
+
+        var z = $(this).val();
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
+            url: '/get_units',
+            data: {
+                "service_id": z
+            },
+            dataType: "json",
+            success: function (data) {
+                var select = document.getElementById("unit"),
+                    opt = document.createElement("option");
+
+                    opt.value = "";
+                    opt.textContent = "Select Unit";
+                    select.appendChild(opt);
+                for (var i = 0; i < data.length; i++) {
+                    
+                var select = document.getElementById("unit"),
+                    opt = document.createElement("option");
+
+                    opt.value = data[i].id;
+                    opt.textContent = data[i].name;
+                    select.appendChild(opt);
+                }
+            }
+        })
+    });
+
+    $('#unit').change(function () {
+
         $('#county').empty();
+
         var z = $(this).val();
         $.ajax({
             headers: {
@@ -111,18 +162,21 @@
             type: "POST",
             url: '/get_counties',
             data: {
-                "service_id": z
+                "unit_id": z
             },
             dataType: "json",
-            success: function(data) {
+            success: function (data) {
                 var select = document.getElementById("county"),
                     opt = document.createElement("option");
-                opt.value = "";
-                opt.textContent = "Select County";
-                select.appendChild(opt);
+
+                    opt.value = "";
+                    opt.textContent = "Select County";
+                    select.appendChild(opt);
                 for (var i = 0; i < data.length; i++) {
-                    var select = document.getElementById("county"),
-                        opt = document.createElement("option");
+                    
+                var select = document.getElementById("county"),
+                    opt = document.createElement("option");
+
                     opt.value = data[i].id;
                     opt.textContent = data[i].name;
                     select.appendChild(opt);
@@ -130,6 +184,7 @@
             }
         })
     });
+
     $('#county').change(function() {
         $('#sub_county').empty();
         var x = $(this).val();
@@ -159,6 +214,7 @@
             }
         })
     });
+    
     $('#sub_county').change(function() {
         $('#facility').empty();
         var y = $(this).val();

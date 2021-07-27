@@ -52,7 +52,7 @@ class DashboardController extends Controller
 
         $units_with_data = Dashboard::select('unit_id')->groupBy('unit_id');
         
-        $all_services = service::select('id', 'name')->whereIn('id', $services_with_data);
+        $all_services = Service::select('id', 'name')->whereIn('id', $services_with_data);
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
         $all_units = Unit::select('id', 'name')->distinct('id')->whereIn('id', $units_with_data);
 
@@ -81,7 +81,7 @@ class DashboardController extends Controller
                             ->whereRaw('(created_at::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
     
         if (!empty($selected_services)) {
-            $all_services = service::select('id', 'name')->whereIn('id', $selected_services);
+            $all_services = Service::select('id', 'name')->whereIn('id', $selected_services);
             $all_units = $all_units->join('mlab_data_materialized', 'unit.id', '=', 'mlab_data_materialized.unit_id')->whereIn('service_id', $selected_services);
             $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('unit_id', $selected_units);
             $all_records = $all_records->whereIn('service_id', $selected_services);
@@ -137,7 +137,7 @@ class DashboardController extends Controller
 
 
         if (!empty($selected_facilities)) {
-            $all_services = service::select('id', 'name')->where('id', Auth::user()->service_id);
+            $all_services = Service::select('id', 'name')->where('id', Auth::user()->service_id);
             $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('mfl_code', $selected_facilities);
             $all_records = $all_records->whereIn('mfl_code', $selected_facilities);
             $sent_records = $sent_records->whereIn('mfl_code', $selected_facilities);
@@ -220,7 +220,7 @@ class DashboardController extends Controller
             $counties_with_data = $selected_counties;
         }
         
-        $all_services = service::select('id', 'name')->whereIn('id', $services_with_data);
+        $all_services = Service::select('id', 'name')->whereIn('id', $services_with_data);
         $all_units = Unit::select('id', 'name')->distinct('id')->whereIn('id', $units_with_data);
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
 
@@ -318,7 +318,7 @@ class DashboardController extends Controller
         }
 
         if (!empty($selected_facilities)) {
-            $all_services = service::select('id', 'name')->where('id', Auth::user()->service_id);
+            $all_services = Service::select('id', 'name')->where('id', Auth::user()->service_id);
             $all_counties = $all_counties->whereIn('mfl_code', $selected_facilities);
             $all_records = $all_records->whereIn('mfl_code', $selected_facilities);
             $sent_records = $sent_records->whereIn('mfl_code', $selected_facilities);
@@ -629,24 +629,27 @@ class DashboardController extends Controller
 
         if (!empty($service_ids)) {
             $all_units = Unit::join('service','service.id', '=', 'unit.service_id')
-                ->join('sub_county', 'county.id', '=', 'sub_county.county_id')
-                ->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
-                ->select('county.id as id', 'county.name as name')
-                ->distinct('county.id')
-                ->whereIn('health_facilities.service_id', $service_ids)
-                ->whereIn('county.id', $counties_with_data)
-                ->groupBy('county.id', 'county.name')
-                ->get('county.id');
+                ->join('health_facilities', 'unit.id', '=', 'health_facilities.unit_id')
+                ->join('sub_county', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
+                ->join('county', 'county.id', '=', 'sub_county.county_id')
+                ->select('unit.id as id', 'unit.name as name')
+                ->distinct('unit.id')
+                ->whereIn('unit.service_id', $service_ids)
+                ->whereIn('county.id', $units_with_data)
+                ->groupBy('unit.id', 'unit.name')
+                ->get('unit.id');
         } else {
-            $all_counties = County::join('sub_county', 'county.id', '=', 'sub_county.county_id')
-            ->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
-            ->select('county.id as id', 'county.name as name')
-            ->distinct('county.id')
-            ->whereIn('county.id', $counties_with_data)
-            ->groupBy('county.id', 'county.name')
-            ->get();
+            $all_units = Unit::join('service','service.id', '=', 'unit.service_id')
+                ->join('health_facilities', 'unit.id', '=', 'health_facilities.unit_id')
+                ->join('sub_county', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
+                ->join('county', 'county.id', '=', 'sub_county.county_id')
+                ->select('unit.id as id', 'unit.name as name')
+                ->distinct('unit.id')
+                ->whereIn('county.id', $units_with_data)
+                ->groupBy('unit.id', 'unit.name')
+                ->get('unit.id');
         }
-        return $all_counties;
+        return $all_units;
     }
 
     public function get_dashboard_counties(Request $request)
@@ -665,7 +668,7 @@ class DashboardController extends Controller
                 ->join('health_facilities', 'sub_county.id', '=', 'health_facilities.Sub_County_ID')
                 ->select('county.id as id', 'county.name as name')
                 ->distinct('county.id')
-                ->whereIn('health_facilities.unit_id', $unit_ids)
+                ->whereIn('health_facili1   ties.unit_id', $unit_ids)
                 ->whereIn('county.id', $counties_with_data)
                 ->groupBy('county.id', 'county.name')
                 ->get('county.id');

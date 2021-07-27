@@ -16,8 +16,8 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label for=" services" class="col-form-label"><b>Select Unit(s)</b></label>
-                    <select class=" services form-control selectpicker" id="units" name="units[]" multiple
+                    <label for=" units" class="col-form-label"><b>Select Unit(s)</b></label>
+                    <select class=" units form-control selectpicker" id="units" name="units[]" multiple
                         data-live-search="true">
 
                     </select>
@@ -388,7 +388,7 @@
                             'value',
                             service.id));
                     });
-                    $.each(data.all_unitss, function(number, units) {
+                    $.each(data.all_units, function(number, units) {
                         $("#units").append($('<option>').text(unit.name).attr('value',
                             unit.id));
                     });
@@ -425,9 +425,9 @@
         });
         $(document).ready(function() {
             $('.services').selectpicker({});
-            $('#service').change(function () {
+            $('#services').change(function () {
 
-                $('#unit').empty();
+                $('#units').empty();
 
                 var z = $(this).val();
                 $.ajax({
@@ -435,21 +435,23 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     type: "POST",
-                    url: '/get_units',
+                    url: '/get_dashboard_units',
                     data: {
                         "service_id": z
                     },
                     dataType: "json",
                     success: function (data) {
-                        var select = document.getElementById("unit"),
+                        console.log("here", data);
+                        var select = document.getElementById("units"),
                             opt = document.createElement("option");
 
                             opt.value = "";
                             opt.textContent = "Select Unit";
                             select.appendChild(opt);
                         for (var i = 0; i < data.length; i++) {
+                            console.log("here 1", data);
                             
-                        var select = document.getElementById("unit"),
+                        var select = document.getElementById("units"),
                             opt = document.createElement("option");
 
                             opt.value = data[i].id;
@@ -460,9 +462,9 @@
                 })
             });
 
-            $('#unit').change(function () {
+            $('#units').change(function () {
 
-                $('#county').empty();
+                $('#counties').empty();
 
                 var z = $(this).val();
                 $.ajax({
@@ -476,7 +478,7 @@
                     },
                     dataType: "json",
                     success: function (data) {
-                        var select = document.getElementById("county"),
+                        var select = document.getElementById("counties"),
                             opt = document.createElement("option");
 
                             opt.value = "";
@@ -484,7 +486,7 @@
                             select.appendChild(opt);
                         for (var i = 0; i < data.length; i++) {
                             
-                        var select = document.getElementById("county"),
+                        var select = document.getElementById("counties"),
                             opt = document.createElement("option");
 
                             opt.value = data[i].id;
@@ -495,8 +497,8 @@
                 })
             });
 
-            $('#county').change(function () {
-                $('#sub_county').empty();
+            $('#counties').change(function () {
+                $('#subcounties').empty();
 
                 var x = $(this).val();
                 $.ajax({
@@ -511,7 +513,7 @@
                     dataType: "json",
                     success: function (data) {
 
-                        var select = document.getElementById("sub_county"),
+                        var select = document.getElementById("subcounties"),
                                 opt = document.createElement("option");
 
                             opt.value = "";
@@ -519,7 +521,7 @@
                             select.appendChild(opt);
 
                         for (var i = 0; i < data.length; i++) {
-                            var select = document.getElementById("sub_county"),
+                            var select = document.getElementById("subcounties"),
                                 opt = document.createElement("option");
 
                             opt.value = data[i].id;
@@ -530,9 +532,9 @@
                 })
             });
 
-            $('#sub_county').change(function () {
+            $('#subcounties').change(function () {
 
-                $('#facility').empty();
+                $('#facilities').empty();
 
                 var y = $(this).val();
                 $.ajax({
@@ -547,7 +549,7 @@
                     dataType: "json",
                     success: function (data) {
 
-                        var select = document.getElementById("facility"),
+                        var select = document.getElementById("facilities"),
                                 opt = document.createElement("option");
 
                             opt.value = "";
@@ -555,7 +557,7 @@
                             select.appendChild(opt);
 
                         for (var i = 0; i < data.length; i++) {
-                            var select = document.getElementById("facility"),
+                            var select = document.getElementById("facilities"),
                                 opt = document.createElement("option");
 
                             opt.value = data[i].code;
