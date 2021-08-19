@@ -39,9 +39,9 @@ class ILFacilityController extends Controller
                 $facility->phone_no = $request->code;
             }
             if(!empty($request->internet) {
-                $facility->internet = 'Yes';
-            } else {
                 $facility->internet = $request->internet;
+            } else {
+                $facility->internet = 'Yes';
             }
 
             if ($facility->save()) {
