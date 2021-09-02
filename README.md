@@ -8,12 +8,12 @@
 
 ### Features
 
-The has the following modules:
-Patient results: this module allows for client appointment management and client enrollment.
-Sub-functions in this module include:
--Sample remote login: for allowing login of samples into the system for the samples being sent to the labs
--HTS results transmission: for HIV results for non – conclusive tests
--Client messaging: for consent and message of clients on results availability to enhance linkage to care
+mLab has the following modules: <br>
+Patient results: this module allows for client appointment management and client enrollment. <br>
+Sub-functions in this module include: <br>
+-Sample remote login: for allowing login of samples into the system for the samples being sent to the labs <br>
+-HTS results transmission: for HIV results for non – conclusive tests <br>
+-Client messaging: for consent and message of clients on results availability to enhance linkage to care <br>
 
 ## Installation
 
