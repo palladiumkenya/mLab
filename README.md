@@ -84,7 +84,8 @@ You can now access the server at http://localhost:8000
 - `config` - Contains all the application configuration files
 - `database/factories` - Contains the model factory for all the models
 - `database/migrations` - Contains all the database migrations
-- `routes` - Contains all the api routes defined in api.php file
+- `routes/api` - Contains all the api routes
+- `routes/web` - Contains all the dashboard routes
 - `tests` - Contains all the application tests
 
 ## Environment variables
