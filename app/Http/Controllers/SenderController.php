@@ -11,7 +11,7 @@ class SenderController extends Controller
 {
     public function send($to, $message)
     {
-        $username = "mhealthkenya";
+        $username = "mLab_KE";
         $apiKey = config('services.at.key');
         $AT       = new AfricasTalking($username, $apiKey);
 
