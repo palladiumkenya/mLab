@@ -73,6 +73,7 @@ class VLResultsController extends Controller
         $yester = date('Y-m-d', strtotime("-31 days"));
         $curl = curl_init();
 
+        // test 1 is VL
         $fields = array(
                 'test' => 1,
                 'facility_code' =>$a,
@@ -112,14 +113,22 @@ class VLResultsController extends Controller
         
 
             foreach ($data as $dat) {
+                // check if result already exisits
                 $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
+
+                //check if ccc has special character or letter or is decimal and replace with nothing
+                if (preg_match('#[^0-9]#', $dat->client_id)) {
+                    $client_id = preg_replace('/[^a-z0-9 ]+/i','',$dat->client_id);
+                } else {
+                    $client_id = $dat->client_id;
+                }
 
                 if (empty($res)) {
                     $r = new Result;
                     $r->source = $dat->source;
                     $r->result_id = $dat->result_id;
                     $r->result_type = $dat->result_type;
-                    $r->client_id = $dat->client_id;
+                    $r->client_id = $client_id;
                     $r->age = $dat->age;
                     $r->request_id = $dat->request_id;
                     $r->result_content = $dat->result_content;
@@ -186,13 +195,20 @@ class VLResultsController extends Controller
             
                     foreach ($data as $dat) {
                         $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
-            
+
+                        //check if ccc has special character or letter or is decimal and replace with nothing
+                        if (preg_match('#[^0-9]#', $dat->client_id)) {
+                            $client_id = preg_replace('/[^a-z0-9 ]+/i','',$dat->client_id);
+                        } else {
+                            $client_id = $dat->client_id;
+                        }
+
                         if (empty($res)) {
                             $r = new Result;
                             $r->source = $dat->source;
                             $r->result_id = $dat->result_id;
                             $r->result_type = $dat->result_type;
-                            $r->client_id = $dat->client_id;
+                            $r->client_id = $client_id;
                             $r->age = $dat->age;
                             $r->request_id = $dat->request_id;
                             $r->result_content = $dat->result_content;
@@ -221,10 +237,11 @@ class VLResultsController extends Controller
 
     public function getEIDResults()
     {
+        //read results from the last month
         $today = date("Y-m-d");
         $yester = date('Y-m-d', strtotime("-31 days"));
 
-
+        // check for facilities using both app and IL
         $ilfs = ILFacility::all();
         $mlabfs = Facility::whereNotNull('mobile')->whereNotNull('partner_id')->get();
 
@@ -251,6 +268,7 @@ class VLResultsController extends Controller
         $a =  implode(',', $results);
         $curl = curl_init();
 
+        // test 2 is eid
         $fields = array(
                 'test' => 2,
                 'facility_code' =>$a,
@@ -289,6 +307,8 @@ class VLResultsController extends Controller
             echo "last_page: ".$objects->last_page.'<br>';
 
             foreach ($data as $dat) {
+
+                // check if result already exisits
                 $res = Result::where('result_id', $dat->result_id)->where('source', 1)->first();
 
                 if (empty($res)) {
@@ -300,11 +320,18 @@ class VLResultsController extends Controller
                         $cnt = $dat->result_content;
                     }
 
+                    //check if ccc has special character or letter or is decimal and replace with nothing
+                    if (preg_match('#[^0-9]#', $dat->client_id)) {
+                        $client_id = preg_replace('/[^a-z0-9 ]+/i','',$dat->client_id);
+                    } else {
+                        $client_id = $dat->client_id;
+                    }
+
                     $r = new Result;
                     $r->source = $dat->source;
                     $r->result_id = $dat->result_id;
                     $r->result_type = $dat->result_type;
-                    $r->client_id = $dat->client_id;
+                    $r->client_id = $client_id; 
                     $r->age = $dat->age;
                     $r->request_id = $dat->request_id;
                     $r->result_content = $cnt;
@@ -380,12 +407,19 @@ class VLResultsController extends Controller
                             } else {
                                 $cnt = $dat->result_content;
                             }
+
+                            //check if ccc has special character or letter or is decimal and replace with nothing
+                            if (preg_match('#[^0-9]#', $dat->client_id)) {
+                                $client_id = preg_replace('/[^a-z0-9 ]+/i','',$dat->client_id);
+                            } else {
+                                $client_id = $dat->client_id;
+                            }
             
                             $r = new Result;
                             $r->source = $dat->source;
                             $r->result_id = $dat->result_id;
                             $r->result_type = $dat->result_type;
-                            $r->client_id = $dat->client_id;
+                            $r->client_id = $client_id; 
                             $r->age = $dat->age;
                             $r->request_id = $dat->request_id;
                             $r->result_content = $cnt;

@@ -252,6 +252,9 @@ class SendResultsController extends Controller
                 $date = date('Y-m-d H:i:s', time());
 
                 $sender = new SenderController;
+
+                // dont update if status failed
+
                 if ($sender->send($dest, $encr)) {
                     $result->il_send = '1';
                     $result->processed = '1';
