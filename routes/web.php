@@ -92,6 +92,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/get_dashboard_facilities', ['uses' => 'DashboardController@get_dashboard_facilities', 'as' => 'get_dashboard_facilities']);
     Route::post('/filter/dashboard', ['uses' => 'DashboardController@get_filtered_data', 'as' => 'filterDashboard']);
     Route::post('/filter/printers/dashboard', ['uses' => 'DashboardController@get_filtered_printers_data', 'as' => 'filterPrintersDashboard']);
+
+    //SMS Routes
+    Route::get('/report/sms', ['uses' => 'SMSReportController@index', 'as' => 'sms_report']);
+    Route::get('/report/get_sms', ['uses' => 'SMSReportController@get_data', 'as' => 'sms_report_data']);
+    Route::post('/report/filtered_get_sms', ['uses' => 'SMSReportController@get_filtered_data', 'as' => 'sms_filtered_report_data']);
+
 });
 
 Route::get('/send/results', ['uses' => 'SendResultsController@sendVLEID', 'as' => 'sendvleid']);
