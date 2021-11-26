@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\SMSData;
 use DB;
 use Auth;
+use App\Partner;
 use Illuminate\Support\Carbon;
 
 
@@ -13,52 +14,97 @@ class SMSReportController extends Controller
 {
     public function index(){
 
-        return view('sms.sms');
+        if(Auth::user()->user_level == 1) {
+
+            $partners = Partner::all();
+            return view('sms.adminsms')->with('partners');
+        } else if(Auth::user()->user_level == 2) {
+            return view('sms.partnersms');
+        }
 
     }
 
     public function get_data(){
 
-        $cost = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status , count(*) as y")
+        if(Auth::user()->user_level == 1) {
+
+            $total_sum = SMSData::selectRaw("sum(sum) as total")->get();
+
+            $cost = SMSData::selectRaw("partner_name, count(*) as y")
+            ->groupBy('partner_name' )
+            ->get();
+
+            // status 101 
+            // 101: Sent   
+            $sent = SMSData::selectRaw("partner_name, month, status , count(*) as y")
+                ->orWhere('status', '=', 101)
+                ->groupBy('month', 'partner_name', 'status')
+                ->get();
+
+            // status 500, 501, 502
+            // 500: InternalServerError
+            // 501: GatewayError
+            // 502: RejectedByGateway
+            $failed = SMSData::selectRaw("partner_name, month, status , count(*) as y")
+                ->orWhere('status', '=', 403)
+                ->groupBy('month', 'partner_name', 'status')
+                ->get();
+
+            // status 406 
+            // 406: UserInBlacklist  
+            $blacklist = SMSData::selectRaw("partner_name, month, status , count(*) as y")
+                ->orWhere('status', '=', 406)
+                ->groupBy('month', 'partner_name', 'status')
+                ->get();
+
+        } else if(Auth::user()->user_level == 2) {
+
+            $total_sum = SMSData::selectRaw("sum(sum) as total")
+            ->where('partner_id', Auth::user()->partner_id )
+            ->get();
+
+            $cost = SMSData::selectRaw("month, status , count(*) as y")
             ->where('partner_id', Auth::user()->partner_id )
             ->groupBy('month', 'status')
             ->orderBy('month', 'ASC')
             ->get();
 
-        // status 101 
-        // 101: Sent   
-        $sent = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status , count(*) as y")
-            ->where('partner_id', Auth::user()->partner_id )
-            ->orWhere('status', '=', 101)
-            ->groupBy('month', 'status')
-            ->orderBy('month', 'ASC')
-            ->get();
+            // status 101 
+            // 101: Sent   
+            $sent = SMSData::selectRaw("month, status , count(*) as y")
+                ->where('partner_id', Auth::user()->partner_id )
+                ->orWhere('status', '=', 101)
+                ->groupBy('month', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
 
-        // status 500, 501, 502
-        // 500: InternalServerError
-        // 501: GatewayError
-        // 502: RejectedByGateway
-        $failed = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status , count(*) as y")
-            ->where('partner_id', Auth::user()->partner_id )
-            ->orWhere('status', '=', 403)
-            ->groupBy('month', 'status')
-            ->orderBy('month', 'ASC')
-            ->get();
+            // status 500, 501, 502
+            // 500: InternalServerError
+            // 501: GatewayError
+            // 502: RejectedByGateway
+            $failed = SMSData::selectRaw("month, status , count(*) as y")
+                ->where('partner_id', Auth::user()->partner_id )
+                ->orWhere('status', '=', 403)
+                ->groupBy('month', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
 
-        // status 406 
-        // 406: UserInBlacklist  
-        $blacklist = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status , count(*) as y")
-            ->where('partner_id', Auth::user()->partner_id )
-            ->orWhere('status', '=', 406)
-            ->groupBy('month', 'status')
-            ->orderBy('month', 'ASC')
-            ->get();
+            // status 406 
+            // 406: UserInBlacklist  
+            $blacklist = SMSData::selectRaw("month, status , count(*) as y")
+                ->where('partner_id', Auth::user()->partner_id )
+                ->orWhere('status', '=', 406)
+                ->groupBy('month','status')
+                ->orderBy('month', 'ASC')
+                ->get();
+        }
 
         
         $data["blacklist"] = $blacklist;
         $data["failed"] = $failed;
         $data["sent"] = $sent;
         $data["cost"] = $cost;
+        $data["total_sum"] = $total_sum;
 
         return $data;
 
@@ -76,42 +122,85 @@ class SMSReportController extends Controller
         $start_date = Carbon::createFromFormat('m/d/Y', $unformatted_startdate)->format('Y-m-d');
         $end_date = Carbon::createFromFormat('m/d/Y', $unformatted_enddate)->format('Y-m-d');
 
-        $cost = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status,count(*) as y")
-            ->where('partner_id', Auth::user()->partner_id )
-            ->whereBetween('created_at',[$start_date, $end_date] )
-            ->groupBy('month', 'status')
+        if(Auth::user()->user_level == 1) {
+
+            $total_sum = SMSData::selectRaw("sum(sum) as total")
+            ->whereBetween('month',[$start_date, $end_date] )
             ->get();
 
-        // status 101    
-        $sent = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status , count(*) as y")
+            $cost = SMSData::selectRaw("partner_name, month, status,count(*) as y")
+                ->whereBetween('month',[$start_date, $end_date] )
+                ->groupBy('month','partner_name', 'status')
+                ->get();
+
+            // status 101    
+            $sent = SMSData::selectRaw("partner_name, month, status , count(*) as y")
+                ->whereBetween('month',[$start_date, $end_date] )
+                ->orWhere('status', '=', 101)
+                ->groupBy('month', 'partner_name', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
+
+            // status 500, 501, 502
+            $failed = SMSData::selectRaw("partner_name, month, status , count(*) as y")
+                ->whereBetween('month',[$start_date, $end_date] )
+                ->orWhere('status', '=', 403)
+                ->groupBy('month', 'partner_name', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
+
+            // status 406   
+            $blacklist = SMSData::selectRaw("partner_name, month, status , count(*) as y")
+                ->orWhere('status', '=', 406)
+                ->groupBy('month', 'partner_name', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
+
+        } else if(Auth::user()->user_level == 2) {
+
+            $total_sum = SMSData::selectRaw("sum(sum) as total")
             ->where('partner_id', Auth::user()->partner_id )
-            ->whereBetween('created_at',[$start_date, $end_date] )
-            ->orWhere('status', '=', 101)
-            ->groupBy('month', 'status')
-            ->orderBy('month', 'ASC')
+            ->whereBetween('month',[$start_date, $end_date] )
             ->get();
 
-        // status 500, 501, 502
-        $failed = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status , count(*) as y")
-            ->where('partner_id', Auth::user()->partner_id )
-            ->whereBetween('created_at',[$start_date, $end_date] )
-            ->orWhere('status', '=', 403)
-            ->groupBy('month', 'status')
-            ->orderBy('month', 'ASC')
-            ->get();
+            $cost = SMSData::selectRaw("month, status,count(*) as y")
+                ->where('partner_id', Auth::user()->partner_id )
+                ->whereBetween('month',[$start_date, $end_date] )
+                ->groupBy('month', 'status')
+                ->get();
 
-        // status 406   
-        $blacklist = SMSData::selectRaw("to_char(created_at, 'YYYY-MM') as month, status , count(*) as y")
-            ->where('partner_id', Auth::user()->partner_id )
-            ->orWhere('status', '=', 406)
-            ->groupBy('month', 'status')
-            ->orderBy('month', 'ASC')
-            ->get();
+            // status 101    
+            $sent = SMSData::selectRaw("month, status , count(*) as y")
+                ->where('partner_id', Auth::user()->partner_id )
+                ->whereBetween('month',[$start_date, $end_date] )
+                ->orWhere('status', '=', 101)
+                ->groupBy('month', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
+
+            // status 500, 501, 502
+            $failed = SMSData::selectRaw("month, status , count(*) as y")
+                ->where('partner_id', Auth::user()->partner_id )
+                ->whereBetween('month',[$start_date, $end_date] )
+                ->orWhere('status', '=', 403)
+                ->groupBy('month', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
+
+            // status 406   
+            $blacklist = SMSData::selectRaw("month, status , count(*) as y")
+                ->where('partner_id', Auth::user()->partner_id )
+                ->orWhere('status', '=', 406)
+                ->groupBy('month', 'status')
+                ->orderBy('month', 'ASC')
+                ->get();
+        }
 
         $data["blacklist"] = $blacklist;
         $data["failed"] = $failed;
         $data["sent"] = $sent;
         $data["cost"] = $cost;
+        $data["total_sum"] = $total_sum;
 
         return $data;
 

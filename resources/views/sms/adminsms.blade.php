@@ -6,6 +6,16 @@
 
 @section('main-content')
 <div class="container-fluid">
+
+    <div class="row mb-2 float-left ">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" style="display: inline-block">Total Cost : </h5>
+                <h4 class="card-text" id="smsTotal" style="display: inline-block"> </h4>
+            </div>
+        </div>
+    </div>
+
     <div class="row mb-2 float-right">
         <form role="form" method="post" action="#" id="dataFilter" class="form-inline pull-right">
             {{ csrf_field() }}
@@ -16,7 +26,7 @@
                 </div>
             </div>
         
-            <div class="col-md-4 col-sm-4">
+            <div class="col-md-4 col-sm-4" style="margin-top: 40px">
                 <div class="form-group">
                     <label for="daterange" class="col-form-label"></label>
                     <button type="submit" class="btn btn-warning"><b>Filter SMS</b> <i class="i-Filter"></i></button>
@@ -91,7 +101,7 @@
         success: function(data) {
             console.log("report", data);
             smsrep(data.cost, data.blacklist, data.sent, data.failed);
-
+            $("#smsTotal").html(parseFloat(data.total_sum[0].total).toFixed(2))
             $("#dashboard_overlay").hide();
         }
     });
@@ -112,6 +122,7 @@
             url: "{{ route('sms_filtered_report_data') }}",
             success: function(data ) {
                 smsrep(data.cost, data.blacklist, data.sent, data.failed);
+                $("#smsTotal").html(data.total_sum[0].total)
                 console.log("filter", data)
                 $("#dashboard_overlay").hide();
             }
@@ -122,13 +133,15 @@
 
 <script>
 
-function smsrep(data, data_b, data_s, data_f) {
+function smsrep(data_c, data_b, data_s, data_f) {
 
-    var xdat = [];
+    var xdat = [];  
 
-    data.forEach(function(item) {
-        xdat.push(item.month);
+    data_c.forEach(function(item) {
+        xdat.push(item.partner_name);
     });
+
+    console.log("opt", xdat);
 
     Highcharts.chart('smsreport', {
         chart: {
@@ -143,14 +156,17 @@ function smsrep(data, data_b, data_s, data_f) {
         yAxis: {
             title: "SMS Expenditure"
         },
+        labels: {
+            format: "{value:.2f}",    // this stands for showing two decimal places
+        },
         legend: {
             layout: 'vertical',
             align: 'right',
             verticalAlign: 'middle'
         },
         plotOptions: {
-            series: {
-                allowPointSelect: true
+            column: {
+                stacking: 'normal',
             }
         },
         series: [{
@@ -162,9 +178,10 @@ function smsrep(data, data_b, data_s, data_f) {
         }, {
             name: 'Sent',
             data: data_s
-        }], 
+        }
+        ], 
         tooltip: {
-            pointFormat: '<b>{point.y}</b> (sms)'
+            pointFormat: '<b>{point.y}</b> (KSH)',
         },
         responsive: {
             rules: [{
