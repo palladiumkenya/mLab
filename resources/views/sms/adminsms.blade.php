@@ -36,7 +36,7 @@
     </div>
 
     <div class="row col-md-12 col-sm-12">
-        <div id="smsreport" style=" width:90%; height: 80%; margin: 0 auto"></div>
+        <div id="smsreport" style=" width:70%; height: 80%; margin: 0 auto"></div>
     </div>
 
     <div id="dashboard_overlay">
