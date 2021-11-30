@@ -36,51 +36,46 @@ class SMSReportController extends Controller
 
             // status 101 
             // 101: Sent   
-
-            return $sent_t = SMSData::selectRaw("partner_name, status , CAST(sum(sum)as INTEGER) as y")
-            ->orWhere('status', '=', 101)
-            ->groupBy('partner_name', 'status')
-            ->get();
-
-            $sent = SMSData::selectRaw("partner_name, status , CAST(sum(sum)as INTEGER) as y")
-                ->orWhere('status', '=', 101)
-                ->groupBy('partner_name', 'status')
+            $sent = SMSData::selectRaw("partner_name, CAST(sum(sum)as INTEGER) as y")
+                ->whereIn('status', ['101', '102'])
+                ->groupBy('partner_name')
                 ->get();
 
             // status 500, 501, 502
             // 500: InternalServerError
             // 501: GatewayError
             // 502: RejectedByGateway
-            $failed = SMSData::selectRaw("partner_name, status , CAST(sum(sum)as INTEGER) as y")
-                ->where('status', '=', 500)
-                ->orWhere('status', '=', 403)
-                ->groupBy( 'partner_name', 'status')
+            $failed = SMSData::selectRaw("partner_name, CAST(sum(sum)as INTEGER) as y")
+                ->where('status', '=', 403)
+                ->groupBy( 'partner_name')
                 ->get();
 
             // status 406 
             // 406: UserInBlacklist  
-            $blacklist = SMSData::selectRaw("partner_name, status , CAST(sum(sum)as INTEGER) as y")
-                ->orWhere('status', '=', 406)
-                ->groupBy( 'partner_name', 'status')
+            $blacklist = SMSData::selectRaw("partner_name, CAST(sum(sum)as INTEGER) as y")
+                ->where('status', '=', 406)
+                ->groupBy( 'partner_name')
                 ->get();
 
         } else if(Auth::user()->user_level == 2) {
 
-            $total_sum = SMSData::selectRaw("CAST(sum(sum)as INTEGER) as total")
+            $total_sum = SMSData::selectRaw("CAST(sum(sum) as INTEGER) as total")
             ->where('partner_id', Auth::user()->partner_id )
             ->get();
 
-            $cost = SMSData::selectRaw("month, status , CAST(sum(sum)as INTEGER) as y")
+            $cost = SMSData::selectRaw("month, CAST(sum(sum) as INTEGER) as y")
             ->where('partner_id', Auth::user()->partner_id )
-            ->groupBy('month', 'status')
+            ->groupBy('month')
             ->orderBy('month', 'ASC')
             ->get();
 
             // status 101 
             // 101: Sent   
-            $sent = SMSData::selectRaw("month, status , CAST(sum(sum)as INTEGER) as y")
+            $sent = SMSData::selectRaw("month, status, CAST(sum(sum) as INTEGER) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->orWhere('status', '=', 101)
+                ->whereIn('status', ['101', '102'])
+                // ->where('status', '=', 101)
+                // ->orWhere('status', '=', 102)
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
@@ -91,7 +86,7 @@ class SMSReportController extends Controller
             // 502: RejectedByGateway
             $failed = SMSData::selectRaw("month, status , CAST(sum(sum)as INTEGER) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->orWhere('status', '=', 403)
+                ->where('status', '=', 403)
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
@@ -100,7 +95,7 @@ class SMSReportController extends Controller
             // 406: UserInBlacklist  
             $blacklist = SMSData::selectRaw("month, status , CAST(sum(sum)as INTEGER) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->orWhere('status', '=', 406)
+                ->where('status', '=', 406)
                 ->groupBy('month','status')
                 ->orderBy('month', 'ASC')
                 ->get();
@@ -141,23 +136,23 @@ class SMSReportController extends Controller
                 ->get();
 
             // status 101    
-            $sent = SMSData::selectRaw("partner_name, status, CAST(sum(sum)as INTEGER) as y")
+            $sent = SMSData::selectRaw("partner_name, CAST(sum(sum)as INTEGER) as y")
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->orWhere('status', '=', 101)
-                ->groupBy('status', 'partner_name')
+                ->whereIn('status', ['101', '102'])
+                ->groupBy( 'partner_name')
                 ->get();
 
             // status 500, 501, 502
-            $failed = SMSData::selectRaw("partner_name, status, CAST(sum(sum)as INTEGER) as y")
+            $failed = SMSData::selectRaw("partner_name, CAST(sum(sum)as INTEGER) as y")
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->orWhere('status', '=', 403)
-                ->groupBy('status', 'partner_name')
+                ->where('status', '=', 403)
+                ->groupBy('partner_name')
                 ->get();
 
             // status 406   
-            $blacklist = SMSData::selectRaw("partner_name, status, CAST(sum(sum)as INTEGER) as y")
-                ->orWhere('status', '=', 406)
-                ->groupBy('status', 'partner_name')
+            $blacklist = SMSData::selectRaw("partner_name, CAST(sum(sum)as INTEGER) as y")
+                ->where('status', '=', 406)
+                ->groupBy('partner_name')
                 ->get();
 
         } else if(Auth::user()->user_level == 2) {
@@ -177,7 +172,9 @@ class SMSReportController extends Controller
             $sent = SMSData::selectRaw("month, status , CAST(sum(sum)as INTEGER) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->orWhere('status', '=', 101)
+                ->whereIn('status', ['101', '102'])
+                // ->where('status', '=', 101)
+                // ->where('status', '=', 102)
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
@@ -186,7 +183,7 @@ class SMSReportController extends Controller
             $failed = SMSData::selectRaw("month, status , CAST(sum(sum)as INTEGER) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->orWhere('status', '=', 403)
+                ->where('status', '=', 403)
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
@@ -194,7 +191,7 @@ class SMSReportController extends Controller
             // status 406   
             $blacklist = SMSData::selectRaw("month, status , CAST(sum(sum)as INTEGER) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->orWhere('status', '=', 406)
+                ->where('status', '=', 406)
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
