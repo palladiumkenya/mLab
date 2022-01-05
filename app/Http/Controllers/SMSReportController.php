@@ -156,7 +156,7 @@ class SMSReportController extends Controller
                 ->get();
 
             // status 102 Queued    
-            $sent = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
+            $queued = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->whereBetween('month',[$start_date, $end_date] )
                 ->where('status', '=', 102)
                 ->groupBy( 'partner_name')

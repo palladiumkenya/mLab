@@ -159,7 +159,7 @@ function smsrep(data_c, data_b, data_s, data_f, data_q) {
             text: 'SMS Expenditure (month/year)'
         },
         xAxis: {
-            categories: ["Centre For Health Solutions - Naishi", "APHIA Pwani", "Clinton Health Access Initiative","Center For Health Solutions Kenya Tegemeza", "Egpaf Timiza 90 HB", "University of Maryland","Center For Health Solutions - Shinda","APHIA PLUS IMARISHA", "APHIA PLUS NW","UCSF FACES","University of Maryland Boresha Mabara", "Meru County", "APHIA KAMILISHA", "Christian Health Association of Kenya","KCCB KARP", "LVCT HEALTH  Western Region","Global Implementation Solution", "FHI 360", "HEALTHSTRAT TACT PROGRAM", "AMPATH", "APHIA JIJINI",  "Afya Ziwani","None (IL Remote)", "Ngima ForSure", "Afya Nyota", "HJFMRI - Kisumu West Program", "Forum", "Amref", "ICAP","Test Partner", "COPTIC HOPE CENTERS", "HJFMRI - Kericho Program", "Fahari ya Jamii"],
+            categories: ["Centre For Health Solutions - Naishi", "APHIA Pwani", "Clinton Health Access Initiative","Center For Health Solutions Kenya Tegemeza", "Center For Health Solutions - Shinda","APHIA PLUS IMARISHA", "APHIA PLUS NW","UCSF FACES","University of Maryland Boresha Mabara", "Meru County", "APHIA KAMILISHA", "Christian Health Association of Kenya","KCCB KARP", "LVCT HEALTH  Western Region","Global Implementation Solution", "FHI 360", "HEALTHSTRAT TACT PROGRAM", "AMPATH", "APHIA JIJINI",  "Afya Ziwani","None (IL Remote)", "Ngima ForSure", "Afya Nyota", "HJFMRI - Kisumu West Program", "Forum", "Amref", "ICAP","Test Partner", "COPTIC HOPE CENTERS", "HJFMRI - Kericho Program", "Fahari ya Jamii"],
             crosshair: true
         },
         yAxis: {
