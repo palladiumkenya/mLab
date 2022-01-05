@@ -100,8 +100,8 @@
         url: "{{ route('sms_report_data') }}",
         success: function(data) {
             console.log("report", data);
-            smsrep(data.cost, data.blacklist, data.sent, data.failed);
-            $("#smsTotal").html(parseFloat(data.total_sum[0].total).toFixed(2))
+            smsrep(data.cost, data.blacklist, data.sent, data.failed, data.queued);
+            $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
             $("#dashboard_overlay").hide();
         }
     });
@@ -121,8 +121,8 @@
             },
             url: "{{ route('sms_filtered_report_data') }}",
             success: function(data ) {
-                smsrep(data.cost, data.blacklist, data.sent, data.failed);
-                $("#smsTotal").html(data.total_sum[0].total)
+                smsrep(data.cost, data.blacklist, data.sent, data.failed, data.queued);
+                $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
                 console.log("filter", data)
                 $("#dashboard_overlay").hide();
             }
@@ -133,13 +133,21 @@
 
 <script>
 
-function smsrep(data_c, data_b, data_s, data_f) {
+function smsrep(data_c, data_b, data_s, data_f, data_q) {
+
+    console.log("here 1",  );
 
     var xdat = [];  
 
     data_c.forEach(function(item) {
         xdat.push(item.partner_name);
     });
+
+    data_s = data_s.map(item => Number(item.y));
+    data_c = data_c.map(item => Number(item.total));
+    data_f = data_f.map(item => Number(item.y));
+    data_b = data_b.map(item => Number(item.y));
+    data_q = data_q.map(item => Number(item.y));
 
     console.log("opt", xdat);
 
@@ -151,22 +159,25 @@ function smsrep(data_c, data_b, data_s, data_f) {
             text: 'SMS Expenditure (month/year)'
         },
         xAxis: {
-            categories: xdat
+            categories: ["Centre For Health Solutions - Naishi", "APHIA Pwani", "Clinton Health Access Initiative","Center For Health Solutions Kenya Tegemeza", "Egpaf Timiza 90 HB", "University of Maryland","Center For Health Solutions - Shinda","APHIA PLUS IMARISHA", "APHIA PLUS NW","UCSF FACES","University of Maryland Boresha Mabara", "Meru County", "APHIA KAMILISHA", "Christian Health Association of Kenya","KCCB KARP", "LVCT HEALTH  Western Region","Global Implementation Solution", "FHI 360", "HEALTHSTRAT TACT PROGRAM", "AMPATH", "APHIA JIJINI",  "Afya Ziwani","None (IL Remote)", "Ngima ForSure", "Afya Nyota", "HJFMRI - Kisumu West Program", "Forum", "Amref", "ICAP","Test Partner", "COPTIC HOPE CENTERS", "HJFMRI - Kericho Program", "Fahari ya Jamii"],
+            crosshair: true
         },
         yAxis: {
+            min: 0,
             title: "SMS Expenditure"
         },
         labels: {
             format: "{value:.2f}",    // this stands for showing two decimal places
         },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-        },
         plotOptions: {
             column: {
-                stacking: 'normal',
+                pointPadding: 0.2,
+                borderWidth: 0,
+                stacking: "normal",
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.2f}'
+                }
             }
         },
         series: [{
@@ -175,6 +186,9 @@ function smsrep(data_c, data_b, data_s, data_f) {
         }, {
             name: 'Blacklist',
             data: data_b
+        },{
+            name: 'Queued',
+            data: data_q
         }, {
             name: 'Sent',
             data: data_s
@@ -182,20 +196,6 @@ function smsrep(data_c, data_b, data_s, data_f) {
         ], 
         tooltip: {
             pointFormat: '<b>{point.y}</b> (KSH)',
-        },
-        responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 500
-                },
-                chartOptions: {
-                    legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom'
-                    }
-                }
-            }]
         }
     });
 

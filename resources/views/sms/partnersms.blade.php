@@ -100,8 +100,8 @@
         url: "{{ route('sms_report_data') }}",
         success: function(data) {
             console.log("report", data);
-            smsrep(data.cost, data.blacklist, data.sent, data.failed);
-            $("#smsTotal").html(parseFloat(data.total_sum[0].total).toFixed(2))
+            smsrep(data.cost, data.blacklist, data.sent, data.failed, data.queued);
+            $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
             $("#dashboard_overlay").hide();
         }
     });
@@ -121,7 +121,7 @@
             },
             url: "{{ route('sms_filtered_report_data') }}",
             success: function(data ) {
-                smsrep(data.cost, data.blacklist, data.sent, data.failed);
+                smsrep(data.cost, data.blacklist, data.sent, data.failed, data.queued);
                 $("#smsTotal").html(data.total_sum[0].total)
                 console.log("filter", data)
                 $("#dashboard_overlay").hide();
@@ -133,13 +133,19 @@
 
 <script>
 
-function smsrep(data, data_b, data_s, data_f) {
+function smsrep(data, data_b, data_s, data_f, data_q) {
 
     var xdat = [];
 
     data.forEach(function(item) {
         xdat.push(item.month);
     });
+
+    data_s = data_s.map(item => Number(item.y));
+    data = data.map(item => Number(item.total));
+    data_f = data_f.map(item => Number(item.y));
+    data_b = data_b.map(item => Number(item.y));
+    data_q = data_q.map(item => Number(item.y));
 
     Highcharts.chart('smsreport', {
         chart: {
@@ -149,22 +155,22 @@ function smsrep(data, data_b, data_s, data_f) {
             text: 'SMS Expenditure (month/year)'
         },
         xAxis: {
-            categories: xdat
+            categories: xdat,
+            crosshair: true
         },
         yAxis: {
-            title: "SMS Expenditure"
-        },
-        labels: {
-            format: "{value:.2f}",    // this stands for showing two decimal places
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
+            min: 0,
+            title: "SMS Expenditure"  
         },
         plotOptions: {
             column: {
-                stacking: 'normal',
+                pointPadding: 0.2,
+                borderWidth: 0,
+                stacking: "normal",
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.2f}'
+                }
             }
         },
         series: [{
@@ -174,26 +180,15 @@ function smsrep(data, data_b, data_s, data_f) {
             name: 'Blacklist',
             data: data_b
         }, {
+            name: 'Queued',
+            data: data_q
+        }, {
             name: 'Sent',
             data: data_s
         }], 
         tooltip: {
             pointFormat: '<b>{point.y}</b> (KSH)',
         },
-        responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 500
-                },
-                chartOptions: {
-                    legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom'
-                    }
-                }
-            }]
-        }
     });
 
 }
