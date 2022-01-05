@@ -32,6 +32,7 @@ class SMSReportController extends Controller
 
             $cost = SMSData::selectRaw("partner_name, CAST(sum(sum) as FLOAT) as total")
             ->groupBy('partner_name')
+            ->orderBy('partner_name')
             ->get();
 
             // status 101 
@@ -39,12 +40,14 @@ class SMSReportController extends Controller
             $sent = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->where('status', '=', 101)
                 ->groupBy('partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
             // 102: Queued   
             $queued = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->where('status', '=', 102)
                 ->groupBy('partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
             // status 500, 501, 502
@@ -54,6 +57,7 @@ class SMSReportController extends Controller
             $failed = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->where('status', '=', 403)
                 ->groupBy( 'partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
             // status 406 
@@ -61,6 +65,7 @@ class SMSReportController extends Controller
             $blacklist = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->where('status', '=', 406)
                 ->groupBy( 'partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
         } else if(Auth::user()->user_level == 2) {
@@ -146,6 +151,7 @@ class SMSReportController extends Controller
             $cost = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->whereBetween('month',[$start_date, $end_date] )
                 ->groupBy('partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
             // status 101    
@@ -153,6 +159,7 @@ class SMSReportController extends Controller
                 ->whereBetween('month',[$start_date, $end_date] )
                 ->where('status', '=', 101)
                 ->groupBy( 'partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
             // status 102 Queued    
@@ -160,6 +167,7 @@ class SMSReportController extends Controller
                 ->whereBetween('month',[$start_date, $end_date] )
                 ->where('status', '=', 102)
                 ->groupBy( 'partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
             // status 500, 501, 502
@@ -167,12 +175,14 @@ class SMSReportController extends Controller
                 ->whereBetween('month',[$start_date, $end_date] )
                 ->where('status', '=', 403)
                 ->groupBy('partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
             // status 406   
             $blacklist = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->where('status', '=', 406)
                 ->groupBy('partner_name')
+                ->orderBy('partner_name')
                 ->get();
 
         } else if(Auth::user()->user_level == 2) {

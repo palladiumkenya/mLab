@@ -35,8 +35,22 @@
         </form>
     </div>
 
+    <div class="row col-md-12 col-sm-12 mb-2">
+        <div class="row col-md-6 col-sm-6">
+            <div id="smsreportsent" style="margin: 0 auto"></div>
+        </div>
+        <div class="row col-md-6 col-sm-6">
+            <div id="smsreportqueued" style="margin: 0 auto"></div>
+        </div>
+    </div>
+
     <div class="row col-md-12 col-sm-12">
-        <div id="smsreport" style=" width:70%; height: 80%; margin: 0 auto"></div>
+        <div class="row col-md-6 col-sm-6">
+            <div id="smsreportblacklist" style="margin: 0 auto"></div>
+        </div>
+        <div class="row col-md-6 col-sm-6">
+            <div id="smsreportfailed" style="margin: 0 auto"></div>
+        </div>
     </div>
 
     <div id="dashboard_overlay">
@@ -135,36 +149,46 @@
 
 function smsrep(data_c, data_b, data_s, data_f, data_q) {
 
-    console.log("here 1",  );
+    var xdats = [];  
+    var xdatf = [];  
+    var xdatq = [];  
+    var xdatb = [];  
 
-    var xdat = [];  
-
-    data_c.forEach(function(item) {
-        xdat.push(item.partner_name);
+    data_s.forEach(function(item) {
+        xdats.push(item.partner_name);
     });
 
-    data_s = data_s.map(item => Number(item.y));
+    data_q.forEach(function(item) {
+        xdatq.push(item.partner_name);
+    });
+
+    data_f.forEach(function(item) {
+        xdatf.push(item.partner_name);
+    });
+
+    data_b.forEach(function(item) {
+        xdatb.push(item.partner_name);
+    });
+
+    data_s = data_s.map(item => {return { partner_name: item.partner_name, y: Number(item.y)}});
     data_c = data_c.map(item => Number(item.total));
-    data_f = data_f.map(item => Number(item.y));
-    data_b = data_b.map(item => Number(item.y));
-    data_q = data_q.map(item => Number(item.y));
+    data_f = data_f.map(item => {return {partner_name: item.partner_name, y: Number(item.y)}});
+    data_b = data_b.map(item => {return {partner_name: item.partner_name, y: Number(item.y)}});
+    data_q = data_q.map(item => {return {partner_name: item.partner_name, y: Number(item.y)}});
 
-    console.log("opt", xdat);
-
-    Highcharts.chart('smsreport', {
+    Highcharts.chart('smsreportsent', {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'SMS Expenditure (month/year)'
+            text: 'Sent SMS Expenditure (month/year)'
         },
         xAxis: {
-            categories: ["Centre For Health Solutions - Naishi", "APHIA Pwani", "Clinton Health Access Initiative","Center For Health Solutions Kenya Tegemeza", "Center For Health Solutions - Shinda","APHIA PLUS IMARISHA", "APHIA PLUS NW","UCSF FACES","University of Maryland Boresha Mabara", "Meru County", "APHIA KAMILISHA", "Christian Health Association of Kenya","KCCB KARP", "LVCT HEALTH  Western Region","Global Implementation Solution", "FHI 360", "HEALTHSTRAT TACT PROGRAM", "AMPATH", "APHIA JIJINI",  "Afya Ziwani","None (IL Remote)", "Ngima ForSure", "Afya Nyota", "HJFMRI - Kisumu West Program", "Forum", "Amref", "ICAP","Test Partner", "COPTIC HOPE CENTERS", "HJFMRI - Kericho Program", "Fahari ya Jamii"],
-            crosshair: true
+            categories: xdats
         },
         yAxis: {
             min: 0,
-            title: "SMS Expenditure"
+            title: "SMS Expenditure Sent"
         },
         labels: {
             format: "{value:.2f}",    // this stands for showing two decimal places
@@ -176,22 +200,146 @@ function smsrep(data_c, data_b, data_s, data_f, data_q) {
                 stacking: "normal",
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:,.2f}'
+                    format: '{point.y:,.2f}',
+                    crop: false,
+                    overflow: 'none',
+                    inside: false,
+                    color: '#000000',
+                }
+            }
+        },
+        series: [{
+            name: 'Sent',
+            data: data_s,
+            color: '#4572A7',
+        }
+        ], 
+        tooltip: {
+            pointFormat: '<b>{point.y}</b> (KSH)',
+        }
+    });
+
+    Highcharts.chart('smsreportqueued', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Queued SMS Expenditure (month/year)'
+        },
+        xAxis: {
+            categories: xdatq
+        },
+        yAxis: {
+            min: 0,
+            title: "SMS Expenditure Queued",
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                stacking: "normal",
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.2f}',
+                    crop: false,
+                    overflow: 'none',
+                    inside: false,
+                    color: '#000000',
+                }
+            }
+        },
+        series: [{
+            name: 'Queued',
+            data: data_q,
+            color: '#DB843D',
+        } 
+        ], 
+        tooltip: {
+            pointFormat: '<b>{point.y}</b> (KSH)',
+        }
+    });
+
+    Highcharts.chart('smsreportblacklist', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Blacklist SMS Expenditure (month/year)'
+        },
+        xAxis: {
+            categories: xdatb
+        },
+        yAxis: {
+            min: 0,
+            title: "SMS Expenditure Blacklist"
+
+        },
+        labels: {
+            format: "{value:.2f}",    // this stands for showing two decimal places
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                stacking: "normal",
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.2f}',
+                    crop: false,
+                    overflow: 'none',
+                    inside: false,
+                    color: '#000000',
+                }
+            }
+        },
+        series: [{
+            name: 'Blacklist',
+            data: data_b,
+            color: 'black',
+        }
+        ], 
+        tooltip: {
+            pointFormat: '<b>{point.y}</b> (KSH)',
+        }
+    });
+
+    Highcharts.chart('smsreportfailed', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Failed SMS Expenditure (month/year)'
+        },
+        xAxis: {
+            categories: xdatf
+        },
+        yAxis: {
+            min: 0,
+            title: "SMS Expenditure Failed",
+            
+        },
+        labels: {
+            format: "{value:.2f}",    // this stands for showing two decimal places
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                stacking: "normal",
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.2f}',
+                    crop: false,
+                    overflow: 'none',
+                    inside: false,
+                    color: '#000000',
                 }
             }
         },
         series: [{
             name: 'Failed',
-            data: data_f
-        }, {
-            name: 'Blacklist',
-            data: data_b
-        },{
-            name: 'Queued',
-            data: data_q
-        }, {
-            name: 'Sent',
-            data: data_s
+            data: data_f,
+            color: '#910000',
         }
         ], 
         tooltip: {
