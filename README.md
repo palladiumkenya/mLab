@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://mlab.mhealthkenya.co.ke">
-    <img src="https://mlab.mhealthkenya.co.ke/assets/images/logo.png" alt="mLab">
+  <a href="https://mlab.palladiumkenya.co.ke">
+    <img src="https://mlab.mhealth.co.ke/assets/images/logo.png" alt="mLab">
   </a>
   </p>
 
