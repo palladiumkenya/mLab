@@ -35,38 +35,28 @@ class SMSReportController extends Controller
             ->orderBy('partner_name')
             ->get();
 
-            // status 101 
-            // 101: Sent   
-            $sent = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
-                ->where('status', '=', 101)
+            // successful  
+            $success = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
+                ->where('status', '=', 'Success')
                 ->groupBy('partner_name')
                 ->orderBy('partner_name')
                 ->get();
 
-            // 102: Queued   
-            $queued = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
-                ->where('status', '=', 102)
-                ->groupBy('partner_name')
-                ->orderBy('partner_name')
+            // delivery failed 
+            $delivery_failure = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
+                ->where('failure_reason', '=', 'DeliveryFailure')
+                ->groupBy('month')
+                ->orderBy('month', 'ASC')
                 ->get();
 
-            // status 500, 501, 502
-            // 500: InternalServerError
-            // 501: GatewayError
-            // 502: RejectedByGateway
-            $failed = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
-                ->where('status', '=', 403)
-                ->groupBy( 'partner_name')
-                ->orderBy('partner_name')
+            // AbsentSubscriber
+            $absent_subscriber = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
+                ->where('failure_reason', '=', 'AbsentSubscriber')
+                ->orWhere('failure_reason', '=', 'UserInBlackList')
+                ->groupBy('month')
+                ->orderBy('month', 'ASC')
                 ->get();
 
-            // status 406 
-            // 406: UserInBlacklist  
-            $blacklist = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
-                ->where('status', '=', 406)
-                ->groupBy( 'partner_name')
-                ->orderBy('partner_name')
-                ->get();
 
         } else if(Auth::user()->user_level == 2) {
 
@@ -80,49 +70,37 @@ class SMSReportController extends Controller
             ->orderBy('month', 'ASC')
             ->get();
 
-            // status 101 
-            // 101: Sent   
-            $sent = SMSData::selectRaw("month, status, CAST(sum(sum) as FLOAT) as y")
+            // successful  
+            $success = SMSData::selectRaw("month, status, CAST(sum(sum) as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->where('status', '=', 101)
+                ->where('status', '=', 'Success')
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
 
-            // 102: Queued  
-            $queued = SMSData::selectRaw("month, status, CAST(sum(sum) as FLOAT) as y")
+            // delivery failed 
+            $delivery_failure = SMSData::selectRaw("month, status, CAST(sum(sum) as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->where('status', '=', 102)
+                ->where('failure_reason', '=', 'DeliveryFailure')
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
 
-            // status 500, 501, 502
-            // 500: InternalServerError
-            // 501: GatewayError
-            // 502: RejectedByGateway
-            $failed = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
+            // AbsentSubscriber
+            $absent_subscriber = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->where('status', '=', 403)
+                ->where('failure_reason', '=', 'AbsentSubscriber')
+                ->orWhere('failure_reason', '=', 'UserInBlackList')
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
 
-            // status 406 
-            // 406: UserInBlacklist  
-            $blacklist = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
-                ->where('partner_id', Auth::user()->partner_id )
-                ->where('status', '=', 406)
-                ->groupBy('month','status')
-                ->orderBy('month', 'ASC')
-                ->get();
         }
 
         
-        $data["blacklist"] = $blacklist;
-        $data["failed"] = $failed;
-        $data["queued"] = $queued;
-        $data["sent"] = $sent;
+        $data["delivery_failure"] = $delivery_failure;
+        $data["absent_subscriber"] = $absent_subscriber;
+        $data["success"] = $success;
         $data["cost"] = $cost;
         $data["total_sum"] = $total_sum;
 
@@ -154,36 +132,31 @@ class SMSReportController extends Controller
                 ->orderBy('partner_name')
                 ->get();
 
-            // status 101    
-            $sent = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
+            // Success  
+            $success = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->where('status', '=', 101)
+                ->where('status', '=', 'Success')
                 ->groupBy( 'partner_name')
                 ->orderBy('partner_name')
                 ->get();
 
-            // status 102 Queued    
-            $queued = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
+            // DeliveryFailure  
+            $delivery_failure = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->where('status', '=', 102)
-                ->groupBy( 'partner_name')
-                ->orderBy('partner_name')
+                ->where('failure_reason', '=', 'DeliveryFailure')
+                ->groupBy('month')
+                ->orderBy('month', 'ASC')
                 ->get();
 
-            // status 500, 501, 502
-            $failed = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
+            // AbsentSubscriber
+            $absent_subscriber = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->where('status', '=', 403)
-                ->groupBy('partner_name')
-                ->orderBy('partner_name')
+                ->where('failure_reason', '=', 'AbsentSubscriber')
+                ->orWhere('failure_reason', '=', 'UserInBlackList')
+                ->groupBy('month')
+                ->orderBy('month', 'ASC')
                 ->get();
 
-            // status 406   
-            $blacklist = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
-                ->where('status', '=', 406)
-                ->groupBy('partner_name')
-                ->orderBy('partner_name')
-                ->get();
 
         } else if(Auth::user()->user_level == 2) {
 
@@ -198,46 +171,39 @@ class SMSReportController extends Controller
                 ->groupBy('month', 'status')
                 ->get();
 
-            // status 101    
-            $sent = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
+            // success    
+            $success = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->where('status', '=', 101)
+                ->where('status', '=', 'success')
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
 
             // status 102 queued   
-            $queued = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
+            $delivery_failure = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->where('status', '=', 102)
+                ->where('failure_reason', '=', 'DeliveryFailure')
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
 
             // status 500, 501, 502
-            $failed = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
+            $absent_subscriber = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->whereBetween('month',[$start_date, $end_date] )
-                ->where('status', '=', 403)
+                ->where('failure_reason', '=', 'AbsentSubscriber')
+                ->orWhere('failure_reason', '=', 'UserInBlackList')
                 ->groupBy('month', 'status')
                 ->orderBy('month', 'ASC')
                 ->get();
 
-            // status 406   
-            $blacklist = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
-                ->where('partner_id', Auth::user()->partner_id )
-                ->where('status', '=', 406)
-                ->groupBy('month', 'status')
-                ->orderBy('month', 'ASC')
-                ->get();
         }
 
-        $data["blacklist"] = $blacklist;
-        $data["failed"] = $failed;
-        $data["sent"] = $sent;
-        $data["queued"] = $queued;
+        $data["delivery_failure"] = $delivery_failure;
+        $data["success"] = $success;
+        $data["absent_subscriber"] = $absent_subscriber;
         $data["cost"] = $cost;
         $data["total_sum"] = $total_sum;
 

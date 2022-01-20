@@ -100,7 +100,7 @@
         url: "{{ route('sms_report_data') }}",
         success: function(data) {
             console.log("report", data);
-            smsrep(data.cost, data.blacklist, data.sent, data.failed, data.queued);
+            smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure);
             $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
             $("#dashboard_overlay").hide();
         }
@@ -121,7 +121,7 @@
             },
             url: "{{ route('sms_filtered_report_data') }}",
             success: function(data ) {
-                smsrep(data.cost, data.blacklist, data.sent, data.failed, data.queued);
+                smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure);
                 $("#smsTotal").html(data.total_sum[0].total)
                 console.log("filter", data)
                 $("#dashboard_overlay").hide();
@@ -133,7 +133,7 @@
 
 <script>
 
-function smsrep(data, data_b, data_s, data_f, data_q) {
+function smsrep(data, data_as, data_s, data_df) {
 
     var xdat = [];
 
@@ -143,9 +143,8 @@ function smsrep(data, data_b, data_s, data_f, data_q) {
 
     data_s = data_s.map(item => Number(item.y));
     data = data.map(item => Number(item.total));
-    data_f = data_f.map(item => Number(item.y));
-    data_b = data_b.map(item => Number(item.y));
-    data_q = data_q.map(item => Number(item.y));
+    data_df = data_df.map(item => Number(item.y));
+    data_as= data_as.map(item => Number(item.y));
 
     Highcharts.chart('smsreport', {
         chart: {
@@ -174,16 +173,13 @@ function smsrep(data, data_b, data_s, data_f, data_q) {
             }
         },
         series: [{
-            name: 'Failed',
-            data: data_f
+            name: 'Delivery Failure',
+            data: data_df
         }, {
             name: 'Blacklist',
-            data: data_b
+            data: data_as
         }, {
-            name: 'Queued',
-            data: data_q
-        }, {
-            name: 'Sent',
+            name: 'Success',
             data: data_s
         }], 
         tooltip: {
