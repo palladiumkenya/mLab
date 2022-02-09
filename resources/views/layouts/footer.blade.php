@@ -5,7 +5,7 @@
                    
                         <img class="logo" src="{{asset('assets/images/logo.png')}}" style="height:100px;" alt="">
                         <div>
-                            <p class="m-0">&copy; 2019 mHealth Kenya. All rights reserved</p>
+                            <p class="m-0">&copy; 2022 Palladium Kenya. All rights reserved</p>
                         </div>
                   
                 </div>

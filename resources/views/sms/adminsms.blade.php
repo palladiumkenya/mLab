@@ -36,16 +36,10 @@
     </div>
 
     <div class="row col-md-12 col-sm-12">
+        <div id="smsreportcountysent" style="margin: 0 auto; width : 80%"></div>
         <div id="smsreportsent" style="margin: 0 auto; width : 80%"></div>
-    </div>
-
-    <div class="row col-md-12 col-sm-12">
-        <div class="row col-md-6 col-sm-6">
-            <div id="smsreportqueued" style="margin: 0 auto"></div>
-        </div>
-        <div class="row col-md-6 col-sm-6">
-            <div id="smsreportfailed" style="margin: 0 auto"></div>
-        </div>
+        <div id="smsreportnonpartnersent" style="margin: 0 auto; width : 80%"></div>
+        <div id="smsreportfailed" style="margin: 0 auto; width : 80%"></div>
     </div>
 
     <div id="dashboard_overlay">
@@ -110,6 +104,7 @@
         success: function(data) {
             console.log("report", data);
             smsrep(data.cost, data.success, data.absent_subscriber, data.delivery_failure);
+            smsrep_nonpartner(data.successNonPartner, data.successPerCounty);
             $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
             $("#dashboard_overlay").hide();
         }
@@ -131,6 +126,7 @@
             url: "{{ route('sms_filtered_report_data') }}",
             success: function(data ) {
                 smsrep(data.cost, data.success, data.absent_subscriber, data.delivery_failure);
+                smsrep_nonpartner(data.successNonPartner, data.successPerCounty);
                 $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
                 console.log("filter", data)
                 $("#dashboard_overlay").hide();
@@ -172,8 +168,6 @@ function smsrep(data_c, data_s, data_as, data_df) {
             return { partner_name: item.partner_name, y: Number(item.y)};
         }
     });
-
-    console.log("success", data_s)
 
     data_c = data_c.map(item => Number(item.total));
     data_as = data_as.map(item => Number(item.y));
@@ -222,7 +216,7 @@ function smsrep(data_c, data_s, data_as, data_df) {
         }
     });
 
-    Highcharts.chart('smsreportqueued', {
+    Highcharts.chart('smsreportfailed', {
         chart: {
             type: 'column'
         },
@@ -234,7 +228,7 @@ function smsrep(data_c, data_s, data_as, data_df) {
         },
         yAxis: {
             min: 0,
-            title: "SMS Expenditure Delivery Failure",
+            title: "SMS Expenditure For Failed Messages",
         },
         plotOptions: {
             column: {
@@ -255,27 +249,58 @@ function smsrep(data_c, data_s, data_as, data_df) {
             name: 'Delivery Failure',
             data: data_df,
             color: '#DB843D',
-        } 
+        }, {
+            name: 'Blacklist Users',
+            data: data_as,
+            color: '#910000',
+        },
         ], 
         tooltip: {
-            pointFormat: '<b>{point.y}</b> (KSH)',
+            pointFormat: '<b>{point.y}</b>, <b>{series.userOptions.name}</b>, (KSH)',
         }
     });
 
-    Highcharts.chart('smsreportfailed', {
+}
+
+function smsrep_nonpartner(data, data1) {
+
+    var xdats = [];
+    var xdats1 = [];
+
+    data.forEach(function(item) {
+        if(item.month === null) {
+            xdats.push('Not Specified');
+        } else {
+            xdats.push(item.month);
+        }
+    });
+
+    data1.forEach(function(item) {
+        if(item.county === null) {
+            xdats1.push('Not Specified');
+        } else {
+            xdats1.push(item.county);
+        }
+    });
+           
+    console.log("months", xdats1);
+
+    data = data.map(item => Number(item.y));
+    data1 = data1.map(item => Number(item.y));
+
+    Highcharts.chart('smsreportcountysent', {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Blacklist SMS Expenditure (month/year)'
+            text: 'Successful SMS Expenditure Per County'
         },
         xAxis: {
-            categories: xdatf
+            categories: xdats1
         },
         yAxis: {
             min: 0,
-            title: "SMS Expenditure Blacklist",
-            
+            title: "SMS Expenditure Successful"
         },
         labels: {
             format: "{value:.2f}",    // this stands for showing two decimal places
@@ -296,9 +321,9 @@ function smsrep(data_c, data_s, data_as, data_df) {
             }
         },
         series: [{
-            name: 'Blacklist',
-            data: data_as,
-            color: '#910000',
+            name: 'Successful',
+            data: data1,
+            color: '#90ed7d',
         }
         ], 
         tooltip: {
@@ -306,6 +331,48 @@ function smsrep(data_c, data_s, data_as, data_df) {
         }
     });
 
+    Highcharts.chart('smsreportnonpartnersent', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Successful SMS Expenditure For Non Partners'
+        },
+        xAxis: {
+            categories: xdats
+        },
+        yAxis: {
+            min: 0,
+            title: "SMS Expenditure Successful"
+        },
+        labels: {
+            format: "{value:.2f}",    // this stands for showing two decimal places
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                stacking: "normal",
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.2f}',
+                    crop: false,
+                    overflow: 'none',
+                    inside: false,
+                    color: '#000000',
+                }
+            }
+        },
+        series: [{
+            name: 'Successful',
+            data: data,
+            color: '#90ed7d',
+        }
+        ], 
+        tooltip: {
+            pointFormat: '<b>{point.y}</b> (KSH)',
+        }
+    });
 }
 
 </script>
