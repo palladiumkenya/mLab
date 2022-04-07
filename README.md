@@ -73,7 +73,7 @@ You can now access the server at http://localhost:8000
 
 ## Docker set up
 
-    git clone https://github.com/palladiumkenya/mLab.git(clone cicd branch)
+    git clone https://github.com/palladiumkenya/mLab.git
     cd mLab
     docker-compose up -d
     You can now access the server at http://localhost:8085
