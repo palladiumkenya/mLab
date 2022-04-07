@@ -1,0 +1,46 @@
+version: '3'
+
+networks:
+  development:
+
+services:
+  site:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    container_name: mlab-nginx
+    restart: always
+    ports:
+      - 8085:443
+    volumes:
+      - ./src:/var/www/html:delegated
+    depends_on:
+      - php
+      - database
+    networks:
+      - development
+
+  database:
+    image: postgres:13.1-alpine
+    container_name: mlab-database
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 5430:5432
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test123
+      - POSTGRES_DB=mlab
+    networks:
+      - development
+
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: mlab-php
+    volumes:
+      - ./src:/var/www/html:delegated
+    networks:
+      - development
+
