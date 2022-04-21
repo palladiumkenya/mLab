@@ -71,7 +71,7 @@ You can now access the server at http://localhost:8000
     cd mLab
     cp .env.example .env
     mkdir src
-    copy all files into src folder (excluding docker-compose.yml,nginx.dockerfile and php.dockerfile)
+    copy all files into src folder (excluding docker-compose.yml,nginx.dockerfile,php.dockerfile and nginx folder)
     docker-compose --env-file ./src/.env up -d --build site
     You can now access the server at http://localhost:8085
     
