@@ -64,19 +64,6 @@ You can now access the server at http://localhost:8000
     php artisan migrate
     php artisan serve
     
-    
-## Docker set up
-    git clone https://github.com/palladiumkenya/mLab.git
-    cd mLab
-    docker-compose up -d
-    You can now access the server at http://localhost:8085
-    
-## Dependencies
-
-- [laravel-passport](https://github.com/laravel/passport) - For handling authentication
-- [laravel-cors](https://github.com/barryvdh/laravel-cors) - For handling Cross-Origin Resource Sharing (CORS)
-- [africastalking](https://github.com/AfricasTalkingLtd/africastalking-php) - For SMS
-
 
 ## Docker set up
 
@@ -88,6 +75,12 @@ You can now access the server at http://localhost:8000
     docker-compose --env-file ./src/.env up -d --build site
     You can now access the server at http://localhost:8085
     
+## Dependencies
+
+- [laravel-passport](https://github.com/laravel/passport) - For handling authentication
+- [laravel-cors](https://github.com/barryvdh/laravel-cors) - For handling Cross-Origin Resource Sharing (CORS)
+- [africastalking](https://github.com/AfricasTalkingLtd/africastalking-php) - For SMS
+  
    
 ## Folders
 
