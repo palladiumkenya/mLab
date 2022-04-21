@@ -82,7 +82,10 @@ You can now access the server at http://localhost:8000
 
     git clone https://github.com/palladiumkenya/mLab.git
     cd mLab
-    docker-compose up -d
+    cp .env.example .env
+    mkdir src
+    copy all files into src folder (excluding docker-compose.yml,nginx.dockerfile and php.dockerfile)
+    docker-compose --env-file ./src/.env up -d --build site
     You can now access the server at http://localhost:8085
     
    
