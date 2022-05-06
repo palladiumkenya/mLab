@@ -20,6 +20,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 	
 COPY . .
 
+EXPOSE 8000
+
 RUN docker-php-ext-install pdo pdo_pgsql
 
 RUN docker-php-ext-enable redis
