@@ -13,7 +13,7 @@ services:
     ports:
       - 8085:443
     volumes:
-      - ./src:/var/www/html:delegated
+      - ./:/var/www/html:delegated
     depends_on:
       - php
       - database
