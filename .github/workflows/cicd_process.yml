@@ -16,12 +16,13 @@ jobs:
         key: ${{ secrets.CICD_SECRET }}
         port: ${{ secrets.MLAB_HOST_PORT }}
         script: |
-          git config --global --add safe.directory /apps/github-workflows/mLab      
-          cd /apps/github-workflows/mLab
+          git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab      
+          cd /apps/github-workflows/mhealth-apps/mLab
           git pull origin production
           git status
 
-          sudo cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mLab
+          sudo cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
       
           docker-compose down
-          docker-compose up -d
+          docker-compose rm -f
+          docker-compose --env-file .env up -d --build site
