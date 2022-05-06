@@ -40,7 +40,7 @@ services:
       dockerfile: php.dockerfile
     container_name: mlab-php
     volumes:
-      - ./src:/var/www/html:delegated
+      - ./:/var/www/html:delegated
     networks:
       - development
 
