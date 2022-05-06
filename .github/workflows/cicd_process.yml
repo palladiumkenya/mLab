@@ -20,8 +20,10 @@ jobs:
           cd /apps/github-workflows/mhealth-apps/mLab
           git pull origin production
           git status
+          composer install
           cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
           docker-compose down
           docker-compose rm -f
           docker-compose --env-file .env up -d --build site
+          docker-compose exec -T php php artisan key:generate
