@@ -26,4 +26,4 @@ jobs:
           docker-compose down
           docker-compose rm -f
           docker-compose --env-file .env up -d --build site
-          docker-compose exec -T php php artisan key:generate
+        #docker-compose exec -T php php artisan key:generate
