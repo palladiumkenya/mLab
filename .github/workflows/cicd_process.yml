@@ -20,9 +20,7 @@ jobs:
           cd /apps/github-workflows/mhealth-apps/mLab
           git pull origin production
           git status
-
-          cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
-      
+          cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab      
           docker-compose down
           docker-compose rm -f
           docker-compose --env-file .env up -d --build site
