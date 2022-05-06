@@ -23,7 +23,7 @@ jobs:
           composer install
           cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
-          cp  /apps/dockerApps/mlabtestsite/src/.env /apps/github-workflows/mhealth-apps/mLab
+          cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
           docker-compose down
           docker-compose rm -f
