@@ -25,5 +25,6 @@ jobs:
           cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/php.dockerfile /apps/github-workflows/mhealth-apps/mLab
-          docker build -t mlab_php:latest . -f python.dockerfile .
-          docker run -p 8085:443 -d --name=mlab_php:latest --link mlab-database --net mlab-database --restart always mlab_php:latest
+          cp /apps/dockerApps/mlabtestsite/docker-compose.yml /apps/github-workflows/mhealth-apps/mLab
+          docker-compose down
+          docker-compose up --build
