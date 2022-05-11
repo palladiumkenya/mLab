@@ -1,7 +1,7 @@
 name: deploy to test
 on:
   push:
-    branches: [ production ]
+    branches: [ master ]
 jobs:
 
   build:
