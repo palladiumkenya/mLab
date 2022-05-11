@@ -5,7 +5,7 @@ RUN addgroup -g 1000 laravel && adduser -G laravel -g laravel -s /bin/sh -D lara
 RUN mkdir -p /var/www/html
 
 
-RUN chown laravel:laravel /var/www/html
+RUN chown -R laravel:laravel /var/www/html
 # Install selected extensions and other stuff
 RUN apk update \
 	&& apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
