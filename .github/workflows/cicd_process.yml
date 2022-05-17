@@ -1,7 +1,7 @@
 name: deploy to test
 on:
   push:
-    branches: [ cicd ]
+    branches: [ master ]
 jobs:
 
   build:
@@ -16,12 +16,14 @@ jobs:
         key: ${{ secrets.CICD_SECRET }}
         port: ${{ secrets.MLAB_HOST_PORT }}
         script: |
-          git config --global --add safe.directory /apps/github-workflows/mLab      
-          cd /apps/github-workflows/mLab
-          git pull origin cicd
+          git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab      
+          cd /apps/github-workflows/mhealth-apps/mLab
+          git pull origin master
           git status
-
-          sudo cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mLab
-      
+          composer install
+          cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
+          cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
+          cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
+          cp  /apps/dockerApps/mlabtestsite/php.dockerfile /apps/github-workflows/mhealth-apps/mLab
           docker-compose down
-          docker-compose up -d
+          docker-compose up --build -d

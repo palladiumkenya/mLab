@@ -13,7 +13,7 @@ services:
     ports:
       - 8085:443
     volumes:
-      - ./src:/var/www/html:delegated
+      - ./:/var/www/html:delegated
     depends_on:
       - php
       - database
@@ -27,20 +27,22 @@ services:
     tty: true
     ports:
       - 5430:5432
+    volumes:
+      - ../scripts/mlab.sql:/docker-entrypoint-initdb.d/mlab.sql
     environment:
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=test123
       - POSTGRES_DB=mlab
     networks:
       - development
-
+    
   php:
     build:
       context: .
       dockerfile: php.dockerfile
     container_name: mlab-php
     volumes:
-      - ./src:/var/www/html:delegated
+      - ./:/var/www/html:delegated
     networks:
       - development
 
