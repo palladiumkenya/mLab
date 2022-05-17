@@ -1,7 +1,7 @@
 name: deploy to test
 on:
   push:
-    branches: [ production ]
+    branches: [ master ]
 jobs:
 
   build:
@@ -18,7 +18,7 @@ jobs:
         script: |
           git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab      
           cd /apps/github-workflows/mhealth-apps/mLab
-          git pull origin production
+          git pull origin master
           git status
           composer install
           cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
