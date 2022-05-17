@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://mlab.mhealthkenya.co.ke">
+  <a href="https://mlab.palladiumkenya.co.ke">
     <img src="https://mlab.mhealthkenya.co.ke/assets/images/logo.png" alt="mLab">
   </a>
   </p>
@@ -23,7 +23,7 @@ Alternative installation is possible without local dependencies relying on [Dock
 
 Clone the repository
 
-    git clone https://github.com/mHealthKenya/mLab.git
+    git clone https://github.com/palladiumkenya/mLab.git
 
 Switch to the repo folder
 
@@ -53,7 +53,7 @@ You can now access the server at http://localhost:8000
 
 **TL;DR command list**
 
-    git clone https://github.com/mHealthKenya/mLab.git
+    git clone https://github.com/palladiumkenya/mLab.git
     cd mLab
     composer install
     cp .env.example .env
@@ -63,13 +63,25 @@ You can now access the server at http://localhost:8000
 
     php artisan migrate
     php artisan serve
+    
 
+## Docker set up
+
+    git clone https://github.com/palladiumkenya/mLab.git
+    cd mLab
+    cp .env.example .env
+    mkdir src
+    copy all files into src folder (excluding docker-compose.yml,nginx.dockerfile,php.dockerfile and nginx folder)
+    docker-compose --env-file ./src/.env up -d --build site
+    You can now access the server at http://localhost:8085
+    
 ## Dependencies
 
 - [laravel-passport](https://github.com/laravel/passport) - For handling authentication
 - [laravel-cors](https://github.com/barryvdh/laravel-cors) - For handling Cross-Origin Resource Sharing (CORS)
 - [africastalking](https://github.com/AfricasTalkingLtd/africastalking-php) - For SMS
-
+  
+   
 ## Folders
 
 - `app` - Contains all the Eloquent models

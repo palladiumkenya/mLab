@@ -1,0 +1,27 @@
+name: deploy to test
+on:
+  push:
+    branches: [ cicd ]
+jobs:
+
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote connection
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.MLAB_HOST }}
+        username: ${{ secrets.MLAB_HOST_USERNAME }}
+        key: ${{ secrets.CICD_SECRET }}
+        port: ${{ secrets.MLAB_HOST_PORT }}
+        script: |
+          git config --global --add safe.directory /apps/github-workflows/mLab      
+          cd /apps/github-workflows/mLab
+          git pull origin cicd
+          git status
+
+          sudo cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mLab
+      
+          docker-compose down
+          docker-compose up -d
