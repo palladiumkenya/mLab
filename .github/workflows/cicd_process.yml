@@ -25,6 +25,5 @@ jobs:
           cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/php.dockerfile /apps/github-workflows/mhealth-apps/mLab
-          cp /apps/dockerApps/mlabtestsite/docker-compose.yml /apps/github-workflows/mhealth-apps/mLab
           docker-compose down
           docker-compose up --build -d
