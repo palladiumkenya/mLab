@@ -32,9 +32,10 @@ Route::post('/remote/login/hts', 'NewRemoteLoginController@hts');
 Route::post('/get/il/viral_loads', 'SendResultsController@sendILInternet');
 Route::post('/ushauri/get/results', 'UshauriController@getResults');
 Route::get('/notify/clients', 'UshauriController@notifyClients');
+Route::get('/fetch/blacklist_users', 'SenderController@get_blacklist');
 
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/viral/loads', 'SendResultsController@ViralLoads');
-    Route::post('/sms/gateway', 'SmsGatewayController@sender');
+    Route::get('/sms/gateway', 'SmsGatewayController@sender');
 });

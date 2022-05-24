@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use AfricasTalking\SDK\AfricasTalking;
 use App\Sender;
+use App\BlackListUsers;
+use Carbon\Carbon;
 use Redirect;
+use DB;
 
 class SenderController extends Controller
 {
@@ -47,5 +50,35 @@ class SenderController extends Controller
             return Redirect::back()->with($send);
         }
         return Redirect::back();
+    }
+
+    public function get_blacklist()
+    {
+
+        BlackListUsers::truncate();
+
+        $fromDate = Carbon::now()->subMonth()->startOfMonth()->toDateString();
+        $tillDate = Carbon::now()->subMonth()->endOfMonth()->toDateString();
+
+        $blacklist_users = Sender::select('number')
+                            ->distinct()
+                            ->where('failure_reason', '=', 'UserInBlackList')
+                            ->whereBetween('created_at',[$fromDate,$tillDate])
+                            ->pluck('number');
+
+        $dataSet = [];
+        foreach ($blacklist_users as $key => $number) {
+            $dataSet[] = [
+                'id' => $key + 1,
+                'phone_number' => $number
+            ];
+        }
+
+        $t = DB::table('blacklist_users')->insert($dataSet);
+
+        return response()->json($t);
+
+        // return $blacklist_users;
+
     }
 }
