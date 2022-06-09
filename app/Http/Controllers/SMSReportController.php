@@ -29,44 +29,44 @@ class SMSReportController extends Controller
 
         if(Auth::user()->user_level == 1) {
 
-            $total_sum = SMSData::selectRaw("sum(sum) as total")->get();
+            $total_sum = SMSData::selectRaw("CEIL(sum(sum)) as total")->get();
 
-            $cost = SMSData::selectRaw("partner_name, CAST(sum(sum) as FLOAT) as total")
+            $cost = SMSData::selectRaw("partner_name, CEIL(sum(sum)) as total")
             ->groupBy('partner_name')
-            ->orderBy('partner_name')
+            ->orderBy('total', 'DESC')
             ->get();
 
-            // successful  
-            $success = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
+            // successful
+            $success = SMSData::selectRaw("partner_name, CEIL(sum(sum)) as y")
                 ->where('status', '=', 'Success')
                 ->whereNotNull('partner_name')
                 ->groupBy('partner_name')
                 ->orderBy('y', 'DESC')
                 ->get();
-            
-            // successful non partner  
-            $successNonPartner = SMSDataNonPartners::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
+
+            // successful non partner
+            $successNonPartner = SMSDataNonPartners::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('status', '=', 'Success')
                 ->groupBy('month')
                 ->orderBy('y', 'DESC')
                 ->get();
 
             // successful county
-            $successPerCounty = SMSData::selectRaw("county, CAST(sum(sum)as FLOAT) as y")
+            $successPerCounty = SMSData::selectRaw("county, CEIL(sum(sum)) as y")
                 ->where('status', '=', 'Success')
                 ->groupBy('county')
                 ->orderBy('y', 'DESC')
                 ->get();
 
-            // delivery failed 
-            $delivery_failure = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
+            // delivery failed
+            $delivery_failure = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('failure_reason', '=', 'DeliveryFailure')
                 ->groupBy('month')
                 ->orderBy('y', 'DESC')
                 ->get();
 
             // AbsentSubscriber
-            $absent_subscriber = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
+            $absent_subscriber = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('failure_reason', '=', 'AbsentSubscriber')
                 ->orWhere('failure_reason', '=', 'UserInBlackList')
                 ->groupBy('month')
@@ -76,18 +76,18 @@ class SMSReportController extends Controller
 
         } else if(Auth::user()->user_level == 2) {
 
-            $total_sum = SMSData::selectRaw("CAST(sum(sum) as FLOAT) as total")
+            $total_sum = SMSData::selectRaw("CEIL(sum(sum)) as total")
             ->where('partner_id', Auth::user()->partner_id )
             ->get();
 
-            $cost = SMSData::selectRaw("month, CAST(sum(sum) as FLOAT) as y")
+            $cost = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
             ->where('partner_id', Auth::user()->partner_id )
             ->groupBy('month')
             ->orderBy('month', 'ASC')
             ->get();
 
-            // successful  
-            $success = SMSData::selectRaw("month, status, CAST(sum(sum) as FLOAT) as y")
+            // successful
+            $success = SMSData::selectRaw("month, status, CEIL(sum(sum)) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->where('status', '=', 'Success')
                 ->groupBy('month', 'status')
@@ -98,7 +98,7 @@ class SMSReportController extends Controller
 
             $successPerCounty = [];
 
-            // delivery failed 
+            // delivery failed
             $delivery_failure = SMSData::selectRaw("month, status, CAST(sum(sum) as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->where('failure_reason', '=', 'DeliveryFailure')
@@ -107,7 +107,7 @@ class SMSReportController extends Controller
                 ->get();
 
             // AbsentSubscriber
-            $absent_subscriber = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
+            $absent_subscriber = SMSData::selectRaw("month, status , CEIL(sum(sum)) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->where('failure_reason', '=', 'AbsentSubscriber')
                 ->orWhere('failure_reason', '=', 'UserInBlackList')
@@ -117,7 +117,7 @@ class SMSReportController extends Controller
 
         }
 
-        
+
         $data["delivery_failure"] = $delivery_failure;
         $data["absent_subscriber"] = $absent_subscriber;
         $data["success"] = $success;
@@ -157,7 +157,7 @@ class SMSReportController extends Controller
                 ->orderBy('partner_name')
                 ->get();
 
-            // Success  
+            // Success
             $success = SMSData::selectRaw("month, partner_name, CAST(sum(sum)as FLOAT) as y")
                 ->whereNotNull('partner_name')
                 ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
@@ -167,7 +167,7 @@ class SMSReportController extends Controller
                 ->orderBy('y', 'DESC')
                 ->get();
 
-            // successful  
+            // successful
             $successNonPartner = SMSDataNonPartners::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
                 ->where('status', '=', 'Success')
                 // ->whereBetween('month',[$start_date, $end_date] )
@@ -176,7 +176,7 @@ class SMSReportController extends Controller
                 ->orderBy('y', 'DESC')
                 ->get();
 
-            // successful  
+            // successful
             $successPerCounty = SMSDataNonPartners::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
                 ->where('status', '=', 'Success')
                 // ->whereBetween('month',[$start_date, $end_date] )
@@ -186,7 +186,7 @@ class SMSReportController extends Controller
                 ->get();
 
 
-            // DeliveryFailure  
+            // DeliveryFailure
             $delivery_failure = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
                 // ->whereBetween('month',[$start_date, $end_date] )
                 ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
@@ -219,7 +219,7 @@ class SMSReportController extends Controller
                 ->groupBy('month', 'status')
                 ->get();
 
-            // success    
+            // success
             $success = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->whereBetween('month',[$start_date, $end_date] )
@@ -230,7 +230,7 @@ class SMSReportController extends Controller
 
             $successNonPartner = [];
 
-            // status 102 queued   
+            // status 102 queued
             $delivery_failure = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->whereBetween('month',[$start_date, $end_date] )

@@ -32,9 +32,9 @@ class DashboardController extends Controller
     public function get_data()
     {
         $data                = [];
-        
 
-      
+
+
         if (Auth::user()->user_level == 2) {
             $selected_partners = [Auth::user()->partner_id];
         }
@@ -46,10 +46,10 @@ class DashboardController extends Controller
         }
 
         $partners_with_data = Dashboard::select('partner_id')->groupBy('partner_id');
-        
+
         $counties_with_data = Dashboard::select('county_id')->groupBy('county_id');
-        
-        
+
+
         $all_partners = Partner::select('id', 'name')->whereIn('id', $partners_with_data);
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
 
@@ -75,7 +75,7 @@ class DashboardController extends Controller
                            ->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $average_eid_collect_sent_diff = DB::table('mlab_data_materialized')->selectRaw('AVG( created_at::DATE - date_collected::DATE)')->where('result_type', '2')
                             ->whereRaw('(created_at::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-    
+
         if (!empty($selected_partners)) {
             $all_partners = Partner::select('id', 'name')->whereIn('id', $selected_partners);
             $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('partner_id', $selected_partners);
@@ -133,12 +133,12 @@ class DashboardController extends Controller
 
         $data["all_counties"]        = $all_counties->get();
         $data["all_partners"]        = $all_partners->get();
-        $data["all_records"]         = $all_records->count();
+        $data["all_records"]         = number_format($all_records->count());
         $data["sent_records"]        = $sent_records->count();
         $data["counties"]            = $counties->count('county_id');
-        $data["facilities"]          = $facilities->count('mfl_code');
+        $data["facilities"]          = number_format($facilities->count('mfl_code'));
         $data["partners"]            = $partners->count('partner_id');
-        $data["vl_records"]          = $vl_records->count();
+        $data["vl_records"]          = number_format($vl_records->count());
         $data["eid_records"]         = $eid_records->count();
         $data["vl_classifications"]  = $vl_classifications->get();
         $data["eid_classifications"] = $eid_classifications->get();
@@ -147,12 +147,13 @@ class DashboardController extends Controller
         $data["county_numbers"]      = $county_numbers->get();
         $data["pulled_data"]         = $pulled_data->get();
         return $data;
+        
     }
 
     public function get_filtered_data(Request $request)
     {
         $data                = [];
-        
+
         $selected_partners = $request->partners;
         $selected_counties = $request->counties;
         $selected_subcounties = $request->subcounties;
@@ -181,13 +182,13 @@ class DashboardController extends Controller
         } else {
             $partners_with_data = $selected_partners;
         }
-        
+
         if (empty($selected_counties)) {
             $counties_with_data = Dashboard::select('county_id')->groupBy('county_id');
         } else {
             $counties_with_data = $selected_counties;
         }
-        
+
         $all_partners = Partner::select('id', 'name')->whereIn('id', $partners_with_data);
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
 
@@ -208,7 +209,7 @@ class DashboardController extends Controller
                             ->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
         $average_eid_collect_sent_diff = DB::table('mlab_data_materialized')->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '2')
                             ->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
-    
+
         if (!empty($selected_partners)) {
             $all_counties = $all_counties->join('mlab_data_materialized', 'county.id', '=', 'mlab_data_materialized.county_id')->whereIn('partner_id', $selected_partners);
             $all_records = $all_records->whereIn('partner_id', $selected_partners);
@@ -300,9 +301,9 @@ class DashboardController extends Controller
     public function get_printers_data()
     {
         $data                = [];
-    
 
-    
+
+
         if (Auth::user()->user_level == 3) {
             $selected_facilities = [Auth::user()->facility_id];
         }
@@ -310,9 +311,9 @@ class DashboardController extends Controller
             $selected_counties = [Auth::user()->county_id];
         }
 
-    
+
         $counties_with_data = Printer::select('county_id')->groupBy('county_id');
-    
+
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
 
         $startdate = Printer::select('created_at')->orderBy('created_at', 'asc')->first();
@@ -337,7 +338,7 @@ class DashboardController extends Controller
         $average_eid_collect_sent_diff = DB::table('printers_data')->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '2')
                         ->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
 
-    
+
         if (!empty($selected_counties)) {
             $all_counties = $all_counties->whereIn('county_id', $selected_counties);
             $all_records = $all_records->whereIn('county_id', $selected_counties);
@@ -391,7 +392,7 @@ class DashboardController extends Controller
     public function get_filtered_printers_data(Request $request)
     {
         $data                = [];
-    
+
         $selected_counties = $request->counties;
         $selected_subcounties = $request->subcounties;
         $selected_facilites = $request->facilities;
@@ -405,21 +406,21 @@ class DashboardController extends Controller
         $startdate = Carbon::createFromFormat('m/d/Y', $unformatted_startdate)->format('Y-m-d');
         $enddate = Carbon::createFromFormat('m/d/Y', $unformatted_enddate)->format('Y-m-d');
 
-    
+
         if (Auth::user()->user_level == 3) {
             $selected_facilities = [Auth::user()->facility_id];
         }
         if (Auth::user()->user_level == 5) {
             $selected_counties = [Auth::user()->county_id];
         }
-    
-    
+
+
         if (empty($selected_counties)) {
             $counties_with_data = Printer::select('county_id')->groupBy('county_id');
         } else {
             $counties_with_data = $selected_counties;
         }
-    
+
         $all_counties = County::select('id', 'name')->distinct('id')->whereIn('id', $counties_with_data);
 
         $all_records         = Printer::whereNotNull('mfl_code')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
@@ -439,7 +440,7 @@ class DashboardController extends Controller
         $average_eid_collect_sent_diff = DB::table('printers_data')->selectRaw('AVG( date_sent::DATE - date_collected::DATE)')->where('result_type', '2')
                         ->whereRaw('(date_sent::DATE - date_collected::DATE) <= ?', [30])->whereNotNull('date_sent')->whereNotNull('date_collected')->where('date_collected', '!=', '0000-00-00')->whereDate('created_at', '>=', $startdate)->whereDate('created_at', '<=', $enddate);
 
-    
+
         if (!empty($selected_counties)) {
             $all_counties = $all_counties->whereIn('county_id', $selected_counties);
             $all_records = $all_records->whereIn('county_id', $selected_counties);
@@ -568,9 +569,9 @@ class DashboardController extends Controller
         }
 
         $withResults = Dashboard::select('mfl_code')->groupBy('mfl_code')->get();
-     
+
         $all_facilities = Facility::select('code', 'name')->distinct('code')->wherein('Sub_County_ID', $sub_county_ids)->wherein('partner_id', $partner_ids)->wherein('code', $withResults)->groupBy('code', 'name')->get();
-        
+
         return $all_facilities;
     }
 }

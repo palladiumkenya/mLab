@@ -8,8 +8,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for=" partners" class="col-form-label"><b>Select Partner(s)</b></label>
-                    <select class=" partners form-control selectpicker" id="partners" name="partners[]" multiple
-                        data-live-search="true">
+                    <select class=" partners form-control selectpicker" id="partners" name="partners[]" multiple data-live-search="true">
 
                     </select>
                 </div>
@@ -17,8 +16,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for=" counties" class="col-form-label"><b>Select County(s)</b></label>
-                    <select class=" counties form-control selectpicker" id="counties" name="counties[]" multiple
-                        data-live-search="true">
+                    <select class=" counties form-control selectpicker" id="counties" name="counties[]" multiple data-live-search="true">
 
                     </select>
                 </div>
@@ -26,8 +24,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for="subcounties" class="col-form-label"><b>Select Sub-County(s)</b></label>
-                    <select class=" subcounties form-control selectpicker" id="subcounties" name="subcounties[]"
-                        multiple data-live-search="true">
+                    <select class=" subcounties form-control selectpicker" id="subcounties" name="subcounties[]" multiple data-live-search="true">
 
                     </select>
                 </div>
@@ -35,8 +32,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for="facilities" class="col-form-label"><b>Select Facility(s)</b></label>
-                    <select class="facilities form-control selectpicker" id="facilities" name="facilities[]" multiple
-                        data-live-search="true">
+                    <select class="facilities form-control selectpicker" id="facilities" name="facilities[]" multiple data-live-search="true">
 
                     </select>
                 </div>
@@ -48,8 +44,7 @@
                 </div>
                 <div class="form-group">
                     <label for="daterange" class="col-form-label"></label>
-                    <button type="submit" class="btn btn-warning"><b>Filter Results</b> <i
-                            class="i-Filter"></i></button>
+                    <button type="submit" class="btn btn-warning"><b>Filter Results</b> <i class="i-Filter"></i></button>
                 </div>
             </div>
         </div>
@@ -59,9 +54,8 @@
 
     <div class="row">
         <div class="col-lg-2 col-md-6 col-sm-6">
-            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 h-75">
                 <div class="card-body text-center">
-                    <i class="i-Mailbox-Full"></i>
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">All Results</p>
                         <p id="all_records" class="text-primary text-18 line-height-1 mb-2"></p>
@@ -71,9 +65,8 @@
         </div>
 
         <div class="col-lg-2 col-md-6 col-sm-6">
-            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4 h-95">
                 <div class="card-body text-center">
-                    <i class="i-Hospital1"></i>
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">Facilities </p>
                         <p id="all_facilities" class="text-primary text-24 line-height-1 mb-2"></p>
@@ -85,7 +78,6 @@
         <div class="col-lg-2 col-md-6 col-sm-6">
             <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                 <div class="card-body text-center">
-                    <i class="i-Globe"></i>
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">Counties </p>
                         <p id="county_numbers" class="text-primary text-24 line-height-1 mb-2"></p>
@@ -97,7 +89,6 @@
         <div class="col-lg-2 col-md-6 col-sm-6">
             <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
                 <div class="card-body text-center">
-                    <i class="i-People-on-Cloud"></i>
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">Partners </p>
                         <p id="partner_numbers" class="text-primary text-24 line-height-1 mb-2"></p>
@@ -111,7 +102,7 @@
                 <div class="card-body text-center">
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">Unsuppressed VL Total</p>
-                        <p id="suppressed_negative" class="text-danger text-24 line-height-1 mb-2"></p>
+                        <p id="suppressed_negative" class="text-danger text-18 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -122,7 +113,7 @@
                 <div class="card-body text-center">
                     <div class="content">
                         <p class="text-muted mt-4 mb-0">Positive EID Total</p>
-                        <p id="unsuppressed_positive" class="text-warning text-24 line-height-1 mb-2"></p>
+                        <p id="unsuppressed_positive" class="text-warning text-18 line-height-1 mb-2"></p>
                     </div>
                 </div>
             </div>
@@ -187,10 +178,7 @@
                                 <div class="form-group col-md-12">
                                     <label for="new_password" class="col-sm-2 control-label ">New Password </label>
                                     <div class="col-sm-10">
-                                        <input type="password" pattern=".{6,20}" required
-                                            title="password requires more than 6 characters"
-                                            class="form-control new_password password" name="new_password"
-                                            id="new_password" placeholder="New Password... ">
+                                        <input type="password" pattern=".{6,20}" required title="password requires more than 6 characters" class="form-control new_password password" name="new_password" id="new_password" placeholder="New Password... ">
                                     </div>
                                 </div>
                             </div>
@@ -199,11 +187,7 @@
                                     <label for="confirm_new_password" class="col-sm-2 control-label">Confirm Password
                                     </label>
                                     <div class="col-sm-10">
-                                        <input type="password" pattern=".{6,20}" required
-                                            title="password requires more than 6 characters"
-                                            class="form-control confirm_new_password password"
-                                            name="confirm_new_password" id="confirm_new_password"
-                                            placeholder="Confirm Password... ">
+                                        <input type="password" pattern=".{6,20}" required title="password requires more than 6 characters" class="form-control confirm_new_password password" name="confirm_new_password" id="confirm_new_password" placeholder="Confirm Password... ">
                                     </div>
                                 </div>
                             </div>

@@ -42,7 +42,7 @@ class UserController extends Controller
 
             $cn = array_unique($cids);
 
-            
+
             $counties = County::whereIn('id', $cn)->get();
         }
 
@@ -54,7 +54,7 @@ class UserController extends Controller
             'partners' => $partners,
             'subcounties' => $subcounties,
             'facilities' => $facilities,
-            
+
         );
 
         // echo json_encode($data);
@@ -83,7 +83,7 @@ class UserController extends Controller
 
             $cn = array_unique($cids);
 
-            
+
             $counties = County::whereIn('id', $cn)->get();
         }
 
@@ -238,7 +238,7 @@ class UserController extends Controller
 
             $user->password = bcrypt($request->new_password);
             $user->first_login = 'No';
-            
+
             if ($user->save()) {
                 toastr()->success('Password has been changed successfully!');
 

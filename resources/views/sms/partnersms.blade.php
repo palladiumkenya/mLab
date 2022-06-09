@@ -10,8 +10,8 @@
     <div class="row mb-2 float-left ">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" style="display: inline-block">Total Cost : </h5>
-                <h4 class="card-text" id="smsTotal" style="display: inline-block"> </h4>
+                <h5 class="card-title" style="display: inline-block">Total Cost :Ksh. </h5>
+                <h5 class="card-text" id="smsTotal" style="display: inline-block"> </h5>
             </div>
         </div>
     </div>
@@ -20,18 +20,18 @@
         <form role="form" method="post" action="#" id="dataFilter" class="form-inline pull-right">
             {{ csrf_field() }}
             <div class="col-md-6 col-sm-6">
-                <div class="form-group" >
-                        <label for="daterange" class="col-form-label"><b>Select Date Range</b></label>
-                        <input class="form-control" id="daterange" type="text" name="daterange" />
+                <div class="form-group">
+                    <label for="daterange" class="col-form-label"><b>Select Date Range</b></label>
+                    <input class="form-control" id="daterange" type="text" name="daterange" />
                 </div>
             </div>
-        
+
             <div class="col-md-4 col-sm-4" style="margin-top: 40px">
                 <div class="form-group">
                     <label for="daterange" class="col-form-label"></label>
                     <button type="submit" class="btn btn-warning"><b>Filter SMS</b> <i class="i-Filter"></i></button>
                 </div>
-            </div> 
+            </div>
         </form>
     </div>
 
@@ -120,7 +120,7 @@
                 "daterange": daterange
             },
             url: "{{ route('sms_filtered_report_data') }}",
-            success: function(data ) {
+            success: function(data) {
                 smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure);
                 $("#smsTotal").html(data.total_sum[0].total)
                 console.log("filter", data)
@@ -128,70 +128,64 @@
             }
         });
     });
-
 </script>
 
 <script>
+    function smsrep(data, data_as, data_s, data_df) {
 
-function smsrep(data, data_as, data_s, data_df) {
+        var xdat = [];
 
-    var xdat = [];
+        data.forEach(function(item) {
+            xdat.push(item.month);
+        });
 
-    data.forEach(function(item) {
-        xdat.push(item.month);
-    });
+        data_s = data_s.map(item => Number(item.y));
+        data = data.map(item => Number(item.total));
+        data_df = data_df.map(item => Number(item.y));
+        data_as = data_as.map(item => Number(item.y));
 
-    data_s = data_s.map(item => Number(item.y));
-    data = data.map(item => Number(item.total));
-    data_df = data_df.map(item => Number(item.y));
-    data_as= data_as.map(item => Number(item.y));
-
-    Highcharts.chart('smsreport', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'SMS Expenditure (month/year)'
-        },
-        xAxis: {
-            categories: xdat,
-            crosshair: true
-        },
-        yAxis: {
-            min: 0,
-            title: "SMS Expenditure"  
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0,
-                stacking: "normal",
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.y:,.2f}'
+        Highcharts.chart('smsreport', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Expenditure of SMS(month/year)'
+            },
+            xAxis: {
+                categories: xdat,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: "SMS Expenditure"
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                    stacking: "normal",
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:,.0f}'
+                    }
                 }
-            }
-        },
-        series: [{
-            name: 'Delivery Failure',
-            data: data_df
-        }, {
-            name: 'Blacklist',
-            data: data_as
-        }, {
-            name: 'Success',
-            data: data_s
-        }], 
-        tooltip: {
-            pointFormat: '<b>{point.y}</b> (KSH)',
-        },
-    });
+            },
+            series: [{
+                name: 'Delivery Failure',
+                data: data_df
+            }, {
+                name: 'Blacklist',
+                data: data_as
+            }, {
+                name: 'Success',
+                data: data_s
+            }],
+            tooltip: {
+                pointFormat: '<b>{point.y}</b> (KSH)',
+            },
+        });
 
-}
-
+    }
 </script>
 
 @endsection
-
-
-
