@@ -149,7 +149,7 @@
                 type: 'column'
             },
             title: {
-                text: 'Expenditure of SMS(month/year)'
+                text: 'Expenditure of SMS By(month/year)'
             },
             xAxis: {
                 categories: xdat,
