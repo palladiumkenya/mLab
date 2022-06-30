@@ -44,7 +44,7 @@ class SendResultsController extends Controller
                 if (strpos($date_collected, "00:00:00") !== false) {
                     $date_collected = substr($date_collected, 0, 10);
                 }
-                
+
                 if ($type == 1) {
                     $ftype = "VL";
                     $rtype = "FFViral Load Results";
@@ -57,7 +57,7 @@ class SendResultsController extends Controller
 
                 $dest = $facility->mobile;
                 $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
-            
+
                 $encr =  base64_encode($msgmlb);
                 $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
 
@@ -76,7 +76,7 @@ class SendResultsController extends Controller
             }
 
             $msg = "We have found ". sizeof($finalres). " results for your facility";
-            
+
             return response()->json(["results" => $finalres, "message" => $msg]);
         } else {
             return "Phone Number not attached to any Facility";
@@ -105,8 +105,8 @@ class SendResultsController extends Controller
 
         if (!empty($fac)) {
             $results= Result::where('mfl_code', $mfl)->where('date_collected', '>=', $fr)->where('date_collected', '<=', $t)->orderBy('id', 'DESC')->get();
-    
-                
+
+
             if ($results->isNotEmpty()) {
                 $finalres =[];
                 foreach ($results as $result) {
@@ -120,12 +120,12 @@ class SendResultsController extends Controller
                     $units = $result->units;
                     $date_collected = $result->date_collected;
                     $mfl = $result->mfl_code;
-        
-        
+
+
                     if (strpos($date_collected, "00:00:00") !== false) {
                         $date_collected = substr($date_collected, 0, 10);
                     }
-                    
+
                     if ($type == 1) {
                         $ftype = "VL";
                         $rtype = "FFViral Load Results";
@@ -133,17 +133,17 @@ class SendResultsController extends Controller
                         $ftype = "EID";
                         $rtype = "FFEID Results";
                     }
-        
+
                     $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
-        
+
                     $encr =  base64_encode($msgmlb);
                     $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
-    
+
                     $res->message = $encr;
                     array_push($finalres, $res);
                 }
                 $msg = "We have found ". sizeof($finalres). " results for your facility";
-            
+
                 return response()->json(["results" => $finalres, "message" => $msg]);
             } else {
                 echo "No results were found for this period: ". $fr . " - ".$to;
@@ -166,12 +166,12 @@ class SendResultsController extends Controller
                         $units = $result->units;
                         $date_collected = $result->date_collected;
                         $mfl = $result->mfl_code;
-            
-            
+
+
                         if (strpos($date_collected, "00:00:00") !== false) {
                             $date_collected = substr($date_collected, 0, 10);
                         }
-                        
+
                         if ($type == 1) {
                             $ftype = "VL";
                             $rtype = "FFViral Load Results";
@@ -179,17 +179,17 @@ class SendResultsController extends Controller
                             $ftype = "EID";
                             $rtype = "FFEID Results";
                         }
-            
+
                         $msgmlb = "$ftype PID:$client_id A:$age S:$gender DC:$date_collected R: :$content $units";
-                    
+
                         $encr =  base64_encode($msgmlb);
                         $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
-        
+
                         array_push($res, $finalmsg);
                     }
-                    $msg = "We have found ". sizeof($finalres). " results for your facility";
-            
-                    return response()->json(["results" => $finalres, "message" => $msg]);
+                    $msg = "We have found ". sizeof($res). " results for your facility";
+
+                    return response()->json(["results" => $res, "message" => $msg]);
                 } else {
                     echo "No results were found for this period: ". $fr . " - ".$to;
                 }
@@ -233,14 +233,14 @@ class SendResultsController extends Controller
             if (strpos($date_ordered, "00:00:00") !== false) {
                 $date_ordered = substr($date_ordered, 0, 10);
             }
-            
+
 
             if ($type = 1) {
                 $rtype = "VL";
                 $msg = "ID: $id, PID:$client_id, Age:$age, Sex:$gender, DC:$date_collected, LOD: $date_ordered, CSR: $csr, CST: $cst, CJ: $cj, Result: :$content $units, MFL: $mfl, Lab: $lab";
 
                 $ted =  base64_encode($msg);
-                
+
                 $encr = "IL ". $ted;
             }
 
@@ -298,8 +298,8 @@ class SendResultsController extends Controller
                 if (strpos($sub, "00:00:00") !== false) {
                     $sub = substr($sub, 0, 10);
                 }
-                    
-                    
+
+
                 $facility = Facility::where('code', $mfl)->first();
 
                 $dest = $facility->mobile;
@@ -318,7 +318,7 @@ class SendResultsController extends Controller
                 $result->save();
             }
             $msg = "We have found ". sizeof($finalres). " results for your facility";
-            
+
             return response()->json(["results" => $finalres, "message" => $msg]);
         } else {
             return "Phone Number not attached to any Facility";
@@ -333,7 +333,7 @@ class SendResultsController extends Controller
 
         if (!empty($facility)) {
             $results = TBResult::where('processed', '0')->get();
-        
+
             if ($results->isNotEmpty()) {
                 $res = [];
 
@@ -359,7 +359,7 @@ class SendResultsController extends Controller
                     if (strpos($record_date, "00:00:00") !== false) {
                         $record_date = substr($record_date, 0, 10);
                     }
-                    
+
 
                     $facility = Facility::where('code', $mfl)->first();
 
@@ -369,7 +369,7 @@ class SendResultsController extends Controller
                     $encr =  base64_encode($msgmlb);
 
                     $finalmsg = "<# ". $encr . " Z9j3qy+Ivki>";
-            
+
                     array_push($res, $finalmsg);
                     // date_default_timezone_set('Africa/Nairobi');
                     // $date = date('Y-m-d H:i:s', time());
@@ -402,7 +402,7 @@ class SendResultsController extends Controller
         ->where('il_send', 0)->orderBy('id', 'DESC')->get();
 
         $final = [];
-        
+
         foreach ($results as $res) {
             $time = date("YmdHis");
 
@@ -444,18 +444,18 @@ class SendResultsController extends Controller
                     "LAB_TESTED_IN" => $res->lab_id
                 ]
             ];
-        
+
 
             $full = (object)[
                 "MESSAGE_HEADER" => $header,
                 "PATIENT_IDENTIFICATION" => $patientIdentifier,
                 "VIRAL_LOAD_RESULT" => $result
             ];
-            
+
             array_push($final, $full);
 
             $date = date('Y-m-d H:i:s', time());
-            
+
             $res->il_send = 1;
             $res->processed = '1';
             $res->date_sent = $date;
@@ -472,13 +472,13 @@ class SendResultsController extends Controller
     public function notify()
     {
         $unpulled_result_facilities = Result::whereNull('date_sent')->where('processed', '0')->distinct()->get(['mfl_code']);
-        
+
         foreach ($unpulled_result_facilities as $fac) {
             $mfl = $fac->mfl_code;
-            
+
             $users = User::where('facility_id', $mfl)->get();
             $facility  = Facility::where('code', $mfl)->first();
-            
+
             $unpulled_count = Result::where('mfl_code', $mfl)->whereNull('date_sent')->where('processed', '0')->count();
             $unpulled_count_high_vl = Result::where('mfl_code', $mfl)->whereNull('date_sent')->where('data_key', 2)->where('processed', '0')->count();
 
@@ -489,17 +489,17 @@ class SendResultsController extends Controller
             if ($facility_number != '' || $facility_number != null) {
                 $facility_msg =  'This is a reminder that your facility, MFL: ' .$mfl . ' has ' . $unpulled_count .
                 ' results pending, '. $unpulled_count_high_vl .'. of which are high VLs, which have not been pulled to mLab. Kindly login to the application to pull and refresh.';
-                
+
                 $sender = new SenderController;
-               
+
                 if ($sender->send($facility_number, $facility_msg)) {
                     foreach ($users as $user) {
                         $phone_no = $user->phone_no;
                         $name = $user->f_name . ' ' . $user->l_name;
-        
+
                         $msg = 'Hello '. $name . ', your facility, MFL: ' .$mfl . ' has ' . $unpulled_count .
                         ' results pending, '. $unpulled_count_high_vl .'. of which are high VLs, which have not been pulled to mLab. Kindly ensure to login to the application to pull and refresh.';
-        
+
                         if ($sender->send($phone_no, $msg)) {
                             echo 'notified';
                         }
@@ -547,14 +547,14 @@ class SendResultsController extends Controller
                     if (strpos($date_ordered, "00:00:00") !== false) {
                         $date_ordered = substr($date_ordered, 0, 10);
                     }
-                    
+
 
                     if ($type = 1) {
                         $rtype = "VL";
                         $msg = "ID: $id, PID:$client_id, Age:$age, Sex:$gender, DC:$date_collected, LOD: $date_ordered, CSR: $csr, CST: $cst, CJ: $cj, Result: :$content $units, MFL: $mfl, Lab: $lab";
 
                         $ted =  base64_encode($msg);
-                        
+
                         $encr = "IL ". $ted;
 
                         array_push($res_arr, $encr);

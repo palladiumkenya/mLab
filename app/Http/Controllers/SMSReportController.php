@@ -61,8 +61,8 @@ class SMSReportController extends Controller
             // delivery failed
             $delivery_failure = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('failure_reason', '=', 'DeliveryFailure')
+                ->orderBy('month', 'ASC')
                 ->groupBy('month')
-                ->orderBy('y', 'DESC')
                 ->get();
 
             // AbsentSubscriber
@@ -70,7 +70,7 @@ class SMSReportController extends Controller
                 ->where('failure_reason', '=', 'AbsentSubscriber')
                 ->orWhere('failure_reason', '=', 'UserInBlackList')
                 ->groupBy('month')
-                ->orderBy('y', 'DESC')
+                ->orderBy('month', 'ASC')
                 ->get();
 
 

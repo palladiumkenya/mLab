@@ -228,11 +228,17 @@
                 text: 'Expenditure of Delivery Failure SMS(month/year)'
             },
             xAxis: {
+                title:{
+                    text: "Year-Month"
+                },
                 categories: xdatq
             },
             yAxis: {
                 min: 0,
                 title: "Failed SMS Cost",
+                title:{
+                    text: "Failed SMS Cost"
+                },
             },
             plotOptions: {
                 column: {
@@ -253,6 +259,10 @@
                 name: 'Delivery Failure',
                 data: data_df,
                 color: '#DB843D',
+                dataSorting: {
+                    enabled: false,
+                    sortKey: 'y'
+                }
             }, {
                 name: 'Blacklist Users',
                 data: data_as,
