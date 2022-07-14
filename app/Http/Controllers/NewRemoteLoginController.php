@@ -137,6 +137,7 @@ class NewRemoteLoginController extends Controller
 
 
         $fac = Facility::where('mobile', $phone)->first();
+        $fac_mfl = Facility::where('mobile', $phone)->pluck('code')->first();
 
         if (!empty($fac)) {
             $val = explode("*", $msg);
@@ -192,11 +193,12 @@ class NewRemoteLoginController extends Controller
                 $rl->requesting_provider = $requesting_provider;
                 $rl->facility = $fac->code;
 
+                $remote_hts = SRLHTS::where('processed', 0)->where('facility', $fac_mfl)->count();
 
                 if ($rl->save()) {
-                    echo "Sample Remote Login Successful";
+                    return response()->json(["Sample remote login for HTS successful. Sample ". $remote_hts." queued in next batch"], 201);
                 } else {
-                    echo "An error occured, kindly try again";
+                    return response()->json(["Server Error, details recieved but unable to save, please try again."], 503);
                 }
             }
         } else {
