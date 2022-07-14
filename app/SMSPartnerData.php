@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SMSData extends Model
+class SMSPartnerData extends Model
 {
-    public $table = 'partners_sms';
+    public $table = 'partner_sms_summary';
     public $timestamps = false;
     protected $primaryKey = 'send_log_id';
 
@@ -16,6 +16,6 @@ class SMSData extends Model
      * @var array
      */
     protected $fillable = [
-        'partner_name', 'month', 'partner_id', 'total', 'status', 'created_at'
+        'partner_name', 'partner_id', 'total', 'status', 'created_at'
     ];
 }

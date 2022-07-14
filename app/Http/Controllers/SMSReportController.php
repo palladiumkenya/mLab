@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\SMSData;
 use App\SMSDataNonPartners;
+use App\SMSPartnerData;
 use DB;
 use Auth;
 use App\Partner;
@@ -37,19 +38,27 @@ class SMSReportController extends Controller
             ->get();
 
             // successful
-            $success = SMSData::selectRaw("partner_name, CEIL(sum(sum)) as y")
+            $success = SMSPartnerData::selectRaw("partner_name, CEIL(sum(sum)) as y")
                 ->where('status', '=', 'Success')
                 ->whereNotNull('partner_name')
                 ->groupBy('partner_name')
                 ->orderBy('y', 'DESC')
                 ->get();
 
-            // successful non partner
+            //successful non partner
             $successNonPartner = SMSDataNonPartners::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('status', '=', 'Success')
                 ->groupBy('month')
-                ->orderBy('y', 'DESC')
+                ->orderBy('month', 'DESC')
                 ->get();
+
+            // $successNonPartner = SMSDataNonPartners::select(
+            //     DB::raw("(sum(sum)) as total"),
+            //     DB::raw("(DATE_FORMAT(created_at::date, '%m-%Y')) as month")
+            //     )
+            //     ->orderBy('created_at', 'desc')
+            //     ->groupBy(DB::raw("DATE_FORMAT(created_at::date, '%m-%Y')"))
+            //     ->get();
 
             // successful county
             $successPerCounty = SMSData::selectRaw("county, CEIL(sum(sum)) as y")
@@ -61,16 +70,16 @@ class SMSReportController extends Controller
             // delivery failed
             $delivery_failure = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('failure_reason', '=', 'DeliveryFailure')
-                ->orderBy('month', 'ASC')
                 ->groupBy('month')
+                ->orderBy('month', 'DESC')
                 ->get();
 
             // AbsentSubscriber
             $absent_subscriber = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('failure_reason', '=', 'AbsentSubscriber')
                 ->orWhere('failure_reason', '=', 'UserInBlackList')
-                ->groupBy('month')
-                ->orderBy('month', 'ASC')
+                ->groupBy( 'month')
+                ->orderBy('month', 'DESC')
                 ->get();
 
 
@@ -83,7 +92,7 @@ class SMSReportController extends Controller
             $cost = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
             ->where('partner_id', Auth::user()->partner_id )
             ->groupBy('month')
-            ->orderBy('month', 'ASC')
+            ->orderBy('month', 'DESC')
             ->get();
 
             // successful
@@ -91,7 +100,7 @@ class SMSReportController extends Controller
                 ->where('partner_id', Auth::user()->partner_id )
                 ->where('status', '=', 'Success')
                 ->groupBy('month', 'status')
-                ->orderBy('month', 'ASC')
+                ->orderBy('month', 'DESC')
                 ->get();
 
             $successNonPartner = [];
@@ -103,7 +112,7 @@ class SMSReportController extends Controller
                 ->where('partner_id', Auth::user()->partner_id )
                 ->where('failure_reason', '=', 'DeliveryFailure')
                 ->groupBy('month', 'status')
-                ->orderBy('month', 'ASC')
+                ->orderBy('month', 'DESC')
                 ->get();
 
             // AbsentSubscriber
@@ -112,7 +121,7 @@ class SMSReportController extends Controller
                 ->where('failure_reason', '=', 'AbsentSubscriber')
                 ->orWhere('failure_reason', '=', 'UserInBlackList')
                 ->groupBy('month', 'status')
-                ->orderBy('month', 'ASC')
+                ->orderBy('month', 'DESC')
                 ->get();
 
         }
@@ -139,122 +148,124 @@ class SMSReportController extends Controller
         $unformatted_startdate = trim($dates[0]);
         $unformatted_enddate = trim($dates[1]);
 
-        $start_date = Carbon::createFromFormat('m/d/Y', $unformatted_startdate)->format('Y-m');
-        $end_date = Carbon::createFromFormat('m/d/Y', $unformatted_enddate)->format('Y-m');
+        $start_date = Carbon::createFromFormat('m/d/Y', $unformatted_startdate)->format('Y-m-d');
+        $end_date = Carbon::createFromFormat('m/d/Y', $unformatted_enddate)->format('Y-m-d');
 
         if(Auth::user()->user_level == 1) {
 
-            $total_sum = SMSData::selectRaw("CAST(sum(sum)as FLOAT) as total")
-            ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
-
-            // ->whereBetween('month',[$start_date, $end_date] )
+            $total_sum = DB::table('partners_sms')->select(DB::raw('sum(sum) as total'))
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
             ->get();
 
-            $cost = SMSData::selectRaw("partner_name, CAST(sum(sum)as FLOAT) as y")
-                ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
-                // ->whereBetween('month',[$start_date, $end_date] )
-                ->groupBy('partner_name')
-                ->orderBy('partner_name')
-                ->get();
+            $cost = DB::table('partners_sms')->select(DB::raw('partner_name, sum(sum) as total'))
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->orderBy('total', 'DESC')
+            ->groupBy('partner_name')
+            ->get();
 
-            // Success
-            $success = SMSData::selectRaw("month, partner_name, CAST(sum(sum)as FLOAT) as y")
-                ->whereNotNull('partner_name')
-                ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
-                // ->whereBetween('month',[$start_date, $end_date] )
+            $success = DB::table('partner_sms_summary')->select(DB::raw('partner_name, sum(sum) as y'))
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->where('status', '=', 'Success')
+            ->groupBy('partner_name')
+            ->orderBy('y', 'DESC')
+            ->get();
+
+            $successPerCounty = DB::table('partners_sms')->select(DB::raw('county, sum(sum) as y'))
+                ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
                 ->where('status', '=', 'Success')
-                ->groupBy( 'partner_name', 'month')
+                ->groupBy('county')
                 ->orderBy('y', 'DESC')
                 ->get();
 
-            // successful
-            $successNonPartner = SMSDataNonPartners::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
+            // $successNonPartner = DB::table('non_partner_sms')->select(DB::raw('month, sum(sum) as y'))
+            //     ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            //     ->where('status', '=', 'Success')
+            //     ->groupBy('month')
+            //     ->orderBy('month', 'DESC')
+            //     ->get();
+
+            // $successNonPartner = SMSDataNonPartners::select(
+            //     DB::raw("(sum(sum)) as total"),
+            //     DB::raw("(DATE_FORMAT(created_at::date, '%m-%Y')) as month")
+            //     )
+            //     ->orderBy('created_at', 'desc')
+            //     ->groupBy(DB::raw("DATE_FORMAT(created_at::date, '%m-%Y')"))
+            //     ->get();
+
+            $successNonPartner = SMSDataNonPartners::selectRaw("month, CEIL(sum(sum)) as y")
+                ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
                 ->where('status', '=', 'Success')
-                // ->whereBetween('month',[$start_date, $end_date] )
-                ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
                 ->groupBy('month')
-                ->orderBy('y', 'DESC')
+                ->orderBy('month', 'DESC')
                 ->get();
 
-            // successful
-            $successPerCounty = SMSDataNonPartners::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
-                ->where('status', '=', 'Success')
-                // ->whereBetween('month',[$start_date, $end_date] )
-                ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
-                ->groupBy('month')
-                ->orderBy('y', 'DESC')
-                ->get();
-
-
-            // DeliveryFailure
-            $delivery_failure = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
-                // ->whereBetween('month',[$start_date, $end_date] )
-                ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
+            $delivery_failure = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as y'))
+                ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
                 ->where('failure_reason', '=', 'DeliveryFailure')
                 ->groupBy('month')
-                ->orderBy('y', 'DESC')
+                ->orderBy('month', 'DESC')
                 ->get();
 
-            // AbsentSubscriber
-            $absent_subscriber = SMSData::selectRaw("month, CAST(sum(sum)as FLOAT) as y")
-                // ->whereBetween('month',[$start_date, $end_date] )
-                ->whereBetween('month', [new Carbon($start_date), new Carbon($end_date)])
+
+            $absent_subscriber = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as y'))
+                ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
                 ->where('failure_reason', '=', 'AbsentSubscriber')
                 ->orWhere('failure_reason', '=', 'UserInBlackList')
                 ->groupBy('month')
-                ->orderBy('y', 'DESC')
+                ->orderBy('month', 'DESC')
                 ->get();
-
 
         } else if(Auth::user()->user_level == 2) {
 
-            $total_sum = SMSData::selectRaw("CAST(sum(sum)as FLOAT) as total")
+            $total_sum = DB::table('partners_sms')->select(DB::raw('sum(sum) as total'))
             ->where('partner_id', Auth::user()->partner_id )
-            ->whereBetween('month',[$start_date, $end_date] )
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
             ->get();
 
-            $cost = SMSData::selectRaw("month, status, CAST(sum(sum)as FLOAT) as y")
-                ->where('partner_id', Auth::user()->partner_id )
-                ->whereBetween('month',[$start_date, $end_date] )
-                ->groupBy('month', 'status')
-                ->get();
+            $cost = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as total'))
+            ->where('partner_id', Auth::user()->partner_id )
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->orderBy('month', 'DESC')
+            ->groupBy('month')
+            ->get();
 
-            // success
-            $success = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
-                ->where('partner_id', Auth::user()->partner_id )
-                ->whereBetween('month',[$start_date, $end_date] )
-                ->where('status', '=', 'success')
-                ->groupBy('month', 'status')
-                ->orderBy('month', 'ASC')
-                ->get();
+            $success = DB::table('partner_sms_summary')->select(DB::raw('month, sum(sum) as y'))
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->where('status', '=', 'Success')
+            ->where('partner_id', Auth::user()->partner_id )
+            ->groupBy('month')
+            ->orderBy('month', 'DESC')
+            ->get();
 
             $successNonPartner = [];
 
-            // status 102 queued
-            $delivery_failure = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
-                ->where('partner_id', Auth::user()->partner_id )
-                ->whereBetween('month',[$start_date, $end_date] )
+            $successPerCounty = [];
+
+            $delivery_failure = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as y'))
+                ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
                 ->where('failure_reason', '=', 'DeliveryFailure')
-                ->groupBy('month', 'status')
-                ->orderBy('month', 'ASC')
+                ->where('partner_id', Auth::user()->partner_id )
+                ->groupBy('month')
+                ->orderBy('month', 'DESC')
                 ->get();
 
-            // status 500, 501, 502
-            $absent_subscriber = SMSData::selectRaw("month, status , CAST(sum(sum)as FLOAT) as y")
-                ->where('partner_id', Auth::user()->partner_id )
-                ->whereBetween('month',[$start_date, $end_date] )
+
+            $absent_subscriber = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as y'))
+                ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
                 ->where('failure_reason', '=', 'AbsentSubscriber')
+                ->where('partner_id', Auth::user()->partner_id )
                 ->orWhere('failure_reason', '=', 'UserInBlackList')
-                ->groupBy('month', 'status')
-                ->orderBy('month', 'ASC')
+                ->groupBy('month')
+                ->orderBy('month', 'DESC')
                 ->get();
 
         }
 
         $data["delivery_failure"] = $delivery_failure;
+        $data["absent_subscriber"] = $absent_subscriber;
         $data["success"] = $success;
         $data["successNonPartner"] = $successNonPartner;
-        $data["absent_subscriber"] = $absent_subscriber;
+        $data["successPerCounty"] = $successPerCounty;
         $data["cost"] = $cost;
         $data["total_sum"] = $total_sum;
 

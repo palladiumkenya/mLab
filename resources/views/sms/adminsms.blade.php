@@ -128,7 +128,7 @@
             success: function(data) {
                 smsrep(data.cost, data.success, data.absent_subscriber, data.delivery_failure);
                 smsrep_nonpartner(data.successNonPartner, data.successPerCounty);
-                $("#smsTotal").html(Number(data.total_sum[0]))
+                $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
                 console.log("filter", data)
                 $("#dashboard_overlay").hide();
             }
@@ -144,7 +144,7 @@
         var xdatq = [];
         var xdatb = [];
 
-        data_s.forEach(function(item) {
+        data_s?.forEach(function(item) {
             if (item.partner_name === null) {
                 xdats.push('Not Specified')
             } else {
@@ -152,15 +152,15 @@
             }
         });
 
-        data_as.forEach(function(item) {
+        data_as?.forEach(function(item) {
             xdatq.push(item.month);
         });
 
-        data_df.forEach(function(item) {
+        data_df?.forEach(function(item) {
             xdatf.push(item.month);
         });
 
-        data_s = data_s.map(item => {
+        data_s = data_s?.map(item => {
             if (item.partner_name === null) {
                 return {
                     partner_name: 'Not Specified',
@@ -174,9 +174,9 @@
             }
         });
 
-        data_c = data_c.map(item => Number(item.total));
-        data_as = data_as.map(item => Number(item.y));
-        data_df = data_df.map(item => Number(item.y));
+        data_c = data_c?.map(item => Number(item.total));
+        data_as = data_as?.map(item => Number(item.y));
+        data_df = data_df?.map(item => Number(item.y));
 
         Highcharts.chart('smsreportsent', {
             chart: {
@@ -280,7 +280,7 @@
         var xdats = [];
         var xdats1 = [];
 
-        data.forEach(function(item) {
+        data?.forEach(function(item) {
             if (item.month === null) {
                 xdats.push('Not Specified');
             } else {
@@ -288,7 +288,7 @@
             }
         });
 
-        data1.forEach(function(item) {
+        data1?.forEach(function(item) {
             if (item.county === null) {
                 xdats1.push('Not Specified');
             } else {
@@ -298,8 +298,8 @@
 
         console.log("months", xdats1);
 
-        data = data.map(item => Number(item.y));
-        data1 = data1.map(item => Number(item.y));
+        data = data?.map(item => Number(item.y));
+        data1 = data1?.map(item => Number(item.y));
 
         Highcharts.chart('smsreportcountysent', {
             chart: {

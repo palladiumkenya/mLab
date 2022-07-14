@@ -122,7 +122,7 @@
             url: "{{ route('sms_filtered_report_data') }}",
             success: function(data) {
                 smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure);
-                $("#smsTotal").html(data.total_sum[0].total)
+                $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
                 console.log("filter", data)
                 $("#dashboard_overlay").hide();
             }
