@@ -607,7 +607,7 @@
                     }
                 },
                 series: [{
-                    name: 'Viral Loads',
+                    name: 'EID',
                     data: displayData
                 }]
             });

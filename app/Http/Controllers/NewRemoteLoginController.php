@@ -20,6 +20,7 @@ class NewRemoteLoginController extends Controller
 
         //we search if the number exixsts for any facility, if so we save the code of that facility in the variable $fac
         $fac = Facility::where('mobile', $phone)->first();
+        $fac_mfl = Facility::where('mobile', $phone)->pluck('code')->first();
 
         /*
         if facility exists, we then use the php inbuilt explode function to transform the string into array and get
@@ -71,9 +72,10 @@ class NewRemoteLoginController extends Controller
                 $rl->lab_id = $lab_id;
                 $rl->facility = $fac->code;
 
+                $remote_eid = SRLEIDs::where('processed', 0)->where('facility', $fac_mfl)->count();
 
                 if ($rl->save()) {
-                    return response()->json(["Sample remote login for EID successfull."], 201);
+                    return response()->json(["Sample remote login for EID successfull. Sample ". $remote_eid." queued in next batch"], 201);
                 } else {
                     return response()->json(["Server Error, details recieved but unable to save, please try again."], 503);
                 }
@@ -114,9 +116,10 @@ class NewRemoteLoginController extends Controller
                     $rl->lab_id = $lab_id;
                     $rl->facility = $fac->code;
 
+                    $remote_vl = SRLVLs::where('processed', 0)->where('facility', $fac_mfl)->count();
 
                     if ($rl->save()) {
-                        return response()->json(["Sample remote login for VL successful."], 201);
+                        return response()->json(["Sample remote login for VL successful. Sample ". $remote_vl." queued in next batch"], 201);
                     } else {
                         return response()->json(["Server Error, details recieved but unable to save, please try again."], 503);
                     }
