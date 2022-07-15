@@ -30,7 +30,13 @@ class SMSReportController extends Controller
 
         if(Auth::user()->user_level == 1) {
 
+            // total sum
             $total_sum = SMSData::selectRaw("CEIL(sum(sum)) as total")->get();
+
+            // pie chart total breakdown
+            $breakdown = SMSData::selectRaw("status,failure_reason, CEIL(sum(sum)) as total")
+            ->groupBy('status', 'failure_reason')
+            ->get();
 
             $cost = SMSData::selectRaw("partner_name, CEIL(sum(sum)) as total")
             ->groupBy('partner_name')
@@ -52,14 +58,6 @@ class SMSReportController extends Controller
                 ->orderBy('month', 'DESC')
                 ->get();
 
-            // $successNonPartner = SMSDataNonPartners::select(
-            //     DB::raw("(sum(sum)) as total"),
-            //     DB::raw("(DATE_FORMAT(created_at::date, '%m-%Y')) as month")
-            //     )
-            //     ->orderBy('created_at', 'desc')
-            //     ->groupBy(DB::raw("DATE_FORMAT(created_at::date, '%m-%Y')"))
-            //     ->get();
-
             // successful county
             $successPerCounty = SMSData::selectRaw("county, CEIL(sum(sum)) as y")
                 ->where('status', '=', 'Success')
@@ -76,8 +74,7 @@ class SMSReportController extends Controller
 
             // AbsentSubscriber
             $absent_subscriber = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
-                ->where('failure_reason', '=', 'AbsentSubscriber')
-                ->orWhere('failure_reason', '=', 'UserInBlackList')
+                ->whereNotIn('failure_reason', ['', 'DeliveryFailure'])
                 ->groupBy( 'month')
                 ->orderBy('month', 'DESC')
                 ->get();
@@ -89,6 +86,12 @@ class SMSReportController extends Controller
             ->where('partner_id', Auth::user()->partner_id )
             ->get();
 
+            // pie chart total breakdown
+            $breakdown = SMSData::selectRaw("status, failure_reason, CEIL(sum(sum)) as total")
+            ->where('partner_id', Auth::user()->partner_id )
+            ->groupBy('status', 'failure_reason')
+            ->get();
+
             $cost = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
             ->where('partner_id', Auth::user()->partner_id )
             ->groupBy('month')
@@ -96,10 +99,10 @@ class SMSReportController extends Controller
             ->get();
 
             // successful
-            $success = SMSData::selectRaw("month, status, CEIL(sum(sum)) as y")
+            $success = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->where('status', '=', 'Success')
-                ->groupBy('month', 'status')
+                ->groupBy('month')
                 ->orderBy('month', 'DESC')
                 ->get();
 
@@ -108,19 +111,18 @@ class SMSReportController extends Controller
             $successPerCounty = [];
 
             // delivery failed
-            $delivery_failure = SMSData::selectRaw("month, status, CAST(sum(sum) as FLOAT) as y")
+            $delivery_failure = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('partner_id', Auth::user()->partner_id )
                 ->where('failure_reason', '=', 'DeliveryFailure')
-                ->groupBy('month', 'status')
+                ->groupBy('month')
                 ->orderBy('month', 'DESC')
                 ->get();
 
             // AbsentSubscriber
-            $absent_subscriber = SMSData::selectRaw("month, status , CEIL(sum(sum)) as y")
+            $absent_subscriber = SMSData::selectRaw("month, CEIL(sum(sum)) as y")
                 ->where('partner_id', Auth::user()->partner_id )
-                ->where('failure_reason', '=', 'AbsentSubscriber')
-                ->orWhere('failure_reason', '=', 'UserInBlackList')
-                ->groupBy('month', 'status')
+                ->whereNotIn('failure_reason', ['', 'DeliveryFailure'])
+                ->groupBy('month')
                 ->orderBy('month', 'DESC')
                 ->get();
 
@@ -134,6 +136,7 @@ class SMSReportController extends Controller
         $data["successPerCounty"] = $successPerCounty;
         $data["cost"] = $cost;
         $data["total_sum"] = $total_sum;
+        $data["breakdown"] = $breakdown;
 
         return $data;
 
@@ -155,6 +158,12 @@ class SMSReportController extends Controller
 
             $total_sum = DB::table('partners_sms')->select(DB::raw('sum(sum) as total'))
             ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->get();
+
+            // pie chart total breakdown
+            $breakdown = DB::table('partners_sms')->select(DB::raw('status, failure_reason, sum(sum) as total'))
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->groupBy('status', 'failure_reason')
             ->get();
 
             $cost = DB::table('partners_sms')->select(DB::raw('partner_name, sum(sum) as total'))
@@ -209,8 +218,7 @@ class SMSReportController extends Controller
 
             $absent_subscriber = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as y'))
                 ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
-                ->where('failure_reason', '=', 'AbsentSubscriber')
-                ->orWhere('failure_reason', '=', 'UserInBlackList')
+                ->whereNotIn('failure_reason', ['', 'DeliveryFailure'])
                 ->groupBy('month')
                 ->orderBy('month', 'DESC')
                 ->get();
@@ -220,6 +228,13 @@ class SMSReportController extends Controller
             $total_sum = DB::table('partners_sms')->select(DB::raw('sum(sum) as total'))
             ->where('partner_id', Auth::user()->partner_id )
             ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->get();
+
+            // pie chart total breakdown
+            $breakdown = DB::table('partners_sms')->select(DB::raw('failure_reason, status, sum(sum) as total'))
+            ->where('partner_id', Auth::user()->partner_id )
+            ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
+            ->groupBy('status', 'failure_reason')
             ->get();
 
             $cost = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as total'))
@@ -252,9 +267,8 @@ class SMSReportController extends Controller
 
             $absent_subscriber = DB::table('partners_sms')->select(DB::raw('month, sum(sum) as y'))
                 ->whereBetween('created_at', [new Carbon($start_date), new Carbon($end_date)])
-                ->where('failure_reason', '=', 'AbsentSubscriber')
                 ->where('partner_id', Auth::user()->partner_id )
-                ->orWhere('failure_reason', '=', 'UserInBlackList')
+                ->whereNotIn('failure_reason', ['', 'DeliveryFailure'])
                 ->groupBy('month')
                 ->orderBy('month', 'DESC')
                 ->get();
@@ -268,6 +282,7 @@ class SMSReportController extends Controller
         $data["successPerCounty"] = $successPerCounty;
         $data["cost"] = $cost;
         $data["total_sum"] = $total_sum;
+        $data["breakdown"] = $breakdown;
 
         return $data;
 

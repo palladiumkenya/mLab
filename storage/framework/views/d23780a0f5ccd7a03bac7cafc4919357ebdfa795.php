@@ -35,8 +35,12 @@
         </form>
     </div>
 
+    <div class="row col-md-12 col-sm-12 mb-2">
+        <div id="smsreportpiechart" style="margin: 0 auto; width : 40%"></div>
+        <div id="smsreportcountysent" style="margin: 0 auto; width : 60%"></div>
+    </div>
+
     <div class="row col-md-12 col-sm-12">
-        <div id="smsreportcountysent" style="margin: 0 auto; width : 80%"></div>
         <div id="smsreportsent" style="margin: 0 auto; width : 80%"></div>
         <div id="smsreportnonpartnersent" style="margin: 0 auto; width : 80%"></div>
         <div id="smsreportfailed" style="margin: 0 auto; width : 80%"></div>
@@ -104,7 +108,7 @@
         url: "<?php echo e(route('sms_report_data')); ?>",
         success: function(data) {
             console.log("report", data);
-            smsrep(data.cost, data.success, data.absent_subscriber, data.delivery_failure);
+            smsrep(data.cost, data.success, data.absent_subscriber, data.delivery_failure, data.breakdown);
             smsrep_nonpartner(data.successNonPartner, data.successPerCounty);
             $("#smsTotal").html(Number(data.total_sum[0].total))
             $("#dashboard_overlay").hide();
@@ -126,7 +130,7 @@
             },
             url: "<?php echo e(route('sms_filtered_report_data')); ?>",
             success: function(data) {
-                smsrep(data.cost, data.success, data.absent_subscriber, data.delivery_failure);
+                smsrep(data.cost, data.success, data.absent_subscriber, data.delivery_failure, data.breakdown);
                 smsrep_nonpartner(data.successNonPartner, data.successPerCounty);
                 $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
                 console.log("filter", data)
@@ -137,12 +141,13 @@
 </script>
 
 <script>
-    function smsrep(data_c, data_s, data_as, data_df) {
+    function smsrep(data_c, data_s, data_as, data_df, data_br) {
 
         var xdats = [];
         var xdatf = [];
         var xdatq = [];
         var xdatb = [];
+        var xdatp = [];
 
         data_s?.forEach(function(item) {
             if (item.partner_name === null) {
@@ -153,11 +158,13 @@
         });
 
         data_as?.forEach(function(item) {
-            xdatq.push(item.month);
+            console.log(typeof item.month)
+            console.log(new Date(item.month).toLocaleString('en-us',{month:'short', year:'numeric'}))
+            xdatq.push(new Date(item.month).toLocaleString('en-us',{month:'short', year:'numeric'}))
         });
 
         data_df?.forEach(function(item) {
-            xdatf.push(item.month);
+            xdatf.push(new Date(item.month).toLocaleString('en-us',{month:'short', year:'numeric'}));
         });
 
         data_s = data_s?.map(item => {
@@ -173,6 +180,28 @@
                 };
             }
         });
+
+        for (let i = 0; i < data_br?.length; i++) {
+            let innerObject = {};
+            if (data_br[i].status == 'Success') {
+                innerObject.name = 'Success';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#004D1A';
+            } else if (data_br[i].status == 'Failed' && data_br[i].failure_reason == 'UserInBlackList') {
+                innerObject.name = 'User In BlackList';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#ffd500';
+            } else if (data_br[i].failure_reason == 'InvalidPhoneNumber') {
+                innerObject.name = 'Invalid Phone Number';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#cc0000';
+            } else if (data_br[i].status == 'Failed' && data_br[i].failure_reason == 'DeliveryFailure') {
+                innerObject.name = 'Delivery Failure';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#d3d3d3';
+            }
+            xdatp.push(innerObject);
+        }
 
         data_c = data_c?.map(item => Number(item.total));
         data_as = data_as?.map(item => Number(item.y));
@@ -273,7 +302,41 @@
             }
         });
 
-    }
+        Highcharts.chart('smsreportpiechart', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Expenditure Based On Delivery Status'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        connectorColor: 'silver',
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Delivery Status',
+                data: xdatp
+            }]
+        });
+    }    
 
     function smsrep_nonpartner(data, data1) {
 
@@ -284,7 +347,7 @@
             if (item.month === null) {
                 xdats.push('Not Specified');
             } else {
-                xdats.push(item.month);
+                xdats.push(new Date(item.month).toLocaleString('en-us',{month:'short', year:'numeric'}))
             }
         });
 
@@ -295,8 +358,6 @@
                 xdats1.push(item.county);
             }
         });
-
-        console.log("months", xdats1);
 
         data = data?.map(item => Number(item.y));
         data1 = data1?.map(item => Number(item.y));

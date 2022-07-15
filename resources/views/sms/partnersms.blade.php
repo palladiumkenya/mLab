@@ -36,7 +36,8 @@
     </div>
 
     <div class="row col-md-12 col-sm-12">
-        <div id="smsreport" style=" width:90%; height: 80%; margin: 0 auto"></div>
+        <div id="smsreport" style=" width:60%; height: 80%; margin: 0 auto"></div>
+        <div id="smsreportpiechart" style="margin: 0 auto; width : 40%"></div>
     </div>
 
     <div id="dashboard_overlay">
@@ -100,7 +101,7 @@
         url: "{{ route('sms_report_data') }}",
         success: function(data) {
             console.log("report", data);
-            smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure);
+            smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure, data.breakdown);
             $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
             $("#dashboard_overlay").hide();
         }
@@ -121,9 +122,9 @@
             },
             url: "{{ route('sms_filtered_report_data') }}",
             success: function(data) {
-                smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure);
+                console.log("report filtered", data);
+                smsrep(data.cost, data.absent_subscriber, data.success, data.delivery_failure, data.breakdown);
                 $("#smsTotal").html(Number(data.total_sum[0].total).toFixed(2))
-                console.log("filter", data)
                 $("#dashboard_overlay").hide();
             }
         });
@@ -131,18 +132,42 @@
 </script>
 
 <script>
-    function smsrep(data, data_as, data_s, data_df) {
+    function smsrep(data, data_as, data_s, data_df, data_br) {
 
         var xdat = [];
+        var xdatp = [];
 
-        data.forEach(function(item) {
-            xdat.push(item.month);
+        data?.forEach(function(item) {
+            xdat.push(new Date(item.month).toLocaleString('en-us',{month:'short', year:'numeric'}))
+
         });
 
-        data_s = data_s.map(item => Number(item.y));
-        data = data.map(item => Number(item.total));
-        data_df = data_df.map(item => Number(item.y));
-        data_as = data_as.map(item => Number(item.y));
+        data_s = data_s?.map(item => Number(item.y));
+        data = data?.map(item => Number(item.total));
+        data_df = data_df?.map(item => Number(item.y));
+        data_as = data_as?.map(item => Number(item.y));
+
+        for (let i = 0; i < data_br?.length; i++) {
+            let innerObject = {};
+            if (data_br[i].status == 'Success') {
+                innerObject.name = 'Success';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#004D1A';
+            } else if (data_br[i].status == 'Failed' && data_br[i].failure_reason == 'UserInBlackList') {
+                innerObject.name = 'User In BlackList';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#ffd500';
+            } else if (data_br[i].failure_reason == 'InvalidPhoneNumber') {
+                innerObject.name = 'Invalid Phone Number';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#cc0000';
+            } else if (data_br[i].status == 'Failed' && data_br[i].failure_reason == 'DeliveryFailure') {
+                innerObject.name = 'Delivery Failure';
+                innerObject.y = parseInt(data_br[i].total);
+                innerObject.color = '#d3d3d3';
+            }
+            xdatp.push(innerObject);
+        }
 
         Highcharts.chart('smsreport', {
             chart: {
@@ -183,6 +208,41 @@
             tooltip: {
                 pointFormat: '<b>{point.y}</b> (KSH)',
             },
+        });
+
+        Highcharts.chart('smsreportpiechart', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Expenditure Based On Delivery Status'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        connectorColor: 'silver',
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Delivery Status',
+                data: xdatp
+            }]
         });
 
     }
