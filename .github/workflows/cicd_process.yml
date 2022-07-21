@@ -18,7 +18,7 @@ jobs:
         script: |
           cd /apps/github-workflows/mhealth-apps/
           sudo rm -rf mLab
-          sudo mkdir mLab
+          sudo mkdir mLab/
           sudo chown -R cicd2:cicd2 mLab
           git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab
           cd mLab
