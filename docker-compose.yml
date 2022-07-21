@@ -41,7 +41,7 @@ services:
       context: .
       dockerfile: php.dockerfile
     container_name: mlab-php
-    
+    restart: unless-stopped
     volumes:
       - ./:/var/www/html:delegated
     networks:
