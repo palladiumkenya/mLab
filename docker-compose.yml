@@ -9,7 +9,6 @@ services:
       context: .
       dockerfile: nginx.dockerfile
     container_name: mlab-nginx
-    user: "1000:1000"
     restart: always
     ports:
       - 8085:443
@@ -42,7 +41,6 @@ services:
       context: .
       dockerfile: php.dockerfile
     container_name: mlab-php
-    user: "1000:1000"
     
     volumes:
       - ./:/var/www/html:delegated
