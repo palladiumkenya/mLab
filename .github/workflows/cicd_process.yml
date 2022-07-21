@@ -17,12 +17,11 @@ jobs:
         port: ${{ secrets.MLAB_HOST_PORT }}
         script: |
           cd /apps/github-workflows/mhealth-apps/
-          ls
           sudo rm -rf mLab
           sudo mkdir mLab
-          ls
           sudo chown -R cicd2:cicd2 /apps/github-workflows/mhealth-apps/mLab
-          git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab      
+          git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab
+          ls
           cd /apps/github-workflows/mhealth-apps/mLab
           git clone -b master https://github.com/palladiumkenya/mLab.git .
           git status
