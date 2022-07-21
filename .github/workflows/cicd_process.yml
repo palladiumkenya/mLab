@@ -16,11 +16,15 @@ jobs:
         key: ${{ secrets.CICD_SECRET }}
         port: ${{ secrets.MLAB_HOST_PORT }}
         script: |
+          sudo rm -rf /apps/github-workflows/mhealth-apps/mLab
+          sudo mkdir /apps/github-workflows/mhealth-apps/mLab
+          sudo chown -R cicd2:cicd2 /apps/github-workflows/mhealth-apps/mLab
           git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab      
           cd /apps/github-workflows/mhealth-apps/mLab
-          git pull origin master
+          ls
+          git clone -b master https://github.com/palladiumkenya/mLab.git
           git status
-          composer install
+          composer install --optimize-autoloader --no-dev
           cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
           cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
