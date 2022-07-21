@@ -24,10 +24,10 @@ jobs:
           cd mLab
           sudo git clone -b master https://github.com/palladiumkenya/mLab.git .
           git status
-          composer install --optimize-autoloader --no-dev
-          cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
-          cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
-          cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
-          cp  /apps/dockerApps/mlabtestsite/php.dockerfile /apps/github-workflows/mhealth-apps/mLab
+          sudo composer install --optimize-autoloader --no-dev
+          sudo cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
+          sudo cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
+          sudo cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
+          sudo cp  /apps/dockerApps/mlabtestsite/php.dockerfile /apps/github-workflows/mhealth-apps/mLab
           docker-compose down
           docker-compose up --build -d
