@@ -22,7 +22,7 @@ jobs:
           sudo chown -R cicd2:cicd2 mLab
           git config --global --add safe.directory /apps/github-workflows/mhealth-apps/mLab
           cd mLab
-          git clone -b master https://github.com/palladiumkenya/mLab.git .
+          sudo git clone -b master https://github.com/palladiumkenya/mLab.git .
           git status
           composer install --optimize-autoloader --no-dev
           cp -R /apps/dockerApps/mlabtestsite/nginx /apps/github-workflows/mhealth-apps/mLab
