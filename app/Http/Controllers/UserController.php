@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use App\User;
 use App\Partner;
 use App\SubCounty;
@@ -15,6 +16,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('partner')->with('facility.sub_county.county')->where('status', '!=', 'Deleted');
+
+
         if (Auth::user()->user_level == 2) {
             $users->where('user_level', '>', 2)->where('partner_id', Auth::user()->partner->id);
             $facilities = Facility::where('partner_id', Auth::user()->partner->id)->get();
@@ -124,8 +127,12 @@ class UserController extends Controller
             $user->first_login = "Yes";
             $user->status = "Active";
 
+            $url = request()->getHttpHost();
+
+           // dd($url);
+
             $msg = "Hello ".$request->fname.", you have been registered successfully on mLab System ".
-                "You can access the system at mlab.mhealthkenya.co.ke with Username:".$request->email." and Password: $request->phone";
+                "You can access the system at $url with Username:".$request->email." and Password: $request->phone";
 
             $to =$request->phone;
 
