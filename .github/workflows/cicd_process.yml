@@ -13,7 +13,7 @@ jobs:
       with:
         host: ${{ secrets.MLAB_HOST }}
         username: ${{ secrets.MLAB_HOST_USERNAME }}
-        key: ${{ secrets.CICD_SECRET }}
+        key: ${{ secrets.CICD2_SECRET }}
         port: ${{ secrets.MLAB_HOST_PORT }}
         script: |
           cd /apps/github-workflows/mhealth-apps/
@@ -31,7 +31,7 @@ jobs:
           sudo cp  /apps/dockerApps/mlabtestsite/php.dockerfile /apps/github-workflows/mhealth-apps/mLab
           docker-compose down
           docker-compose up --build -d
-           docker-compose exec -T php php artisan key:generate
+          docker-compose exec -T php php artisan key:generate
           docker-compose exec -T php php artisan config:cache
           docker-compose exec -T php php artisan view:cache
           docker-compose exec -T php php artisan route:cache
