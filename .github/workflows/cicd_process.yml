@@ -11,10 +11,10 @@ jobs:
     - name: executing remote connection
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.MLAB_HOST }}
-        username: ${{ secrets.MLAB_HOST_USERNAME }}
+        host: ${{ secrets.CICD2_HOST }}
+        username: ${{ secrets.CICD2_USERNAME }}
         key: ${{ secrets.CICD2_SECRET }}
-        port: ${{ secrets.MLAB_HOST_PORT }}
+        port: ${{ secrets.PORT }}
         script: |
           cd /apps/github-workflows/mhealth-apps/
           sudo rm -rf mLab
