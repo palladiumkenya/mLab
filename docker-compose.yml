@@ -12,6 +12,7 @@ services:
     restart: always
     ports:
       - 8085:443
+      - 8004:80
     volumes:
       - ./:/var/www/html:delegated
     depends_on:
