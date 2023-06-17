@@ -31,6 +31,8 @@ Route::post('/remote/login/all', 'NewRemoteLoginController@results');
 Route::post('/remote/login/hts', 'NewRemoteLoginController@hts');
 Route::post('/get/il/viral_loads', 'SendResultsController@sendILInternet');
 Route::post('/ushauri/get/results', 'UshauriController@getResults');
+Route::post('/emr/get/results', 'EMRController@getResults');
+
 Route::get('/notify/clients', 'UshauriController@notifyClients');
 Route::get('/fetch/blacklist_users', 'SenderController@get_blacklist');
 
