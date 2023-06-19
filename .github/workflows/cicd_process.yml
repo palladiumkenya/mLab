@@ -29,8 +29,13 @@ jobs:
           sudo cp  /apps/dockerApps/mlabtestsite/nginx.dockerfile /apps/github-workflows/mhealth-apps/mLab
           sudo cp  /apps/dockerApps/mlabtestsite/.env /apps/github-workflows/mhealth-apps/mLab
           sudo cp  /apps/dockerApps/mlabtestsite/php.dockerfile /apps/github-workflows/mhealth-apps/mLab
-          docker-compose down
-          docker-compose up --build -d
+          #stop only the app 
+          docker-compose stop php
+          # remove older docker image
+          docker-composer rm -rf php
+          # build new image with new changes
+          docker-compose up -d php
+          # laravel configs for env-keys, views and configurations
           docker-compose exec -T php php artisan key:generate
           docker-compose exec -T php php artisan config:cache
           docker-compose exec -T php php artisan view:cache
