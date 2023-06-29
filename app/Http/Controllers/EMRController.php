@@ -42,8 +42,11 @@ class EMRController extends Controller
 
      }
 
+     $result_type=1; //VL results Type
+
    if (!empty($mfl)) {
             $results = Result::where('mfl_code', $mfl)
+                     ->where('result_type', $result_type)
                     ->whereDate('date_collected','>=',$from_date)
                     ->whereDate('date_collected','<=',$to_date)
                     ->select('results.client_id as ccc_no',
@@ -55,7 +58,8 @@ class EMRController extends Controller
                     'results.date_collected',
                     'results.lab_order_date',
                     'results.lab_name')
-                    ->get();
+                    ->paginate(1000);
+                    //->get();
            
      
             if (!$results->isEmpty()) {
