@@ -49,9 +49,16 @@ class VLResultsController extends Controller
     {
        // $ilfs = ILFacility::all();
 
-        $mlabfs = FacilitySchedule::where('d_month',date('h'))
-                                    ->where('ispulled','0')
-                                    ->limit(20)->get();
+       //echo 'asdsad';
+       $mlab_queue = FacilitySchedule::where('ispulled','<',date('n'))->min('ispulled');
+      // $mlab_queue = FacilitySchedule::where('ispulled','<','0')->min('ispulled');
+
+
+        $mlabfs = FacilitySchedule::where('ispulled',$mlab_queue)
+                                    ->limit(50)->get();
+
+        //print_r($mlabfs); exit();
+
                                     
     // exit();
         if($mlabfs->count()) {
@@ -61,9 +68,9 @@ class VLResultsController extends Controller
         $facilities_ids = array();
 
         foreach ($mlabfs as $mlabf) {
+
             $code = $mlabf->mfl_code;
             $legacy_id=$mlabf->id;
-
             array_push($facilities, $code);
             array_push($facilities_ids, $legacy_id);
         }
@@ -82,19 +89,17 @@ class VLResultsController extends Controller
         //$today = date("Y-m-d");
 
         //echo date('H');
-      //  echo  date('h');
-       // exit();
-       $month=date('h');
-       // $yester = date('Y-m-d', strtotime("-31 days"));
-       
+        //echo  date('h');
+        //exit();
+        $month=sprintf('%02d', $mlab_queue);
+        $month_d=sprintf('%02d', $mlab_queue+1);
+        //$yester = date('Y-m-d', strtotime("-31 days"));
         $today = date("Y-m-t", strtotime('2023-'.$month.'-15')); //get the last day of the month
         $yester = '2023-'.$month.'-01'; //start of the month
-       // $yester = date('Y-m-d', strtotime("-31 days"));
-
-     // print_r($results);
-     // echo $update_all;
-
-     //exit();
+        //$yester = date('Y-m-d', strtotime("-31 days"));
+        //print_r($results);
+        //echo $update_all;
+        //exit();
         $curl = curl_init();
 
         // test 1 is VL
@@ -263,9 +268,9 @@ class VLResultsController extends Controller
         }
 
         //Update the records of the facilities pulled
-        FacilitySchedule::where('ispulled','0')
-          ->whereIn('id', $facilities_ids)
-          ->update(['ispulled' => 1]);
+        $mlab_queue_one=$mlab_queue+1;
+        FacilitySchedule::whereIn('id', $facilities_ids)
+          ->update(['ispulled' => $mlab_queue_one]);
 
 
     }
