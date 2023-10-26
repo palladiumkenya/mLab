@@ -55,7 +55,7 @@ class VLResultsController extends Controller
 
 
         $mlabfs = FacilitySchedule::where('ispulled',$mlab_queue)
-                                    ->limit(50)->get();
+                                    ->limit(100)->get();
 
         //print_r($mlabfs); exit();
 
