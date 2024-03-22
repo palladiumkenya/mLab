@@ -50,14 +50,18 @@ class VLResultsController extends Controller
        // $ilfs = ILFacility::all();
 
        //echo 'asdsad';
-       $mlab_queue = FacilitySchedule::where('ispulled','<',date('n'))->min('ispulled');
+       $mlab_queue = FacilitySchedule::where('ispulled','<',13)
+                                            ->where('year','<', (date('Y')+1))
+                                            ->where('date_limit','<', date('Y-m-d'))
+                                            ->min('ispulled');
       // $mlab_queue = FacilitySchedule::where('ispulled','<','0')->min('ispulled');
+      // print_r($mlab_queue); exit();
 
 
         $mlabfs = FacilitySchedule::where('ispulled',$mlab_queue)
-                                    ->limit(100)->get();
+                                    ->limit(50)->get();
 
-        //print_r($mlabfs); exit();
+       // print_r($mlabfs); exit();
 
                                     
     // exit();
@@ -69,7 +73,8 @@ class VLResultsController extends Controller
 
         foreach ($mlabfs as $mlabf) {
 
-            $code = $mlabf->mfl_code;
+            $code=$mlabf->mfl_code;
+            $mlabyear= $mlabf->year;
             $legacy_id=$mlabf->id;
             array_push($facilities, $code);
             array_push($facilities_ids, $legacy_id);
@@ -94,8 +99,8 @@ class VLResultsController extends Controller
         $month=sprintf('%02d', $mlab_queue);
         $month_d=sprintf('%02d', $mlab_queue+1);
         //$yester = date('Y-m-d', strtotime("-31 days"));
-        $today = date("Y-m-t", strtotime('2023-'.$month.'-15')); //get the last day of the month
-        $yester = '2023-'.$month.'-01'; //start of the month
+        $today = date("Y-m-t", strtotime($mlabyear.'-'.$month.'-15')); //get the last day of the month
+        $yester = $mlabyear.'-'.$month.'-01'; //start of the month
         //$yester = date('Y-m-d', strtotime("-31 days"));
         //print_r($results);
         //echo $update_all;
@@ -269,8 +274,15 @@ class VLResultsController extends Controller
 
         //Update the records of the facilities pulled
         $mlab_queue_one=$mlab_queue+1;
+        if($mlab_queue_one==13)
+        {
+            $mlab_queue_one=1;
+            $mlabyear=$mlabyear+1;
+
+        }
         FacilitySchedule::whereIn('id', $facilities_ids)
-          ->update(['ispulled' => $mlab_queue_one]);
+          ->update(['ispulled' => $mlab_queue_one, 
+          'year' => $mlabyear, 'date_limit'=>$today]);
 
 
     }
